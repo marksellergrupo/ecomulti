@@ -1,0 +1,355 @@
+<!doctype html>
+<html lang="pt-AO">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Área de Pagamento</title>
+
+<!-- CSS Externo Compartilhado -->
+<link rel="stylesheet" href="pagamento.css">
+<link rel="shortcut icon" href="imagens/logo 03.png" type="image/x-icon">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="pedido.css">
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<header>
+  <a class="brand" href="index.html" aria-label="Ecomulti - início">
+          <img src="imagens/fatia1.png" alt="Logo Ecomulti" />
+        </a>
+</header>
+
+<main>
+  <h1 id="title">Contratar e pagar serviços</h1>
+  <p class="lead" id="lead">Escolha os serviços, confirme os dados de faturação e receba a referência de pagamento na hora.</p>
+
+  <ol class="steps" id="steps">
+    <li data-s="1" class="on"><span class="n">1</span>Serviços</li>
+    <li data-s="2"><span class="n">2</span>Faturação</li>
+    <li data-s="3"><span class="n">3</span>Pagamento</li>
+    <li data-s="4"><span class="n">4</span>Referência</li>
+  </ol>
+
+  <div class="grid">
+    <div>
+      <!-- PASSO 1 -->
+      <section id="s1">
+        <div class="card">
+          <h2>1. Escolha os serviços</h2>
+          <p class="sub">Pode combinar alojamento, website, gestão e domínios. O total é calculado automaticamente.</p>
+          <div class="cat-tabs" id="tabs"></div>
+          <div class="plans" id="plans"></div>
+          <div id="domBox" class="hidden">
+            <div class="dom-input">
+              <input id="domName" placeholder="nome-da-empresa" aria-label="Nome do domínio" autocomplete="off">
+              <select id="domExt" aria-label="Extensão" style="width:auto"></select>
+              <button class="btn sm" id="domAdd" type="button">Adicionar</button>
+            </div>
+            <div class="err" id="domErr"></div>
+            <div class="hint">Sem hífens no início/fim, sem acentos nem espaços.</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- PASSO 2 -->
+      <section id="s2" class="hidden">
+        <div class="card">
+          <h2>2. Dados de faturação</h2>
+          <p class="sub">Estes dados aparecem na factura e no comprovativo.</p>
+          <div class="row">
+            <div><label for="fTipo">Tipo de cliente</label>
+              <select id="fTipo"><option value="empresa">Empresa</option><option value="particular">Particular</option></select></div>
+            <div><label for="fNif">NIF</label><input id="fNif" inputmode="numeric" placeholder="Ex.: 5000000000"><div class="err" id="eNif"></div></div>
+          </div>
+          <div class="row one">
+            <div><label for="fNome" id="lNome">Nome da empresa</label><input id="fNome" autocomplete="organization"><div class="err" id="eNome"></div></div>
+          </div>
+          <div class="row">
+            <div><label for="fEmail">Email</label><input id="fEmail" type="email" autocomplete="email"><div class="err" id="eEmail"></div></div>
+            <div><label for="fTel">Telefone / WhatsApp</label><input id="fTel" inputmode="tel" placeholder="9XX XXX XXX" autocomplete="tel"><div class="err" id="eTel"></div></div>
+          </div>
+          <div class="row one">
+            <div><label for="fMorada">Morada <span style="color:var(--muted);font-weight:400">(opcional)</span></label><input id="fMorada" autocomplete="street-address"></div>
+          </div>
+          <div class="actions">
+            <button class="btn ghost" type="button" data-go="1">← Voltar</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- PASSO 3 -->
+      <section id="s3" class="hidden">
+        <div class="card">
+          <h2>3. Como prefere pagar?</h2>
+          <p class="sub">A encomenda fica reservada até ao fim da validade da referência.</p>
+          <div class="methods" id="methods">
+            <button class="method sel" type="button" data-m="ref"><div class="ico">REF</div><div><b>Pagamento por Referência</b><span>Multibanco/ATM Multicaixa, Internet Banking ou app do banco. Confirmação automática.</span></div></button>
+            <button class="method" type="button" data-m="mcx"><div class="ico">MCX</div><div><b>Multicaixa Express</b><span>Recebe o pedido no telemóvel e confirma na aplicação.</span></div></button>
+            <button class="method" type="button" data-m="trf"><div class="ico">IBAN</div><div><b>Transferência bancária</b><span>Para valores elevados. Exige envio do comprovativo; confirmação manual.</span></div></button>
+          </div>
+          <div id="mcxBox" class="hidden" style="margin-top:14px">
+            <label for="mcxTel">Número associado ao Multicaixa Express</label>
+            <input id="mcxTel" inputmode="tel" placeholder="9XX XXX XXX">
+            <div class="err" id="eMcx"></div>
+          </div>
+          <div class="actions">
+            <button class="btn ghost" type="button" data-go="2">← Voltar</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- PASSO 4 -->
+      <section id="s4" class="hidden">
+        <div class="card" id="result"></div>
+      </section>
+    </div>
+
+    <!-- RESUMO -->
+    <aside class="summary no-print" id="summary">
+      <div class="card">
+        <h2>Resumo da encomenda</h2>
+        <div id="lines"></div>
+        <div id="totals"></div>
+        <button class="btn" id="next" type="button" disabled>Continuar</button>
+        <p class="note" id="ivaNote"></p>
+      </div>
+    </aside>
+  </div>
+</main>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ===================== CONFIGURAÇÃO ===================== */
+const CONFIG = {
+  taxaIVA: 0.14,
+  precosIncluemIVA: false,
+  validadeReferenciaHoras: 72,
+  entidadeReferencia: '00000',
+  banco: '[Nome do banco]',
+  titular: '[Titular da conta]',
+  iban: 'AO06 0000 0000 0000 0000 0000 0',
+  contactoPagamentos: '[email de pagamentos]'
+};
+
+const CATALOGO = [
+  { cat:'aloj', nome:'Alojamento web', grupo:'aloj', exclusivo:true, itens:[
+    { id:'aloj-start', tag:'START', nome:'Alojamento START', preco:39900, periodo:'ano', recorrente:true, feat:['5 GB SSD','5 emails profissionais','SSL incluído'] },
+    { id:'aloj-pro', tag:'PRO · Mais procurado', nome:'Alojamento PRO', preco:79900, periodo:'ano', recorrente:true, feat:['10 GB SSD','10 emails profissionais','SSL incluído'] },
+    { id:'aloj-bus', tag:'BUSINESS', nome:'Alojamento BUSINESS', preco:null, feat:['SSD e emails à medida'] }
+  ]},
+  { cat:'web', nome:'Website + alojamento', grupo:'aloj', exclusivo:true, itens:[
+    { id:'web-start', tag:'START', nome:'Website + alojamento START', preco:149900, periodo:'1.º ano', recorrente:false, feat:['Website profissional','Alojamento do 1.º ano'] },
+    { id:'web-pro', tag:'PRO', nome:'Website + alojamento PRO', preco:299900, periodo:'1.º ano', recorrente:false, feat:['Website profissional','Alojamento do 1.º ano'] },
+    { id:'web-bus', tag:'BUSINESS', nome:'Website + alojamento BUSINESS', preco:null, feat:['Projeto à medida'] }
+  ]},
+  { cat:'gest', nome:'Gestão e manutenção', grupo:'gest', exclusivo:true, itens:[
+    { id:'gest-start', tag:'START', nome:'Gestão e manutenção START', preco:59999, periodo:'ano', recorrente:true, feat:['Actualizações e segurança','Cópias de segurança'] },
+    { id:'gest-pro', tag:'PRO', nome:'Gestão e manutenção PRO', preco:99000, periodo:'ano', recorrente:true, feat:['Actualizações e segurança','Cópias de segurança'] },
+    { id:'gest-bus', tag:'BUSINESS', nome:'Gestão e manutenção BUSINESS', preco:null, feat:['Plano à medida'] }
+  ]},
+  { cat:'dom', nome:'Domínios', dominios:true, ext:[
+    { ext:'.ao', preco:15000, exemplo:true }, { ext:'.co.ao', preco:15000, exemplo:true },
+    { ext:'.com', preco:12000, exemplo:true }, { ext:'.net', preco:14000, exemplo:true }, { ext:'.org', preco:14000, exemplo:true }
+  ]},
+  { cat:'outros', nome:'E-mails Corporativos', itens:[
+    { id:'vps', tag:'START', nome:'Servidor VPS', preco:89999,periodo:'ano', feat:['5GB'] },
+    { id:'ia', tag:'PRO', nome:'Automação com IA', preco:119999,periodo:'ano', feat:['10GB'] },
+    { id:'ia', tag:'BUSINESS', nome:'Automação com IA', preco:null, feat:['Orçamento à medida'] },
+  ]}
+];
+
+/* ===================== ESTADO ===================== */
+const state = { step:1, cat:'aloj', cart:[], metodo:'ref', encomenda:null };
+const $ = s => document.querySelector(s);
+const kz = n => Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g,'.') + ' Kz';
+const findItem = id => { for (const c of CATALOGO) for (const i of (c.itens||[])) if (i.id===id) return {...i, grupo:c.grupo, exclusivo:c.exclusivo}; };
+function toast(t){ const e=$('#toast'); e.textContent=t; e.classList.add('on'); clearTimeout(toast.t); toast.t=setTimeout(()=>e.classList.remove('on'),1800); }
+
+/* ===================== CÁLCULO ===================== */
+function calcular(){
+  let base = 0;
+  state.cart.forEach(l => base += l.preco * (l.recorrente ? l.anos : 1));
+  let subtotal, iva, total;
+  if (CONFIG.precosIncluemIVA){ total = base; subtotal = base/(1+CONFIG.taxaIVA); iva = total-subtotal; }
+  else { subtotal = base; iva = base*CONFIG.taxaIVA; total = subtotal+iva; }
+  return { subtotal, iva, total:Math.round(total) };
+}
+
+/* ===================== CATÁLOGO ===================== */
+function renderTabs(){
+  $('#tabs').innerHTML = CATALOGO.map(c=>`<button type="button" class="${c.cat===state.cat?'on':''}" data-cat="${c.cat}">${c.nome}</button>`).join('');
+}
+function renderPlans(){
+  const c = CATALOGO.find(x=>x.cat===state.cat);
+  $('#domBox').classList.toggle('hidden', !c.dominios);
+  if (c.dominios){
+    $('#plans').innerHTML = c.ext.map(e=>`<div class="plan consulta" style="cursor:default"><div class="tag">Registo anual</div><h3>${e.ext}</h3><div class="price">${kz(e.preco)} <small>/ ano</small>${e.exemplo?'<span class="badge">preço de exemplo</span>':''}</div></div>`).join('');
+    $('#domExt').innerHTML = c.ext.map(e=>`<option value="${e.ext}">${e.ext}</option>`).join('');
+    return;
+  }
+  $('#plans').innerHTML = c.itens.map(i=>{
+    const sel = state.cart.some(l=>l.id===i.id);
+    if (i.preco===null) return `<div class="plan consulta"><div class="tag">${i.tag}</div><h3>${i.nome}</h3><div class="price">Sob consulta</div><ul>${i.feat.map(f=>`<li>${f}</li>`).join('')}</ul><a href="#" class="note" style="display:inline-block;color:var(--brand)" onclick="toast('Encaminhar para o formulário de proposta');return false">Pedir orçamento →</a></div>`;
+    return `<button type="button" class="plan ${sel?'sel':''}" data-id="${i.id}" aria-pressed="${sel}"><span class="chk">${sel?'✓':''}</span><div class="tag">${i.tag}</div><h3>${i.nome}</h3><div class="price">${kz(i.preco)} <small>/ ${i.periodo}</small></div><ul>${i.feat.map(f=>`<li>${f}</li>`).join('')}</ul></button>`;
+  }).join('');
+}
+function togglePlan(id){
+  const it = findItem(id);
+  const idx = state.cart.findIndex(l=>l.id===id);
+  if (idx>=0){ state.cart.splice(idx,1); }
+  else {
+    if (it.exclusivo){
+      const antes = state.cart.filter(l=>l.grupo===it.grupo);
+      state.cart = state.cart.filter(l=>l.grupo!==it.grupo);
+      if (antes.length) toast(`Substituído: ${antes.map(a=>a.nome).join(', ')}`);
+    }
+    state.cart.push({ id, nome:it.nome, preco:it.preco, recorrente:it.recorrente, anos:1, grupo:it.grupo, periodo:it.periodo });
+  }
+  renderPlans(); renderSummary();
+}
+function addDominio(){
+  const raw = $('#domName').value.trim().toLowerCase().replace(/^www\./,'');
+  const ext = $('#domExt').value;
+  const ok = /^[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?$/.test(raw);$('#domErr').textContent = ok ? '' : 'Nome inválido. Use apenas letras, números e hífens.';
+  if (!ok) return;
+  const nome = raw+ext;
+  if (state.cart.some(l=>l.id==='dom:'+nome)){ $('#domErr').textContent='Este domínio já está na encomenda.'; return; }
+  const e = CATALOGO.find(c=>c.dominios).ext.find(x=>x.ext===ext);
+  state.cart.push({ id:'dom:'+nome, nome:'Domínio '+nome, preco:e.preco, recorrente:true, anos:1, grupo:'dom', periodo:'ano' });
+  $('#domName').value=''; renderSummary(); toast(nome+' adicionado');
+}
+
+/* ===================== RESUMO ===================== */
+function renderSummary(){
+  const lines = $('#lines');
+  const editable = state.step===1;
+  if (!state.cart.length){ lines.innerHTML = '<div class="empty">Ainda não escolheu nenhum serviço.</div>'; $('#totals').innerHTML=''; }
+  else {
+    lines.innerHTML = state.cart.map((l,i)=>{
+      const val = l.preco*(l.recorrente?l.anos:1);
+      const meta = l.recorrente ? (editable ? `<span class="yrs"><button type="button" data-yr="${i}" data-d="-1" aria-label="Menos um ano">−</button><output>${l.anos} ${l.anos>1?'anos':'ano'}</output><button type="button" data-yr="${i}" data-d="1" aria-label="Mais um ano">+</button></span>` : `<small>${l.anos} ${l.anos>1?'anos':'ano'} × ${kz(l.preco)}</small>`) : `<small>${l.periodo}</small>`;
+      return `<div class="line"><div class="nm">${l.nome}${meta}${editable?` <div><button class="rm" type="button" data-rm="${i}">Remover</button></div>`:''}</div><div>${kz(val)}</div></div>`;
+    }).join('');
+    const t = calcular();
+    $('#totals').innerHTML = `<div class="tot"><span>Subtotal</span><span>${kz(t.subtotal)}</span></div><div class="tot"><span>IVA (${CONFIG.taxaIVA*100}%)</span><span>${kz(t.iva)}</span></div><div class="tot big"><span>Total</span><span>${kz(t.total)}</span></div>`;
+  }
+  $('#ivaNote').textContent = CONFIG.precosIncluemIVA ? 'Preços com IVA incluído.' : 'Aos preços da tabela acresce IVA à taxa de 14%.';
+  const labels = {1:'Continuar para faturação',2:'Continuar para pagamento',3:'Gerar referência de pagamento'};
+  if (state.metodo==='mcx') labels[3]='Enviar pedido ao telemóvel';
+  if (state.metodo==='trf') labels[3]='Obter coordenadas bancárias';
+  $('#next').textContent = labels[state.step]||'';
+  $('#next').disabled = !state.cart.length;
+  $('#summary').classList.toggle('hidden', state.step===4);
+}
+
+/* ===================== VALIDAÇÃO ===================== */
+function validarFaturacao(){
+  const tipo=$('#fTipo').value, nif=$('#fNif').value.replace(/\s/g,''), nome=$('#fNome').value.trim(),
+        email=$('#fEmail').value.trim(), tel=$('#fTel').value.replace(/\D/g,'').replace(/^244/,'');
+  const e = {
+    eNif: tipo==='empresa' && !/^\d{9,14}$/.test(nif) ? 'Indique um NIF válido (empresa).' : (nif && !/^[0-9A-Z]{9,14}$/i.test(nif) ? 'NIF inválido.' : ''),
+    eNome: nome.length<2 ? 'Campo obrigatório.' : '',
+    eEmail: !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) ? 'Email inválido.' : '',
+    eTel: !/^9\d{8}$/.test(tel) ? 'Número angolano com 9 dígitos, a começar por 9.' : ''
+  };
+  Object.entries(e).forEach(([k,v])=>$('#'+k).textContent=v);
+  if (Object.values(e).some(Boolean)) return false;
+  state.cliente = { tipo, nif:nif||'Consumidor final', nome, email, tel, morada:$('#fMorada').value.trim() };
+  if (!$('#mcxTel').value) $('#mcxTel').value = tel;
+  return true;
+}
+
+/* ===================== REFERÊNCIA ===================== */
+function gerarReferenciaDemo(seed){
+  const base = String(seed % 10000000).padStart(7,'0');
+  const chk = String(98 - (Number(base+'00') % 97)).padStart(2,'0');
+  return base+chk;
+}
+function criarEncomenda(){
+  const agora = new Date();
+  const seq = Math.floor(Math.random()*900000)+100000;
+  const t = calcular();
+  return {
+    numero:`ECO-${agora.getFullYear()}-${seq}`,
+    data:agora,
+    validade:new Date(agora.getTime()+CONFIG.validadeReferenciaHoras*3600e3),
+    total:t.total, totais:t,
+    itens:state.cart.map(l=>({...l})),
+    cliente:state.cliente,
+    metodo:state.metodo,
+    referencia:gerarReferenciaDemo(seq*7919),
+    estado:'pendente'
+  };
+}
+const fmtData = d => d.toLocaleString('pt-PT',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});
+const grp3 = s => s.replace(/(\d{3})(?=\d)/g,'$1 ');
+const coord = (k,v,raw) => `<div class="coord"><div><div class="k">${k}</div><div class="v">${v}</div></div><button class="copy no-print" type="button" data-copy="${raw??v}">Copiar</button></div>`;
+
+function renderResultado(){
+  const o = state.encomenda, c = o.cliente;
+  const head = `<div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap"><div><h2 style="margin:0">Encomenda ${o.numero}</h2><p class="sub" style="margin:2px 0 0">${fmtData(o.data)} · ${c.nome}</p></div><span class="status ${o.estado==='paga'?'ok':''}" id="st"><span class="dot"></span>${o.estado==='paga'?'Pago':'A aguardar pagamento'}</span></div>`;
+  let body='';
+  if (o.metodo==='ref'){
+    body = `<p class="sub" style="margin-top:16px">Pague em qualquer ATM Multicaixa, Internet Banking ou app do seu banco, na opção <b>Pagamentos → Pagamento por Referência</b>.</p>
+      <div class="coords">${coord('Entidade',o.entidade=CONFIG.entidadeReferencia)}${coord('Referência',grp3(o.referencia),o.referencia)}${coord('Montante',kz(o.total),o.total)}</div>
+      <p class="note">Válida até <b>${fmtData(o.validade)}</b>. A confirmação é automática; receberá a factura em ${c.email}.</p>`;
+  } else if (o.metodo==='mcx'){
+    body = `<div class="coords" style="margin-top:16px">${coord('Pedido enviado para',c.tel.replace(/(\d{3})(\d{3})(\d{3})/,'$1 $2 $3'),c.tel)}${coord('Montante',kz(o.total),o.total)}</div>
+      <ol class="howto"><li>Abra a aplicação Multicaixa Express.</li><li>Aceite o pedido de pagamento da Ecomulti.</li><li>Confirme com o seu PIN. Tem <b id="cd">90</b> segundos.</li></ol>
+      <p class="note">Se o tempo expirar, pode reenviar o pedido ou mudar para pagamento por referência.</p>`;
+  } else {
+    body = `<p class="sub" style="margin-top:16px">Faça a transferência e indique o número da encomenda no descritivo.</p>
+      <div class="coords">${coord('Banco',CONFIG.banco)}${coord('Titular',CONFIG.titular)}${coord('IBAN',CONFIG.iban,CONFIG.iban.replace(/\s/g,''))}${coord('Montante',kz(o.total),o.total)}${coord('Descritivo',o.numero)}</div>
+      <div class="no-print" style="margin-top:14px"><label for="comp">Enviar comprovativo (PDF ou imagem)</label><input type="file" id="comp" accept=".pdf,image/*"><div class="hint" id="compH">A encomenda é activada após validação do comprovativo pela equipa (até 1 dia útil).</div></div>`;
+  }
+  const itens = `<div style="margin-top:20px"><div class="k" style="font-size:12px;color:var(--muted);margin-bottom:4px">Detalhe</div>${o.itens.map(l=>`<div class="line"><div class="nm">${l.nome}<small>${l.recorrente?`${l.anos} ${l.anos>1?'anos':'ano'}`:l.periodo}</small></div><div>${kz(l.preco*(l.recorrente?l.anos:1))}</div></div>`).join('')}<div class="tot"><span>Subtotal</span><span>${kz(o.totais.subtotal)}</span></div><div class="tot"><span>IVA 14%</span><span>${kz(o.totais.iva)}</span></div><div class="tot big"><span>Total</span><span>${kz(o.total)}</span></div><p class="note">Cliente: ${c.nome} · NIF ${c.nif} · ${c.email} · ${c.tel}</p></div>`;
+  const acoes = `<div class="actions no-print"><button class="btn" type="button" onclick="window.print()">Imprimir / guardar PDF</button><button class="btn ghost" type="button" id="simPago">Simular pagamento recebido</button><button class="btn ghost" type="button" id="nova">Nova encomenda</button></div>`;
+  $('#result').innerHTML = head+body+itens+acoes;
+  if (o.metodo==='mcx') iniciarContagem();
+  $('#title').textContent = o.estado==='paga' ? 'Pagamento confirmado' : 'Os seus dados de pagamento';
+  $('#lead').textContent = o.estado==='paga' ? 'Obrigado. A factura foi enviada por email e os serviços serão activados.' : 'Guarde estes dados. Também os enviamos por email e SMS.';
+}
+function iniciarContagem(){
+  let s=90; clearInterval(state.timer);
+  state.timer=setInterval(()=>{ s--; const e=$('#cd'); if(!e){clearInterval(state.timer);return;} e.textContent=s; if(s<=0){clearInterval(state.timer); e.parentElement.innerHTML='O pedido expirou. <a href="#" id="reenv" style="color:var(--brand)">Reenviar</a>';} },1000);
+}
+
+/* ===================== NAVEGAÇÃO ===================== */
+function go(n){
+  state.step=n;
+  ['s1','s2','s3','s4'].forEach((id,i)=>$('#'+id).classList.toggle('hidden',i+1!==n));
+  document.querySelectorAll('#steps li').forEach(li=>{ const s=+li.dataset.s; li.classList.toggle('on',s===n); li.classList.toggle('done',s<n); });
+  if (n<4){ $('#title').textContent='Contratar e pagar serviços'; $('#lead').textContent='Escolha os serviços, confirme os dados de faturação e receba a referência de pagamento na hora.'; }
+  renderSummary(); window.scrollTo({top:0,behavior:'smooth'});
+}
+$('#next').addEventListener('click',()=>{
+  if (state.step===1) return go(2);
+  if (state.step===2){ if (validarFaturacao()) go(3); return; }
+  if (state.step===3){
+    if (state.metodo==='mcx'){ const t=$('#mcxTel').value.replace(/\D/g,'').replace(/^244/,''); if(!/^9\d{8}$/.test(t)){$('#eMcx').textContent='Número inválido.'; return;} $('#eMcx').textContent=''; state.cliente.tel=t; }
+    state.encomenda = criarEncomenda(); go(4); renderResultado();
+  }
+});
+document.addEventListener('click',e=>{
+  const t=e.target.closest('[data-cat],[data-id],[data-rm],[data-yr],[data-go],[data-m],[data-copy],#simPago,#nova,#reenv,#domAdd');
+  if(!t) return;
+  if (t.dataset.cat){ state.cat=t.dataset.cat; renderTabs(); renderPlans(); }
+  else if (t.dataset.id) togglePlan(t.dataset.id);
+  else if (t.dataset.rm!==undefined){ state.cart.splice(+t.dataset.rm,1); renderPlans(); renderSummary(); }
+  else if (t.dataset.yr!==undefined){ const l=state.cart[+t.dataset.yr]; l.anos=Math.min(3,Math.max(1,l.anos+ +t.dataset.d)); renderSummary(); }
+  else if (t.dataset.go) go(+t.dataset.go);
+  else if (t.dataset.m){ state.metodo=t.dataset.m; document.querySelectorAll('.method').forEach(m=>m.classList.toggle('sel',m===t)); $('#mcxBox').classList.toggle('hidden',state.metodo!=='mcx'); renderSummary(); }
+  else if (t.dataset.copy!==undefined){ const v=t.dataset.copy; (navigator.clipboard?navigator.clipboard.writeText(v):Promise.reject()).then(()=>toast('Copiado'),()=>toast(v)); }
+  else if (t.id==='simPago'){ e.preventDefault(); clearInterval(state.timer); state.encomenda.estado='paga'; renderResultado(); toast('Webhook do gateway simulado: pago'); }
+  else if (t.id==='nova'){ state.cart=[]; state.encomenda=null; state.metodo='ref'; document.querySelectorAll('.method').forEach(m=>m.classList.toggle('sel',m.dataset.m==='ref')); $('#mcxBox').classList.add('hidden'); renderPlans(); go(1); }
+  else if (t.id==='reenv'){ e.preventDefault(); renderResultado(); toast('Pedido reenviado'); }
+  else if (t.id==='domAdd') addDominio();
+});
+$('#domName').addEventListener('keydown',e=>{ if(e.key==='Enter') addDominio(); });
+$('#fTipo').addEventListener('change',e=>{ $('#lNome').textContent = e.target.value==='empresa'?'Nome da empresa':'Nome completo'; });
+document.addEventListener('change',e=>{ if(e.target.id==='comp' && e.target.files[0]){ $('#compH').textContent='Recebido: '+e.target.files[0].name+'. Vamos validar e avisar por email.'; } });
+
+renderTabs(); renderPlans(); renderSummary();
+</script>
+</body>
+</html>

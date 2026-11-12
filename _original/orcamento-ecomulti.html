@@ -1,0 +1,1308 @@
+<!DOCTYPE html>
+<html lang="pt-AO">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Reveja os serviços seleccionados, ajuste quantidades e finalize o seu pedido de orçamento com a ECOMULTI.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="inicio.css">
+  <link rel="icon" type="image/x-icon" href="imagens/logo 03.png">
+  <title>Orçamento | ECOMULTI</title>
+
+  <style>
+    /* -------- Estilos específicos do carrinho (não existem no inicio.css) -------- */
+    .cart-layout {
+      display: grid;
+      grid-template-columns: 1.4fr 0.9fr;
+      gap: 28px;
+      align-items: start;
+    }
+    .cart-list { display: grid; gap: 16px; }
+
+    .cart-item {
+      display: grid;
+      grid-template-columns: auto 1fr auto auto;
+      gap: 18px;
+      align-items: center;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 20px 22px;
+    }
+    .cart-item .servico-ico {
+      width: 48px; height: 48px;
+      display: grid; place-items: center;
+      border-radius: 12px;
+      background: var(--tint);
+      color: var(--primary-2);
+      font-size: 1.4rem;
+      border: 1px solid rgba(26,126,219,.2);
+    }
+    .cart-item h3 {
+      margin: 0 0 4px;
+      font-size: 1.05rem;
+      color: var(--primary);
+    }
+    .cart-item .servico-label {
+      display: inline-block;
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--primary-2);
+      margin-bottom: 4px;
+    }
+    .cart-item ul {
+      list-style: none;
+      margin: 8px 0 0;
+      padding: 0;
+      display: grid;
+      gap: 4px;
+    }
+    .cart-item ul li {
+      font-size: 0.86rem;
+      color: var(--muted);
+      display: flex;
+      gap: 6px;
+      align-items: flex-start;
+    }
+    .cart-item ul li::before {
+      content: "•";
+      color: var(--primary-2);
+      font-weight: 900;
+    }
+    .cart-item .item-total {
+      text-align: right;
+      min-width: 120px;
+    }
+    .cart-item .item-total strong {
+      display: block;
+      font-size: 1.15rem;
+      color: var(--primary);
+      letter-spacing: -0.02em;
+    }
+    .cart-item .item-total span {
+      display: block;
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+    .cart-item .remove {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      width: 38px; height: 38px;
+      display: grid; place-items: center;
+      cursor: pointer;
+      color: #b91c1c;
+      font-size: 1.1rem;
+      transition: 0.2s;
+    }
+    .cart-item .remove:hover {
+      border-color: #b91c1c;
+      background: #fef2f2;
+    }
+
+    /* Estado vazio */
+    .empty-state {
+      background: var(--panel);
+      border: 1px dashed var(--line);
+      border-radius: var(--radius);
+      padding: 48px 24px;
+      text-align: center;
+    }
+    .empty-state .icon-box { margin: 0 auto 18px; }
+    .empty-state h3 { margin: 0 0 8px; color: var(--primary); }
+    .empty-state p { margin: 0 0 20px; color: var(--muted); }
+    .empty-state .hero-actions { justify-content: center; }
+
+    /* Resumo (reaproveita .summary já existente) */
+    .summary .cart-actions { display: grid; gap: 10px; margin-top: 22px; }
+    .summary .btn-danger {
+      background: transparent;
+      color: #fecaca;
+      border: 1px solid rgba(255,255,255,0.3);
+    }
+    .summary .btn-danger:hover {
+      background: rgba(255,255,255,0.08);
+      color: #fff;
+      box-shadow: none;
+    }
+    .summary .btn-primary {
+      background: #fff;
+      color: var(--primary);
+    }
+    .summary .btn-primary:hover {
+      background: #eaf3ff;
+    }
+
+    /* Aviso de confirmação */
+    .alert {
+      margin-top: 16px;
+      padding: 14px 16px;
+      border-radius: 12px;
+      background: var(--tint);
+      color: var(--primary);
+      font-size: 0.9rem;
+      border: 1px solid rgba(26,126,219,.25);
+    }
+
+    @media (max-width: 980px) {
+      .cart-layout { grid-template-columns: 1fr; }
+      .cart-item {
+        grid-template-columns: auto 1fr;
+        grid-template-areas:
+          "ico body"
+          "total total"
+          "remove remove";
+      }
+      .cart-item .servico-ico { grid-area: ico; }
+      .cart-item .item-body { grid-area: body; }
+      .cart-item .item-total { grid-area: total; text-align: left; min-width: 0; }
+      .cart-item .remove { grid-area: remove; width: 100%; }
+    }
+
+    /* ============================================================
+   MODAL DE PAGAMENTO
+   ============================================================ */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 28, 77, 0.55);
+  backdrop-filter: blur(4px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  z-index: 100;
+}
+.modal-backdrop.open { display: flex; animation: fadeIn 0.25s var(--ease, ease); }
+
+.modal {
+  background: #fff;
+  border-radius: 20px;
+  width: min(640px, 100%);
+  max-height: calc(100vh - 40px);
+  overflow-y: auto;
+  box-shadow: 0 30px 80px rgba(10, 28, 77, 0.35);
+  animation: fadeUp 0.35s var(--ease, ease);
+}
+.modal-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 24px 26px 10px;
+}
+.modal-header h3 {
+  margin: 0 0 4px;
+  color: var(--primary);
+  font-size: 1.35rem;
+}
+.modal-header p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+.modal-close {
+  background: #f1f5fb;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  color: var(--primary);
+  flex-shrink: 0;
+  transition: 0.2s;
+}
+.modal-close:hover { background: var(--tint); }
+
+.modal-body { padding: 8px 26px 22px; }
+
+/* Métodos de pagamento (radios em cartão) */
+.pay-methods {
+  display: grid;
+  gap: 10px;
+  margin: 6px 0 22px;
+}
+.pay-method {
+  position: relative;
+  display: block;
+  cursor: pointer;
+}
+.pay-method input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+.pay-method .pm-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 16px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: #fff;
+  transition: 0.2s;
+}
+.pay-method .pm-ico {
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  border-radius: 10px;
+  background: var(--tint);
+  color: var(--primary-2);
+  font-size: 1.2rem;
+  flex-shrink: 0;
+}
+.pay-method .pm-text strong {
+  display: block;
+  color: var(--primary);
+  font-size: 0.98rem;
+}
+.pay-method .pm-text small {
+  display: block;
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+.pay-method input:checked + .pm-card {
+  border: 2px solid var(--primary-2);
+  background: var(--tint);
+  box-shadow: 0 0 0 4px rgba(26,126,219,0.1);
+}
+.pay-method input:focus-visible + .pm-card {
+  outline: 3px solid rgba(26,126,219,0.35);
+}
+
+/* Painel de detalhes do método escolhido */
+.pay-details {
+  border: 1px dashed var(--line);
+  border-radius: 14px;
+  padding: 16px 18px;
+  background: #f8fbff;
+  margin-bottom: 20px;
+  display: none;
+}
+.pay-details.show { display: block; animation: fadeUp 0.3s var(--ease, ease); }
+.pay-details h4 {
+  margin: 0 0 6px;
+  color: var(--primary);
+  font-size: 0.98rem;
+}
+.pay-details p {
+  margin: 0 0 12px;
+  color: var(--muted);
+  font-size: 0.88rem;
+}
+.pay-details .field { margin-bottom: 12px; }
+.pay-details .field:last-child { margin-bottom: 0; }
+.pay-details .field input {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 10px 12px;
+  background: #fff;
+  font-size: 0.92rem;
+}
+.pay-details .field input:focus {
+  outline: none;
+  border-color: var(--primary-2);
+  box-shadow: 0 0 0 3px rgba(26,126,219,0.13);
+}
+.pay-details .field label {
+  display: block;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--primary);
+  margin-bottom: 6px;
+}
+
+/* Caixa de dados do pagamento (referência / IBAN) */
+.pay-info {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 12px 14px;
+  margin-top: 10px;
+  font-size: 0.88rem;
+  color: var(--text);
+}
+.pay-info strong { color: var(--primary); }
+.pay-info .copy-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 0;
+  border-bottom: 1px dashed var(--line);
+}
+.pay-info .copy-row:last-child { border-bottom: 0; }
+.pay-info button {
+  background: var(--tint);
+  border: 1px solid rgba(26,126,219,0.3);
+  color: var(--primary-2);
+  border-radius: 8px;
+  padding: 4px 10px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+.pay-info button:hover { background: #d8e8fb; }
+
+/* Resumo mini dentro do modal */
+.modal-summary {
+  background: var(--primary);
+  color: #fff;
+  border-radius: 14px;
+  padding: 16px 18px;
+  margin-bottom: 18px;
+}
+.modal-summary .line {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 6px 0;
+  font-size: 0.9rem;
+  border-bottom: 1px solid rgba(255,255,255,0.12);
+}
+.modal-summary .line:last-of-type { border-bottom: 0; }
+.modal-summary .line span:first-child { color: #cfddf1; }
+.modal-summary .total-line {
+  margin-top: 8px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255,255,255,0.25);
+  font-size: 1.05rem;
+  font-weight: 800;
+}
+.modal-summary .total-line span:first-child { color: #fff; }
+
+/* Ações do modal */
+.modal-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  padding: 8px 26px 26px;
+}
+.modal-actions .btn { min-width: 140px; }
+.modal-actions .btn-ghost {
+  background: #fff;
+  border: 1px solid var(--line);
+  color: var(--primary);
+}
+.modal-actions .btn-ghost:hover { background: var(--tint); }
+
+.modal-msg {
+  margin: 0 26px 18px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: var(--tint);
+  color: var(--primary);
+  font-size: 0.88rem;
+  border: 1px solid rgba(26,126,219,0.25);
+}
+.modal-msg.erro {
+  background: #fef2f2;
+  color: #b91c1c;
+  border-color: #fecaca;
+}
+
+@media (max-width: 640px) {
+  .modal-header, .modal-body, .modal-actions { padding-left: 18px; padding-right: 18px; }
+  .modal-actions .btn { flex: 1; min-width: 0; }
+}
+
+/* ============================================================
+   CAMPOS GERAIS DO MODAL (nome / e-mail / telemóvel do cliente)
+   ============================================================ */
+.modal-body .field {
+  margin-bottom: 16px;
+}
+.modal-body .field > label {
+  display: block;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--primary);
+  margin-bottom: 6px;
+}
+.modal-body .field > input,
+.modal-body .field > select,
+.modal-body .field > textarea {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 11px 14px;
+  background: #fff;
+  color: var(--text);
+  font-size: 0.92rem;
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.modal-body .field > input::placeholder,
+.modal-body .field > textarea::placeholder {
+  color: #94a3b8;
+}
+.modal-body .field > input:focus,
+.modal-body .field > select:focus,
+.modal-body .field > textarea:focus {
+  border-color: var(--primary-2);
+  box-shadow: 0 0 0 3px rgba(26, 126, 219, 0.13);
+}
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="container nav">
+      <a class="brand" href="index.html" aria-label="Ecomulti - início">
+        <img src="imagens/fatia1.png" alt="Logo Ecomulti" />
+      </a>
+      <button class="menu-toggle" id="menuToggle" type="button" aria-label="Abrir menu" aria-expanded="false" aria-controls="menu">
+        <span aria-hidden="true">☰</span>
+      </button>
+      <nav class="nav-links" id="menu" aria-label="Menu principal">
+        <a href="index.html#dominio">Domínios</a>
+        <a href="email-corporativo-ecomulti.html">E-mail</a>
+        <a href="desenvolvimento-ecomulti.html">Websites</a>
+        <a href="hospedagem-ecomulti.html">Hospedagem</a>
+        <a href="#contacto">Contacto</a>
+      </nav>
+      <a class="btn btn-primary" href="#resumo">Ver orçamento</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" id="inicio">
+      <div class="container hero-wrap" style="grid-template-columns:1fr;text-align:center">
+        <div>
+          <span class="eyebrow" style="margin:0 auto 18px">Orçamento</span>
+          <h1>Revise os serviços escolhidos e finalize o seu pedido.</h1>
+          <p class="lead">Todos os serviços que seleccionou estão reunidos aqui. Pode remover itens, ver o total estimado e enviar o pedido para a ECOMULTI.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="orcamento">
+      <div class="container">
+        <div class="section-head">
+          <small>Passo 1 — Rever</small>
+          <h2>O seu orçamento</h2>
+          <p id="contadorItens">A carregar os itens seleccionados…</p>
+        </div>
+
+        <div class="cart-layout">
+          <!-- Lista de itens -->
+          <div id="cartList" class="cart-list" aria-live="polite"></div>
+
+          <!-- Resumo lateral -->
+          <aside class="summary" id="resumo" aria-live="polite" aria-atomic="true">
+            <h3>Resumo do orçamento</h3>
+            <p>Estimativa do valor a pagar pelos serviços seleccionados.</p>
+
+            <div class="summary-line"><span>Nº de serviços</span><strong id="resumoItens">0</strong></div>
+            <div class="summary-line"><span>Subtotal</span><strong id="resumoSubtotal">0 Kz</strong></div>
+            <div class="summary-line"><span>Desconto multi-serviço</span><strong id="resumoDesconto">0 Kz (0%)</strong></div>
+
+            <div class="summary-total">
+              <span>Total estimado</span>
+              <strong id="resumoTotal">0 Kz</strong>
+            </div>
+
+            <div class="cart-actions">
+              <button class="btn btn-primary" id="btnFinalizar" type="button" disabled>
+                Finalizar pedido <span aria-hidden="true">→</span>
+              </button>
+              <button class="btn btn-danger" id="btnLimpar" type="button" disabled>
+                Limpar orçamento
+              </button>
+            </div>
+
+            <p class="fine-print" style="margin-top:14px">
+              Valores estimativos. O preço final, impostos e condições devem ser confirmados pela ECOMULTI antes da contratação.
+            </p>
+
+            <div class="alert" id="alertBox" hidden></div>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <section id="contacto" class="alt">
+      <div class="container">
+        <div class="contact-grid">
+          <div>
+            <h2>Precisa de ajuda a decidir?</h2>
+            <p>Fale com a nossa equipa para ajustar o orçamento, esclarecer dúvidas ou combinar uma proposta personalizada.</p>
+            <ul class="contact-points">
+              <li><svg class="icon"><use href="#i-mail" /></svg> suporte@ecomulti.ao</li>
+              <li><svg class="icon"><use href="#i-check" /></svg> Resposta em horário útil</li>
+            </ul>
+          </div>
+          <form class="contact" id="formContacto" novalidate>
+            <label>Nome
+              <input type="text" name="nome" required>
+            </label>
+            <label>E-mail
+              <input type="email" name="email" required>
+            </label>
+            <label>Mensagem
+              <textarea name="mensagem" rows="4" required></textarea>
+            </label>
+            <button class="btn btn-primary" type="submit">Enviar mensagem</button>
+            <p class="form-msg" id="formMsg" aria-live="polite"></p>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div class="footer-cols">
+        <div>
+          <img src="imagens/fatia1.png" alt="Logo Ecomulti">
+          <p>Presença digital profissional para empresas angolanas.</p>
+        </div>
+        <div>
+          <h4>Serviços</h4>
+          <a href="hospedagem-ecomulti.html">Hospedagem</a>
+          <a href="email-corporativo-ecomulti.html">E-mail corporativo</a>
+          <a href="desenvolvimento-ecomulti.html">Desenvolvimento web</a>
+        </div>
+        <div>
+          <h4>Empresa</h4>
+          <a href="index.html#sobre">Sobre</a>
+          <a href="#contacto">Contacto</a>
+        </div>
+        <div>
+          <h4>Contacto</h4>
+          <a href="mailto:suporte@ecomulti.ao">suporte@ecomulti.ao</a>
+        </div>
+      </div>
+      <div class="footer-row">
+        <span>© <span id="anoAtual"></span> ECOMULTI. Todos os direitos reservados.</span>
+        <a href="#inicio">Voltar ao topo ↑</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ============================================================
+     MODAL DE PAGAMENTO
+     ============================================================ -->
+<div class="modal-backdrop" id="payModal" role="dialog" aria-modal="true" aria-labelledby="payModalTitle">
+  <div class="modal" role="document">
+    <div class="modal-header">
+      <div>
+        <h3 id="payModalTitle">Finalizar pedido</h3>
+        <p>Escolha o método de pagamento que prefere.</p>
+      </div>
+      <button class="modal-close" type="button" id="payClose" aria-label="Fechar">
+        <svg class="icon"><use href="#i-close" /></svg>
+      </button>
+    </div>
+
+    <div class="modal-body">
+      <!-- Resumo -->
+      <div class="modal-summary" aria-live="polite">
+        <div class="line"><span>Subtotal</span><strong id="paySubtotal">0 Kz</strong></div>
+        <div class="line"><span>Desconto multi-serviço</span><strong id="payDesconto">0 Kz (0%)</strong></div>
+        <div class="line total-line"><span>Total a pagar</span><strong id="payTotal">0 Kz</strong></div>
+      </div>
+
+      <!-- Métodos -->
+      <div class="pay-methods" role="radiogroup" aria-label="Método de pagamento">
+        <label class="pay-method">
+          <input type="radio" name="metodoPagamento" value="express" checked>
+          <span class="pm-card">
+            <span class="pm-ico" aria-hidden="true">
+              <svg class="icon"><use href="#i-bolt" /></svg>
+            </span>
+            <span class="pm-text">
+              <strong>Pagamento por Express</strong>
+              <small>Pagamento rápido e imediato</small>
+            </span>
+          </span>
+        </label>
+
+        <label class="pay-method">
+          <input type="radio" name="metodoPagamento" value="referencia">
+          <span class="pm-card">
+            <span class="pm-ico" aria-hidden="true">
+              <svg class="icon"><use href="#i-barcode" /></svg>
+            </span>
+            <span class="pm-text">
+              <strong>Referência</strong>
+              <small>Pague com referência num multicaixa ou homebanking</small>
+            </span>
+          </span>
+        </label>
+
+        <label class="pay-method">
+          <input type="radio" name="metodoPagamento" value="transferencia">
+          <span class="pm-card">
+            <span class="pm-ico" aria-hidden="true">
+              <svg class="icon"><use href="#i-bank" /></svg>
+            </span>
+            <span class="pm-text">
+              <strong>Transferência bancária</strong>
+              <small>Transfira o valor para a conta da ECOMULTI</small>
+            </span>
+          </span>
+        </label>
+      </div>
+
+      <!-- Detalhes dinâmicos por método -->
+      <div class="pay-details" id="payDetailsExpress">
+        <h4>Pagamento por Express</h4>
+        <p>Introduza os dados para receber o pedido de pagamento. A ECOMULTI entrará em contacto para concluir a operação.</p>
+        <div class="field">
+          <label for="expressTelefone">Telemóvel (com indicativo)</label>
+          <input type="tel" id="expressTelefone" placeholder="+244 9XX XXX XXX" autocomplete="tel">
+        </div>
+        <div class="field">
+          <label for="expressNome">Nome do titular</label>
+          <input type="text" id="expressNome" placeholder="Nome completo" autocomplete="name">
+        </div>
+      </div>
+
+      <div class="pay-details" id="payDetailsReferencia">
+        <h4>Pagamento por Referência</h4>
+        <p>Use os dados abaixo para pagar num multicaixa, homebanking ou ATM. Depois de pagar, envie o comprovativo para a ECOMULTI.</p>
+        <div class="pay-info">
+          <div class="copy-row">
+            <span>Entidade: <strong id="refEntidade">00000</strong></span>
+            <button type="button" data-copy="refEntidade">Copiar</button>
+          </div>
+          <div class="copy-row">
+            <span>Referência: <strong id="refNumero">000 000 000</strong></span>
+            <button type="button" data-copy="refNumero">Copiar</button>
+          </div>
+          <div class="copy-row">
+            <span>Valor: <strong id="refValor">0 Kz</strong></span>
+          </div>
+        </div>
+        <p class="field-hint" style="margin-top:10px">A referência é gerada após a confirmação. Estes valores são de demonstração.</p>
+      </div>
+
+      <div class="pay-details" id="payDetailsTransferencia">
+        <h4>Transferência bancária</h4>
+        <p>Transfira o valor total para a conta abaixo e envie o comprovativo para <strong>suporte@ecomulti.ao</strong>.</p>
+        <div class="pay-info">
+          <div class="copy-row">
+            <span>Banco: <strong>BAI</strong></span>
+          </div>
+          <div class="copy-row">
+            <span>IBAN: <strong id="ibanConta">AO06 0000 0000 0000 0000 0</strong></span>
+            <button type="button" data-copy="ibanConta">Copiar</button>
+          </div>
+          <div class="copy-row">
+            <span>Titular: <strong>ECOMULTI, LDA</strong></span>
+          </div>
+          <div class="copy-row">
+            <span>Valor: <strong id="transfValor">0 Kz</strong></span>
+          </div>
+        </div>
+        <div class="field" style="margin-top:14px">
+          <label for="transfComprovativo">Nº do comprovativo (opcional)</label>
+          <input type="text" id="transfComprovativo" placeholder="Ex.: 123456789">
+        </div>
+      </div>
+
+      <!-- Dados do cliente -->
+      <div class="field">
+        <label for="payNome">O seu nome</label>
+        <input type="text" id="payNome" placeholder="Nome completo" autocomplete="name">
+      </div>
+      <div class="field">
+        <label for="payEmail">O seu e-mail</label>
+        <input type="email" id="payEmail" placeholder="nome@empresa.ao" autocomplete="email">
+      </div>
+      <div class="field">
+        <label for="payTelefone">Telemóvel</label>
+        <input type="tel" id="payTelefone" placeholder="+244 9XX XXX XXX" autocomplete="tel">
+      </div>
+
+      <div class="modal-msg" id="payMsg" hidden></div>
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn btn-ghost" type="button" id="payCancel">Cancelar</button>
+      <button class="btn btn-primary" type="button" id="payConfirm">
+        Confirmar pedido <span aria-hidden="true">→</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol>
+    <symbol id="i-mail" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></symbol>
+    <symbol id="i-cart" viewBox="0 0 24 24"><circle cx="9" cy="20" r="1.5"/><circle cx="18" cy="20" r="1.5"/><path d="M2 3h3l2.5 12h11l2-8H6"/></symbol>
+    <symbol id="i-hosting" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="6" rx="2"/><rect x="3" y="14" width="18" height="6" rx="2"/><path d="M7 7h.01M7 17h.01"/></symbol>
+    <symbol id="i-email" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></symbol>
+    <symbol id="i-code" viewBox="0 0 24 24"><path d="m8 8-4 4 4 4M16 8l4 4-4 4M14 4l-4 16"/></symbol>
+    <symbol id="i-bolt" viewBox="0 0 24 24"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8z"/></symbol>
+    <symbol id="i-barcode" viewBox="0 0 24 24"><path d="M4 5v14M8 5v14M12 5v14M16 5v14M20 5v14"/></symbol>
+    <symbol id="i-bank" viewBox="0 0 24 24"><path d="M3 10 12 4l9 6M5 10v9h14v-9M9 19v-6h6v6"/></symbol>
+  </svg>
+
+  <script src="api/catalogo.php"></script>
+  <script>
+/* =========================================================
+   CONFIGURAÇÃO
+   ========================================================= */
+const STORAGE_KEY = "ecomulti_orcamento";
+const EMAIL_EMPRESA = "suporte@ecomulti.ao";
+const DESCONTO_MULTI = precoDe("regra.desconto_multi"); // % de desconto se 2+ serviços diferentes
+
+const ICONES = {
+  hospedagem:     "#i-hosting",
+  email:          "#i-email",
+  desenvolvimento:"#i-code"
+};
+const LABELS = {
+  hospedagem:     "Hospedagem Web",
+  email:          "E-mail Corporativo",
+  desenvolvimento:"Desenvolvimento de Websites"
+};
+
+/* =========================================================
+   HELPERS
+   ========================================================= */
+const fmt = (v) => new Intl.NumberFormat("pt-AO", { maximumFractionDigits: 0 }).format(v) + " Kz";
+const $ = (id) => document.getElementById(id);
+
+const cartList       = $("cartList");
+const contadorItens  = $("contadorItens");
+const resumoItens    = $("resumoItens");
+const resumoSubtotal = $("resumoSubtotal");
+const resumoDesconto = $("resumoDesconto");
+const resumoTotal    = $("resumoTotal");
+const btnFinalizar   = $("btnFinalizar");
+const btnLimpar      = $("btnLimpar");
+const alertBox       = $("alertBox");
+
+function lerCarrinho() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    const lista = raw ? JSON.parse(raw) : [];
+    return Array.isArray(lista) ? lista : [];
+  } catch (e) {
+    console.error("Erro a ler o carrinho:", e);
+    return [];
+  }
+}
+
+function gravarCarrinho(lista) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(lista));
+}
+
+function mostrarAlerta(msg, tipo = "info") {
+  if (!alertBox) return;
+  alertBox.hidden = false;
+  alertBox.textContent = msg;
+  alertBox.style.background = tipo === "erro" ? "#fef2f2" : "var(--tint)";
+  alertBox.style.color = tipo === "erro" ? "#b91c1c" : "var(--primary)";
+  alertBox.style.borderColor = tipo === "erro" ? "#fecaca" : "rgba(26,126,219,.25)";
+  clearTimeout(mostrarAlerta._t);
+  mostrarAlerta._t = setTimeout(() => { alertBox.hidden = true; }, 5000);
+}
+
+/* =========================================================
+   RENDER DO CARRINHO + RESUMO
+   ========================================================= */
+function render() {
+  const lista = lerCarrinho();
+
+  /* ---------- Lista ---------- */
+  if (!cartList) return;
+
+  if (!lista.length) {
+    cartList.innerHTML = `
+      <div class="empty-state">
+        <div class="icon-box" aria-hidden="true">
+          <svg class="icon"><use href="#i-cart" /></svg>
+        </div>
+        <h3>O seu orçamento está vazio</h3>
+        <p>Ainda não seleccionou nenhum serviço. Escolha um plano numa das páginas abaixo para começar.</p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="hospedagem-ecomulti.html">Hospedagem</a>
+          <a class="btn btn-secondary" href="email-corporativo-ecomulti.html">E-mail</a>
+          <a class="btn btn-secondary" href="desenvolvimento-ecomulti.html">Desenvolvimento</a>
+        </div>
+      </div>`;
+    if (contadorItens) contadorItens.textContent = "Sem serviços seleccionados.";
+  } else {
+    cartList.innerHTML = lista.map((item) => {
+      const icone = ICONES[item.servico] || "#i-cart";
+      const label = item.servicoLabel || LABELS[item.servico] || "Serviço";
+      const detalhes = Array.isArray(item.detalhes) ? item.detalhes : [];
+      return `
+        <article class="cart-item" data-id="${escapeHtml(item.id)}">
+          <div class="servico-ico" aria-hidden="true">
+            <svg class="icon"><use href="${icone}" /></svg>
+          </div>
+          <div class="item-body">
+            <span class="servico-label">${escapeHtml(label)}</span>
+            <h3>${escapeHtml(item.plano)}</h3>
+            ${detalhes.length ? `<ul>${detalhes.map(d => `<li>${escapeHtml(d)}</li>`).join("")}</ul>` : ""}
+          </div>
+          <div class="item-total">
+            <strong>${fmt(item.total)}</strong>
+            <span>estimativa</span>
+          </div>
+          <button class="remove" type="button" data-remove="${escapeHtml(item.id)}" aria-label="Remover ${escapeHtml(item.plano)}">
+            <svg class="icon"><use href="#i-close" /></svg>
+          </button>
+        </article>`;
+    }).join("");
+    if (contadorItens) {
+      contadorItens.textContent = `${lista.length} serviço${lista.length === 1 ? "" : "s"} no orçamento.`;
+    }
+  }
+
+  /* ---------- Resumo ---------- */
+  const subtotal = lista.reduce((s, i) => s + (Number(i.total) || 0), 0);
+  const servicosDistintos = new Set(lista.map(i => i.servico)).size;
+  const pct = servicosDistintos >= 2 ? DESCONTO_MULTI : 0;
+  const desconto = Math.round(subtotal * pct / 100);
+  const total = subtotal - desconto;
+
+  if (resumoItens)    resumoItens.textContent = lista.length;
+  if (resumoSubtotal) resumoSubtotal.textContent = fmt(subtotal);
+  if (resumoDesconto) resumoDesconto.textContent = `${fmt(desconto)} (${pct}%)`;
+  if (resumoTotal)    resumoTotal.textContent = fmt(total);
+
+  if (btnFinalizar) btnFinalizar.disabled = lista.length === 0;
+  if (btnLimpar)    btnLimpar.disabled = lista.length === 0;
+
+  if (btnFinalizar) {
+    btnFinalizar.dataset.subtotal = String(subtotal);
+    btnFinalizar.dataset.desconto = String(desconto);
+    btnFinalizar.dataset.total    = String(total);
+    btnFinalizar.dataset.pct      = String(pct);
+  }
+}
+
+/* =========================================================
+   EVENTOS DO CARRINHO
+   ========================================================= */
+if (cartList) {
+  cartList.addEventListener("click", (e) => {
+    const btn = e.target.closest("[data-remove]");
+    if (!btn) return;
+    const id = btn.dataset.remove;
+    const lista = lerCarrinho().filter(i => i.id !== id);
+    gravarCarrinho(lista);
+    render();
+    mostrarAlerta("Serviço removido do orçamento.");
+  });
+}
+
+if (btnLimpar) {
+  btnLimpar.addEventListener("click", () => {
+    if (!confirm("Tem a certeza que quer limpar todo o orçamento?")) return;
+    gravarCarrinho([]);
+    render();
+    mostrarAlerta("Orçamento limpo.");
+  });
+}
+
+/* =========================================================
+   MODAL DE PAGAMENTO
+   ========================================================= */
+const payModal       = $("payModal");
+const payClose       = $("payClose");
+const payCancel      = $("payCancel");
+const payConfirm     = $("payConfirm");
+const payMsg         = $("payMsg");
+const paySubtotalEl  = $("paySubtotal");
+const payDescontoEl  = $("payDesconto");
+const payTotalEl     = $("payTotal");
+const refValorEl     = $("refValor");
+const transfValorEl  = $("transfValor");
+const payDetails = {
+  express:       $("payDetailsExpress"),
+  referencia:    $("payDetailsReferencia"),
+  transferencia: $("payDetailsTransferencia")
+};
+
+let ultimoResumo = { subtotal: 0, desconto: 0, total: 0, pct: 0 };
+
+function abrirModalPagamento() {
+  if (!payModal) return;
+  const lista = lerCarrinho();
+  if (!lista.length) return;
+
+  const subtotal = Number(btnFinalizar.dataset.subtotal || 0);
+  const desconto = Number(btnFinalizar.dataset.desconto || 0);
+  const total    = Number(btnFinalizar.dataset.total || 0);
+  const pct      = Number(btnFinalizar.dataset.pct || 0);
+
+  ultimoResumo = { subtotal, desconto, total, pct };
+
+  if (paySubtotalEl) paySubtotalEl.textContent = fmt(subtotal);
+  if (payDescontoEl) payDescontoEl.textContent = `${fmt(desconto)} (${pct}%)`;
+  if (payTotalEl)    payTotalEl.textContent    = fmt(total);
+  if (refValorEl)    refValorEl.textContent    = fmt(total);
+  if (transfValorEl) transfValorEl.textContent = fmt(total);
+
+  const radioExpress = document.querySelector('input[name="metodoPagamento"][value="express"]');
+  if (radioExpress) radioExpress.checked = true;
+
+  atualizarDetalhesPagamento();
+
+  if (payMsg) {
+    payMsg.hidden = true;
+    payMsg.textContent = "";
+    payMsg.classList.remove("erro");
+  }
+
+  payModal.classList.add("open");
+  document.body.style.overflow = "hidden";
+
+  setTimeout(() => {
+    const primeiro = payDetails.express && payDetails.express.querySelector("input");
+    if (primeiro) primeiro.focus();
+  }, 120);
+}
+
+function fecharModalPagamento() {
+  if (!payModal) return;
+  payModal.classList.remove("open");
+  document.body.style.overflow = "";
+}
+
+function atualizarDetalhesPagamento() {
+  const checked = document.querySelector('input[name="metodoPagamento"]:checked');
+  if (!checked) return;
+  const escolhido = checked.value;
+  Object.entries(payDetails).forEach(([chave, el]) => {
+    if (!el) return;
+    el.classList.toggle("show", chave === escolhido);
+  });
+}
+
+/* Copiar (referência / IBAN) */
+document.querySelectorAll("[data-copy]").forEach(btn => {
+  btn.addEventListener("click", async () => {
+    const alvo = document.getElementById(btn.dataset.copy);
+    if (!alvo) return;
+    const texto = alvo.textContent.trim();
+    try {
+      await navigator.clipboard.writeText(texto);
+      const original = btn.textContent;
+      btn.textContent = "Copiado!";
+      setTimeout(() => { btn.textContent = original; }, 1500);
+    } catch (e) {
+      alert("Copie manualmente: " + texto);
+    }
+  });
+});
+
+/* Validação */
+function validarPagamento() {
+  const nome  = ($("payNome")  && $("payNome").value.trim())  || "";
+  const email = ($("payEmail") && $("payEmail").value.trim()) || "";
+  const tel   = ($("payTelefone") && $("payTelefone").value.trim()) || "";
+  const checked = document.querySelector('input[name="metodoPagamento"]:checked');
+  const metodo = checked ? checked.value : "express";
+
+  if (!nome) return "Indique o seu nome.";
+  if (!email || !/^\S+@\S+\.\S+$/.test(email)) return "Indique um e-mail válido.";
+  if (!tel) return "Indique o seu telemóvel.";
+
+  if (metodo === "express") {
+    if (!$("expressTelefone") || !$("expressTelefone").value.trim()) return "Indique o telemóvel para o Pagamento por Express.";
+    if (!$("expressNome")     || !$("expressNome").value.trim())     return "Indique o nome do titular do Pagamento por Express.";
+  }
+  return null;
+}
+
+/* =========================================================
+   Confirmar pagamento (produção, via proxy PHP)
+   ========================================================= */
+const PAY_ENDPOINT = 'api/chart.php';
+
+async function confirmarPagamento() {
+  // 1. Validação local
+  const erro = validarPagamento();
+  if (erro) {
+    showPayMsg(erro, true);
+    return;
+  }
+
+  const checked = document.querySelector('input[name="metodoPagamento"]:checked');
+  const metodo  = checked ? checked.value : 'express';
+
+  // A transferência é feita pelo cliente no banco: não passa pelo gateway
+  if (metodo === 'transferencia') {
+    showPayMsg('Faça a transferência com os dados acima e envie o comprovativo para ' + EMAIL_EMPRESA + '.', false);
+    return;
+  }
+
+  const itens = lerCarrinho();
+  if (itens.some(i => !i.config)) {
+    showPayMsg('O seu orçamento foi criado numa versão anterior. Limpe-o e volte a adicionar os serviços.', true);
+    return;
+  }
+
+  const nome    = $("payNome").value.trim();
+  const email   = $("payEmail").value.trim();
+  // No Express, o pedido de pagamento vai para o telemóvel indicado nessa opção
+  const tel     = (metodo === 'express' ? $("expressTelefone") : $("payTelefone")).value.trim();
+  const telNumeros = tel.replace(/\D/g, '').replace(/^244/, '');
+
+  if (!/^9\d{8}$/.test(telNumeros)) {
+    showPayMsg('Telemóvel inválido. Use 9XX XXX XXX.', true);
+    return;
+  }
+
+  // 2. Valor: cobra sempre o total, em qualquer método
+  const valorKz  = ultimoResumo.total;
+  if (valorKz < 1) {
+    showPayMsg('Valor mínimo de 1,00 Kz.', true);
+    return;
+  }
+
+  const paymentType = metodo === 'referencia' ? 'REFERENCE' : 'MCX';
+  const clientRefId = 'ecomulti-' + Date.now() + '-' + Math.random().toString(36).slice(2, 8);
+
+  const payload = {
+    amount: valorKz, // em Kz: o gateway não usa cêntimos
+    payment_type: paymentType,
+    client_reference_id: clientRefId,
+    itens: itens.map(i => ({ servico: i.servico, config: i.config })),
+    customer: {
+      name:  nome,
+      email: email,
+      phone: telNumeros,
+    },
+  };
+
+  // 3. Estado de loading
+  const textoOriginal = payConfirm.innerHTML;
+  payConfirm.disabled = true;
+  payConfirm.innerHTML = 'A processar…';
+  if (paymentType === 'MCX') {
+    showPayMsg('Enviámos o pedido para o seu telemóvel. Abra o Multicaixa Express e confirme com o PIN (tem até 90 segundos).', false);
+  } else {
+    payMsg.hidden = true;
+  }
+
+  try {
+    const resp = await fetch(PAY_ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+
+    const data = await resp.json();
+
+    if (!resp.ok || !data.success) {
+      const mapa = {
+        400: 'Dados inválidos. Verifique os campos.',
+        401: 'Erro de autenticação com o gateway.',
+        402: 'Saldo insuficiente no gateway.',
+        405: 'Método não permitido.',
+        409: 'Os preços foram actualizados. Limpe o orçamento e volte a adicionar os serviços.',
+        500: 'Erro interno do servidor.',
+        502: 'Gateway temporariamente indisponível.',
+      };
+      throw new Error(mapa[resp.status] || data.error || 'Falha ao processar pagamento.');
+    }
+
+    // 4. Sucesso: a cobrança foi criada; o pagamento é confirmado pelo gateway a seguir
+    pagamentoEnviado = true;
+    if (paymentType === 'REFERENCE') {
+      const elEnt = $("refEntidade");
+      const elNum = $("refNumero");
+      if (elEnt) elEnt.textContent = data.entity;
+      if (elNum) elNum.textContent = data.reference;
+      if (refValorEl) refValorEl.textContent = fmt(data.amount);
+
+      showPayMsg(
+        `Referência gerada: Entidade <strong>${escapeHtml(data.entity)}</strong> — ` +
+        `Nº <strong>${escapeHtml(data.reference)}</strong>. ` +
+        (data.due_date ? `Pague até ${new Date(data.due_date).toLocaleString('pt-PT')}. ` : '') +
+        `Esta janela actualiza-se quando o pagamento for recebido.`,
+        false, true
+      );
+    } else {
+      showPayMsg('A aguardar a sua confirmação… Abra o Multicaixa Express no telemóvel e confirme com o PIN. Esta janela actualiza-se sozinha: não feche nem volte a pagar.', false);
+    }
+    payConfirm.innerHTML = 'A aguardar pagamento…';
+    acompanharPagamento(clientRefId, paymentType);
+
+    // 5. Guardar transacção para follow-up
+    localStorage.setItem('ecomulti_ultima_transacao', JSON.stringify({
+      transaction_id:          data.transaction_id,
+      merchant_transaction_id: data.merchant_transaction_id,
+      status:                  data.status,
+      payment_type:            data.payment_type,
+      amount:                  data.amount,
+      client_reference_id:     clientRefId,
+      criado_em:               new Date().toISOString(),
+    }));
+
+  } catch (err) {
+    console.error('Erro no pagamento:', err);
+    showPayMsg(err.message || 'Erro ao contactar o gateway. Tente novamente.', true);
+  } finally {
+    // Com a cobrança enviada, o botão fica bloqueado para não pagar duas vezes
+    if (!pagamentoEnviado) {
+      payConfirm.disabled = false;
+      payConfirm.innerHTML = textoOriginal;
+    }
+  }
+}
+
+/* =========================================================
+   Acompanhar o pagamento até o gateway o confirmar
+   ========================================================= */
+const ESTADO_ENDPOINT = 'api/estado.php';
+const ULTIMA_TRANSACAO = 'ecomulti_ultima_transacao';
+let pagamentoEnviado = false;
+let acompanhamento = null;
+
+// Pergunta ao servidor de 4 em 4 segundos se o webhook do gateway já chegou
+function acompanharPagamento(ref, paymentType, silencioso = false) {
+  clearInterval(acompanhamento);
+  const inicio = Date.now();
+  const limite = (paymentType === 'REFERENCE' ? 30 : 5) * 60 * 1000;
+
+  acompanhamento = setInterval(async () => {
+    if (Date.now() - inicio > limite) {
+      clearInterval(acompanhamento);
+      if (!silencioso && paymentType !== 'REFERENCE') {
+        showPayMsg('Ainda não recebemos a confirmação do banco. Se já confirmou no telemóvel, não volte a pagar: o pedido está registado e será confirmado assim que o banco nos avisar. Dúvidas: ' + EMAIL_EMPRESA + '.', true);
+      }
+      return;
+    }
+    try {
+      const r = await fetch(ESTADO_ENDPOINT + '?ref=' + encodeURIComponent(ref), { cache: 'no-store' });
+      if (!r.ok) return;
+      const d = await r.json();
+      if (d.pago) {
+        clearInterval(acompanhamento);
+        concluirPagamento();
+      } else if (d.concluido) {
+        clearInterval(acompanhamento);
+        localStorage.removeItem(ULTIMA_TRANSACAO);
+        pagamentoEnviado = false;
+        payConfirm.disabled = false;
+        payConfirm.innerHTML = 'Tentar novamente';
+        if (!silencioso) showPayMsg('O pagamento não foi concluído. Pode tentar novamente.', true);
+      }
+    } catch (e) {
+      // Falha de rede momentânea: tenta outra vez na próxima volta
+    }
+  }, 4000);
+}
+
+function concluirPagamento() {
+  localStorage.removeItem(ULTIMA_TRANSACAO);
+  gravarCarrinho([]);
+  render();
+  payConfirm.hidden = true;
+  if (payCancel) payCancel.textContent = 'Fechar';
+  showPayMsg('Pagamento confirmado. Obrigado! O seu pedido está registado e a ECOMULTI vai tratar da activação.', false);
+  mostrarAlerta('Pagamento confirmado. Obrigado!');
+}
+
+// Se a página foi recarregada a meio de um pagamento, continua a acompanhá-lo
+(function retomarAcompanhamento() {
+  try {
+    const t = JSON.parse(localStorage.getItem(ULTIMA_TRANSACAO) || 'null');
+    if (t && t.client_reference_id && Date.now() - new Date(t.criado_em).getTime() < 30 * 60 * 1000) {
+      acompanharPagamento(t.client_reference_id, t.payment_type, true);
+    }
+  } catch (e) {}
+})();
+
+/* Helpers de UI */
+function showPayMsg(msg, isErro = false, isHtml = false) {
+  if (!payMsg) return;
+  payMsg.hidden = false;
+  payMsg.classList.toggle('erro', isErro);
+  if (isHtml) payMsg.innerHTML = msg;
+  else        payMsg.textContent = msg;
+}
+
+function escapeHtml(str) {
+  return String(str).replace(/[&<>"']/g, (c) => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+  }[c]));
+}
+
+/* Eventos do modal */
+if (btnFinalizar) btnFinalizar.addEventListener("click", abrirModalPagamento);
+if (payClose)     payClose.addEventListener("click", fecharModalPagamento);
+if (payCancel)    payCancel.addEventListener("click", fecharModalPagamento);
+if (payConfirm)   payConfirm.addEventListener("click", confirmarPagamento);
+
+if (payModal) {
+  payModal.addEventListener("click", (e) => {
+    if (e.target === payModal) fecharModalPagamento();
+  });
+}
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape" && payModal && payModal.classList.contains("open")) {
+    fecharModalPagamento();
+  }
+});
+
+document.querySelectorAll('input[name="metodoPagamento"]').forEach(radio => {
+  radio.addEventListener("change", atualizarDetalhesPagamento);
+});
+
+/* =========================================================
+   FORM DE CONTACTO (demo)
+   ========================================================= */
+const form = $("formContacto");
+const formMsg = $("formMsg");
+if (form) {
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    if (formMsg) formMsg.textContent = "Obrigado! A sua mensagem foi registada (demonstração).";
+    form.reset();
+  });
+}
+
+/* =========================================================
+   MENU MOBILE
+   ========================================================= */
+const menuToggle = $("menuToggle");
+const menu = $("menu");
+if (menuToggle && menu) {
+  menuToggle.addEventListener("click", () => {
+    const aberto = menu.classList.toggle("open");
+    menuToggle.setAttribute("aria-expanded", String(aberto));
+  });
+  menu.querySelectorAll("a").forEach(link => {
+    link.addEventListener("click", () => {
+      menu.classList.remove("open");
+      menuToggle.setAttribute("aria-expanded", "false");
+    });
+  });
+}
+
+/* =========================================================
+   INIT
+   ========================================================= */
+const anoEl = $("anoAtual");
+if (anoEl) anoEl.textContent = new Date().getFullYear();
+
+render();
+
+window.addEventListener("storage", (e) => {
+  if (e.key === STORAGE_KEY) render();
+});
+</script>
+</body>
+</html>

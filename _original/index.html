@@ -1,0 +1,1237 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+  <head>
+    <meta charset="UTF-8" />
+    <script>document.documentElement.classList.add("js");</script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Ecomulti: registo de domínios, hospedagem web, servidores VPS, websites e automação de processos com Inteligência Artificial para empresas e profissionais em Angola."
+    />
+    <title>Ecomulti | Hospedagem e Soluções Digitais</title>
+
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap"
+      rel="stylesheet"
+    />
+
+    <link rel="stylesheet" href="inicio.css">
+  
+    <link rel="icon" type="image/x-icon" href="imagens/logo 03.png">
+  </head>
+  <body>
+    <!-- Biblioteca de ícones: todos desenhados com traço, numa única cor (currentColor) -->
+    <svg width="0" height="0" style="position: absolute" aria-hidden="true">
+      <defs>
+        <symbol id="i-code" viewBox="0 0 24 24"><path d="M8 7l-5 5 5 5M16 7l5 5-5 5M14 4l-4 16"/></symbol>
+        <symbol id="i-server" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="7" rx="2"/><rect x="3" y="14" width="18" height="7" rx="2"/><path d="M7 6.5h.01M7 17.5h.01M12 6.5h5M12 17.5h5"/></symbol>
+        <symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.2 3 14.8 0 18M12 3c-3 3.2-3 14.8 0 18"/></symbol>
+        <symbol id="i-cart" viewBox="0 0 24 24"><circle cx="9" cy="20" r="1.5"/><circle cx="18" cy="20" r="1.5"/><path d="M2 3h3l2.7 12.4a1 1 0 0 0 1 .8h8.6a1 1 0 0 0 1-.8L20 7H6"/></symbol>
+        <symbol id="i-cpu" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2"/><rect x="9.5" y="9.5" width="5" height="5"/><path d="M9 2v3M15 2v3M9 19v3M15 19v3M2 9h3M2 15h3M19 9h3M19 15h3"/></symbol>
+        <symbol id="i-chart" viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 6-7"/></symbol>
+        <symbol id="i-wrench" viewBox="0 0 24 24"><path d="M14.7 6.3a4 4 0 0 0 5 5l-9.4 9.4a2.1 2.1 0 0 1-3-3l9.4-9.4z"/><path d="M14.7 6.3l2.6-2.6a4 4 0 0 0-1.6 6.2"/></symbol>
+        <symbol id="i-rocket" viewBox="0 0 24 24"><path d="M5 15c-1.5 1.3-2 5-2 5s3.7-.5 5-2"/><path d="M12 15l-3-3a22 22 0 0 1 2-4 12 12 0 0 1 11-5c0 2.7-1 8-5 11a22 22 0 0 1-5 1z"/><circle cx="15" cy="9" r="1"/></symbol>
+        <symbol id="i-lock" viewBox="0 0 24 24"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></symbol>
+        <symbol id="i-people" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.6-3.6 3.2-5.5 6.5-5.5s5.9 1.9 6.5 5.5"/><path d="M16 4.7a3.5 3.5 0 0 1 0 6.6M18 14.8c1.9.7 3.2 2.4 3.5 5.2"/></symbol>
+        <symbol id="i-check" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.7 2.7L16 9.5"/></symbol>
+        <symbol id="i-tick" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></symbol>
+        <symbol id="i-mail" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></symbol>
+        <symbol id="i-phone" viewBox="0 0 24 24"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"/></symbol>
+        <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+        <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></symbol>
+        <symbol id="i-chevron" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></symbol>
+        <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></symbol>
+        <symbol id="i-up" viewBox="0 0 24 24"><path d="M6 15l6-6 6 6"/></symbol>
+        <symbol id="i-book" viewBox="0 0 24 24"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 21V5M9 7h6"/></symbol>
+        <symbol id="i-help" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.7.4-1 .9-1 1.7M12 17h.01"/></symbol>
+        <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 4.5-3.2 7.8-8 9-4.8-1.2-8-4.5-8-9V6z"/><path d="M9 12l2 2 4-4"/></symbol>
+        <symbol id="i-database" viewBox="0 0 24 24"><ellipse cx="12" cy="6" rx="8" ry="3"/><path d="M4 6v6c0 1.7 3.6 3 8 3s8-1.3 8-3V6M4 12v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6"/></symbol>
+        <symbol id="i-route" viewBox="0 0 24 24"><circle cx="6" cy="6" r="2.5"/><circle cx="18" cy="18" r="2.5"/><path d="M8.5 6H15a3 3 0 0 1 0 6H9a3 3 0 0 0 0 6h6.5"/></symbol>
+        <symbol id="i-spark" viewBox="0 0 24 24"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"/><path d="M19 16l.7 1.8L21.5 18.5l-1.8.7L19 21l-.7-1.8-1.8-.7 1.8-.7z"/></symbol>
+        <symbol id="i-refresh"viewBox="0 0 24 24"><path d="M20 11a8 8 0 0 0-14-4L4 9M4 4v5h5M4 13a8 8 0 0 0 14 4l2-2M20 20v-5h-5"/></symbol>
+      </defs>
+    </svg>
+    <header class="topbar">
+      <div class="container nav">
+        <a class="brand" href="#inicio" aria-label="Ecomulti - início">
+          <img src="imagens/fatia1.png" alt="Logo Ecomulti" />
+        </a>
+
+        <button class="menu-toggle" id="menuToggle" aria-label="Abrir menu" aria-expanded="false" aria-controls="menu">
+          <svg class="icon"><use href="#i-menu" /></svg>
+        </button>
+
+        <nav class="nav-links" id="menu" aria-label="Menu principal">
+          <a href="dominios.html">Domínios</a>
+          <a href="email-corporativo-ecomulti.html">E-mail</a>
+          <a href="desenvolvimento-ecomulti.html">Websites</a>
+          <a href="hospedagem-ecomulti.html">Hospedagem</a>
+          <!-- <a href="#suporte">Suporte</a>
+          <a href="#ajuda">Explicações</a> -->
+          <a href="#contacto">Contacto</a>
+        </nav>
+
+        <a class="btn btn-primary" href="ecomulti-pagamento.html" target="_blank">Pedir proposta</a>
+      </div>
+    </header>
+
+    <main id="inicio">
+
+      <!-- HERO -->
+      <section class="hero">
+        <div class="container">
+          <div>
+
+            <h1>O seu negócio, mais forte no digital.</h1>
+            <p class="lead">
+              Na ECOMULTI reunimos tecnologia, inovação e acompanhamento especializado para ajudar
+              empresas e profissionais em Angola a crescer online: domínios, websites, hospedagem,
+              servidores VPS, e-mails profissionais e automação com Inteligência Artificial.
+              <strong>Uma empresa. Múltiplas soluções. Novas oportunidades.</strong>
+            </p>
+            <p class="lead" style="margin-top:14px"><strong>Comece por verificar o domínio da sua marca:</strong></p>
+
+        <section id="dominio" style="padding-top: 0">
+        <div class="container">
+          <div class="domain-box">
+
+            <form class="domain-form" id="domainForm">
+              <div class="serachDomin">
+                 <input type="text" id="domainName" placeholder="ex.: minhaempresa" aria-label="Nome do domínio" required maxlength="63" />
+              <select id="domainExt" aria-label="Extensão">
+                <option>.ao</option>
+                <option>.co.ao</option>
+                <option>.com</option>
+                <option>.net</option>
+                <option>.org</option>
+              </select>
+              </div>
+             
+              <button class="btn btn-primary" type="submit">
+                <svg class="icon"><use href="#i-search" /></svg> Verificar
+              </button>
+            </form>
+
+            <div class="domain-result" id="domainResult" role="status" aria-live="polite"></div>
+
+            <div class="domain-tips">
+              <div><svg class="icon"><use href="#i-tick" /></svg> Prefira nomes curtos e fáceis de escrever e de dizer ao telefone.</div>
+              <div><svg class="icon"><use href="#i-tick" /></svg> Evite hífens, números e acentos: confundem os clientes.</div>
+              <div><svg class="icon"><use href="#i-tick" /></svg> Use o nome da sua marca para reforçar a identidade.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+<!-- 
+            <div class="hero-actions">
+              <a class="btn btn-primary" href="#planos">Ver planos</a>
+              <a class="btn btn-secondary" href="#assistente">Ajude-me a escolher</a>
+            </div> -->
+
+            <!-- <ul class="hero-list">
+              <li><svg class="icon"><use href="#i-tick" /></svg> Suporte técnico 24/7</li>
+              <li><svg class="icon"><use href="#i-tick" /></svg> Certificado SSL incluído</li>
+              <li><svg class="icon"><use href="#i-tick" /></svg> Domínios .ao, .co.ao e internacionais</li>
+              <li><svg class="icon"><use href="#i-tick" /></svg> Automação com Inteligência Artificial</li>
+            </ul> -->
+            <!-- <p class="reassure"><svg class="icon"><use href="#i-shield" /></svg> Reunião de apresentação para entender o seu projeto antes de qualquer compromisso.</p> -->
+          </div>
+
+          <!-- <div class="hero-visual">
+            <div class="hero-orb" aria-hidden="true"></div>
+            <img class="hero-person" src="imagens/bvPersonagem.webp" width="760" height="950" alt="Consultor Ecomulti de fato escuro e gravata laranja, de braços cruzados e a sorrir" fetchpriority="high" />
+            <div class="float-badge b1" aria-hidden="true"><svg class="icon"><use href="#i-lock" /></svg><span>SSL incluído<small>Site seguro</small></span></div>
+            <div class="float-badge b2" aria-hidden="true"><svg class="icon"><use href="#i-clock" /></svg><span>Suporte 24/7<small>Atendimento humano</small></span></div>
+            <div class="float-badge b3" aria-hidden="true"><svg class="icon"><use href="#i-globe" /></svg><span>Domínios .ao<small>e internacionais</small></span></div>
+          </div> -->
+        </div>
+      </section>
+
+
+
+      <!-- SOBRE -->
+      <section id="sobre">
+        <div class="container about-grid">
+          <div>
+            <div class="section-head">
+              <small>Quem somos</small>
+              <h2>ECOMULTI — o seu parceiro digital</h2>
+            </div>
+            <p>
+              O mundo está cada vez mais digital e o seu negócio precisa de acompanhar esta
+              evolução. Somos uma empresa de soluções digitais, comprometida em ajudar negócios a
+              construir, fortalecer e expandir a sua presença na Internet.
+            </p>
+            <p>
+              Acreditamos que a tecnologia é uma ferramenta essencial para transformar ideias em
+              oportunidades e empresas em marcas mais competitivas. Combinamos tecnologia, inovação
+              e acompanhamento especializado para oferecer soluções ajustadas às necessidades de
+              cada cliente.
+            </p>
+            <ul class="feature-list">
+              <li><svg class="icon"><use href="#i-check" /></svg> Todos os serviços digitais essenciais num único parceiro</li>
+              <li><svg class="icon"><use href="#i-check" /></svg> Soluções à medida da dimensão e dos objectivos de cada cliente</li>
+              <li><svg class="icon"><use href="#i-check" /></svg> Acompanhamento humano, do primeiro passo à evolução do negócio</li>
+            </ul>
+          </div>
+
+          <div class="info-box">
+            <h3>Estar no digital é apenas o começo.</h3>
+            <p>O verdadeiro objectivo é crescer. Tecnologia que conecta negócios a novas oportunidades.</p>
+            <div class="metric-list">
+              <div class="metric"><strong>Domínios</strong><span>Registo e gestão</span></div>
+              <div class="metric"><strong>Web</strong><span>Sites e lojas online</span></div>
+              <div class="metric"><strong>VPS</strong><span>Servidores virtuais</span></div>
+              <div class="metric"><strong>IA</strong><span>Automação de processos</span></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- MISSÃO, VISÃO E VALORES -->
+      <section id="missao" class="alt">
+        <div class="container">
+          <div class="section-head">
+            <small>Identidade</small>
+            <h2>Missão, visão e valores</h2>
+          </div>
+
+          <div class="mv-split">
+            <div>
+              <h3>Missão</h3>
+              <p>Ajudar empresas e profissionais a construir, fortalecer e expandir a sua presença digital, com soluções tecnológicas acessíveis, seguras e acompanhadas por uma equipa especializada.</p>
+            </div>
+            <div>
+              <h3>Visão</h3>
+              <p>Ser a referência em soluções digitais para empresas angolanas, reconhecida pela confiança, pela inovação e pelo impacto no crescimento dos negócios que serve.</p>
+            </div>
+          </div>
+
+          <div class="values-row">
+            <div><svg class="icon"><use href="#i-shield" /></svg><strong>Confiança</strong><span>Transparência e responsabilidade em cada projecto.</span></div>
+            <div><svg class="icon"><use href="#i-spark" /></svg><strong>Inovação</strong><span>Tecnologia actual, incluindo IA, ao serviço do negócio.</span></div>
+            <div><svg class="icon"><use href="#i-people" /></svg><strong>Proximidade</strong><span>Atendimento humano, sem jargão técnico.</span></div>
+            <div><svg class="icon"><use href="#i-chart" /></svg><strong>Crescimento</strong><span>Soluções que evoluem com o cliente.</span></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SERVIÇOS -->
+      <section id="servicos">
+        <div class="container">
+          <div class="section-head">
+            <small>Serviços</small>
+            <h2>Tudo o que o seu negócio precisa para estar no digital</h2>
+            <p>Encontre num único lugar as soluções para cada etapa da sua presença online.</p>
+          </div>
+
+          <div class="svc-list">
+            <a href="dominios.html"><svg class="icon"><use href="#i-globe" /></svg><span><strong>Registo de domínios</strong>Identidade exclusiva para a sua marca: .ao, .co.ao e internacionais.</span></a>
+            <a href="desenvolvimento-ecomulti.html"><svg class="icon"><use href="#i-code" /></svg><span><strong>Websites e lojas online</strong>Sites modernos para apresentar e vender os seus produtos e serviços.</span></a>
+            <a href="hospedagem-ecomulti.html"><svg class="icon"><use href="#i-server" /></svg><span><strong>Alojamento web</strong>Hospedagem estável e segura, com SSL e suporte técnico.</span></a>
+            <a href="email-corporativo-ecomulti.html"><svg class="icon"><use href="#i-mail" /></svg><span><strong>E-mails profissionais</strong>Endereços no nome da sua empresa, para mais credibilidade.</span></a>
+            <a href="#contacto"><svg class="icon"><use href="#i-cpu" /></svg><span><strong>Servidores VPS</strong>Recursos dedicados para projectos mais exigentes.</span></a>
+            <a href="#contacto"><svg class="icon"><use href="#i-spark" /></svg><span><strong>Automação com IA</strong>Ferramentas de Inteligência Artificial para ganhar produtividade.</span></a>
+          </div>
+        </div>
+      </section>
+
+      <!-- PORQUE ESCOLHER -->
+      <section id="porque" class="alt">
+        <div class="container why-grid">
+          <div>
+            <div class="section-head">
+              <small>Porquê a ECOMULTI</small>
+              <h2>Porque escolher a ECOMULTI</h2>
+              <p>A tecnologia adapta-se ao seu negócio, e não o contrário.</p>
+            </div>
+            <ul class="feature-list">
+              <li><svg class="icon"><use href="#i-route" /></svg><span><strong>Um único parceiro.</strong> Domínio, site, alojamento, e-mail e automação no mesmo sítio.</span></li>
+              <li><svg class="icon"><use href="#i-people" /></svg><span><strong>Acompanhamento especializado</strong>, do diagnóstico à evolução do projecto.</span></li>
+              <li><svg class="icon"><use href="#i-wrench" /></svg><span><strong>Soluções à medida</strong> das suas necessidades e objectivos.</span></li>
+              <li><svg class="icon"><use href="#i-lock" /></svg><span><strong>Segurança e estabilidade</strong>, com SSL e cuidado com os seus dados.</span></li>
+              <li><svg class="icon"><use href="#i-clock" /></svg><span><strong>Suporte técnico</strong> para que os serviços online não parem.</span></li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section id="processo">
+        <div class="container">
+          <div class="section-head">
+
+            <h2>Como trabalhamos</h2>
+          </div>
+
+          <div class="steps">
+            <article class="step">
+              <div class="step-number">1</div>
+              <h3>Diagnóstico</h3>
+              <p>Entendemos as suas necessidades, objetivos e o contexto da sua operação digital.</p>
+            </article>
+            <article class="step">
+              <div class="step-number">2</div>
+              <h3>Proposta</h3>
+              <p>Indicamos a solução mais adequada com foco em infraestrutura, custo e crescimento.</p>
+            </article>
+            <article class="step">
+              <div class="step-number">3</div>
+              <h3>Implementação</h3>
+              <p>Configuramos a solução de forma organizada, segura e alinhada ao seu negócio.</p>
+            </article>
+            <article class="step">
+              <div class="step-number">4</div>
+              <h3>Acompanhamento</h3>
+              <p>Suporte contínuo para manter a sua presença digital em excelente nível.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- SERVIÇOS PRINCIPAIS -->
+      <!-- <section id="servicos" class="main-services">
+        <div class="container">
+          <div class="section-head">
+            <small>Serviços</small>
+            <h2>O que podemos fazer pela sua empresa</h2>
+            <p>Escolha o serviço de que precisa e envie-nos os detalhes do seu pedido.</p>
+          </div>
+
+          <div class="grid-4">
+            <article class="card svc">
+              <div class="icon-box"><svg class="icon"><use href="#i-code" /></svg></div>
+              <h3>Desenvolvimento</h3>
+              <p>Criamos websites institucionais, lojas online e aplicações web à medida, com design profissional, rápidos e preparados para telemóvel.</p>
+            </article>
+            <article class="card svc">
+              <div class="icon-box"><svg class="icon"><use href="#i-wrench" /></svg></div>
+              <h3>Gestão e Manutenção</h3>
+              <p>Cuidamos do seu site ou sistema: actualizações, segurança, cópias de segurança e correção de erros, para que nunca pare.</p>
+            </article>
+            <article class="card svc">
+              <div class="icon-box"><svg class="icon"><use href="#i-server" /></svg></div>
+              <h3>Alojamento</h3>
+              <p>Hospedagem web, domínios e servidores VPS seguros e estáveis, com SSL incluído e suporte técnico sempre disponível.</p>
+            </article>
+            <article class="card svc">
+              <div class="icon-box"><svg class="icon"><use href="#i-spark" /></svg></div>
+              <h3>Automação por IA</h3>
+              <p>Automatizamos tarefas repetitivas com Inteligência Artificial: atendimento, organização de contactos e processos internos.</p>
+            </article>
+          </div>
+        </div>
+      </section> -->
+
+      <!-- DOMÍNIO -->
+  
+
+      <!-- PLANOS -->
+   
+          <!-- 2. Desenvolvimento web + 12 meses de alojamento -->
+          <!-- <div class="tab-panel grid-3" data-panel="website" role="tabpanel" hidden>
+            <article class="card plan">
+              <span class="tag">START</span>
+              <h3>Website START</h3>
+              <p class="price"><strong>149.900 Kz</strong></p>
+              <ul>
+                <li><svg class="icon"><use href="#i-tick" /></svg> Website One Page responsivo</li>
+                <li><svg class="icon"><use href="#i-tick" /></svg> 12 meses de alojamento incluídos</li>
+              </ul>
+              <a class="btn btn-secondary" href="ecomulti-pagamento.html" data-plan="Website + alojamento — START">Pedir proposta</a>
+            </article>
+
+            <article class="card plan featured">
+              <span class="tag">PRO · Mais procurado</span>
+              <h3>Website PRO</h3>
+              <p class="price"><strong>299.900 Kz</strong></p>
+              <ul>
+                <li><svg class="icon"><use href="#i-tick" /></svg> Website até 5 páginas</li>
+                <li><svg class="icon"><use href="#i-tick" /></svg> 12 meses de alojamento incluídos</li>
+              </ul>
+              <a class="btn btn-primary" href="ecomulti-pagamento.html" data-plan="Website + alojamento — PRO">Pedir proposta</a>
+            </article>
+
+            <article class="card plan">
+              <span class="tag">BUSINESS</span>
+              <h3>Website BUSINESS</h3>
+              <p class="price"><strong>Sob consulta</strong></p>
+              <ul>
+                <li><svg class="icon"><use href="#i-tick" /></svg> Loja online / e-commerce</li>
+                <li><svg class="icon"><use href="#i-tick" /></svg> 12 meses de alojamento incluídos</li>
+              </ul>
+              <a class="btn btn-secondary" href="ecomulti-pagamento.html" data-plan="Website + alojamento — BUSINESS">Pedir proposta</a>
+            </article>
+          </div> -->
+
+          <!-- 3. Gestão e manutenção -->
+          <!-- <div class="tab-panel grid-3" data-panel="gestao" role="tabpanel" hidden>
+            <article class="card plan">
+              <span class="tag">START</span>
+              <h3>Gestão START</h3>
+              <p class="price"><strong>50.000 Kz</strong> <span>/ mês</span></p>
+              <ul>
+                <li><svg class="icon"><use href="#i-tick" /></svg> Equivalente a 600.000 Kz em 12 meses</li>
+              </ul>
+              <a class="btn btn-secondary" href="ecomulti-pagamento.html" data-plan="Gestão e manutenção — START">Pedir proposta</a>
+            </article>
+
+            <article class="card plan featured">
+              <span class="tag">PRO · Mais procurado</span>
+              <h3>Gestão PRO</h3>
+              <p class="price"><strong>99.000 Kz</strong> <span>/ mês</span></p>
+              <ul>
+                <li><svg class="icon"><use href="#i-tick" /></svg> Equivalente a 1.188.000 Kz em 12 meses</li>
+              </ul>
+              <a class="btn btn-primary" href="ecomulti-pagamento.html" data-plan="Gestão e manutenção — PRO">Pedir proposta</a>
+            </article>
+
+            <article class="card plan">
+              <span class="tag">BUSINESS</span>
+              <h3>Gestão BUSINESS</h3>
+              <p class="price"><strong>Sob consulta</strong></p>
+              <ul>
+                <li><svg class="icon"><use href="#i-tick" /></svg> Mensalidade ajustada ao projeto</li>
+              </ul>
+              <a class="btn btn-secondary" href="ecomulti-pagamento.html" data-plan="Gestão e manutenção — BUSINESS">Pedir proposta</a>
+            </article>
+          </div> -->
+
+
+      <!-- SERVIÇOS (detalhe) -->
+      <!-- <section id="servicos-detalhe">
+        <div class="container">
+          <div class="section-head">
+     
+            <h2>O único parceiro tecnológico de que precisa</h2>
+            <p>Centralize os serviços essenciais num só lugar, do endereço do site à automação.</p>
+          </div>
+
+          <div class="grid-3">
+            <article class="card">
+              <div class="icon-box"><svg class="icon"><use href="#i-server" /></svg></div>
+              <h3>Hospedagem Web</h3>
+              <p>Ambiente seguro e estável para sites, portais e aplicações, com foco em velocidade e disponibilidade contínua.</p>
+            </article>
+            <article class="card">
+              <div class="icon-box"><svg class="icon"><use href="#i-globe" /></svg></div>
+              <h3>Domínios</h3>
+              <p>Registo, gestão e apoio na escolha da melhor identidade digital para a sua marca.</p>
+            </article>
+            <article class="card">
+              <div class="icon-box"><svg class="icon"><use href="#i-cart" /></svg></div>
+              <h3>Sites e Lojas</h3>
+              <p>Estruturas digitais profissionais para apresentar a sua empresa, vender e gerar confiança com clientes.</p>
+            </article>
+            <article class="card">
+              <div class="icon-box"><svg class="icon"><use href="#i-cpu" /></svg></div>
+              <h3>VPS</h3>
+              <p>Recursos dedicados para necessidades mais exigentes, com mais controlo e performance para operações críticas.</p>
+            </article>
+            <article class="card">
+              <div class="icon-box"><svg class="icon"><use href="#i-spark" /></svg></div>
+              <h3>Automação com IA</h3>
+              <p>Automação de processos empresariais com Inteligência Artificial: organização de contactos, apoio ao atendimento e tarefas repetitivas simplificadas.</p>
+            </article>
+            <article class="card">
+              <div class="icon-box"><svg class="icon"><use href="#i-wrench" /></svg></div>
+              <h3>Suporte e Manutenção</h3>
+              <p>Acompanhamento técnico para garantir o bom funcionamento dos serviços online e reduzir riscos operacionais.</p>
+            </article>
+          </div>
+        </div>
+      </section> -->
+
+      <!-- BANNER ASSISTENTE -->
+      <!-- <section class="banner-section">
+        <div class="container">
+          <div class="banner">
+            <div class="banner-ico"><svg class="icon"><use href="#i-help" /></svg></div>
+            <div>
+              <strong>Não sabe por onde começar?</strong>
+              <span>Responda a três perguntas e indicamos a solução ideal.</span>
+            </div>
+            <a class="btn btn-primary" href="#assistente">Usar o assistente</a>
+          </div>
+        </div>
+      </section> -->
+
+      <!-- ASSISTENTE -->
+      <section id="assistente">
+        <div class="container">
+          <div class="section-head">
+           
+            <h2>Não sabe o que escolher? Responda a três perguntas</h2>
+            <p>Indicamos a solução que mais se adequa ao que pretende.</p>
+          </div>
+
+          <div class="wizard-layout">
+          <aside class="guide">
+            <img src="imagens/logo 03.png" width="220" height="346" alt="Consultor Ecomulti a sorrir, de braços cruzados" loading="lazy" />
+            <div>
+              <div class="guide-bubble"><strong>Olá! Sou o seu consultor Ecomulti.</strong> Responda a três perguntas e eu indico-lhe o plano certo para o seu negócio.</div>
+              <span class="guide-status">Disponível para ajudar</span>
+            </div>
+          </aside>
+
+          <form class="wizard" id="wizard">
+            <fieldset>
+              <legend>1. O que pretende ter online?</legend>
+              <div class="options">
+                <label><input type="radio" name="q1" value="site" required /><span>Site da empresa</span></label>
+                <label><input type="radio" name="q1" value="loja" /><span>Loja online</span></label>
+                <label><input type="radio" name="q1" value="app" /><span>Sistema / aplicação</span></label>
+              </div>
+            </fieldset>
+            <fieldset>
+              <legend>2. Já tem um site ou domínio?</legend>
+              <div class="options">
+                <label><input type="radio" name="q2" value="nada" required /><span>Não tenho nada</span></label>
+                <label><input type="radio" name="q2" value="dominio" /><span>Só tenho o domínio</span></label>
+                <label><input type="radio" name="q2" value="site" /><span>Já tenho site</span></label>
+              </div>
+            </fieldset>
+            <fieldset>
+              <legend>3. Quantas visitas espera?</legend>
+              <div class="options">
+                <label><input type="radio" name="q3" value="poucas" required /><span>Poucas (negócio local)</span></label>
+                <label><input type="radio" name="q3" value="medias" /><span>Moderadas</span></label>
+                <label><input type="radio" name="q3" value="muitas" /><span>Muitas / não sei</span></label>
+              </div>
+            </fieldset>
+            <button class="btn btn-primary" type="submit">Ver recomendação</button>
+
+            <div class="wizard-result" id="wizardResult" role="status" tabindex="-1"></div>
+          </form>
+          </div>
+        </div>
+      </section>
+
+      <!-- FUNCIONALIDADES -->
+      <!-- <section id="solucoes">
+        <div class="container">
+          <div class="section-head">
+           
+            <h2>Tecnologia pensada para velocidade, segurança e crescimento</h2>
+          </div>
+          <div class="chips" role="tablist" id="featTabs" style="margin-bottom: 22px"><button class="chip active" role="tab" data-tab="perf" aria-selected="true">Desempenho</button><button class="chip" role="tab" data-tab="seg" aria-selected="false">Segurança</button><button class="chip" role="tab" data-tab="flex" aria-selected="false">Flexibilidade</button><button class="chip" role="tab" data-tab="sup" aria-selected="false">Suporte</button></div>
+          <div class="tab-panel grid-3" data-panel="perf" role="tabpanel"><article class="card"><div class="icon-box"><svg class="icon"><use href="#i-rocket" /></svg></div><h3>Velocidade</h3><p>Infraestrutura pensada para carregar rápido e manter o site disponível.</p></article><article class="card"><div class="icon-box"><svg class="icon"><use href="#i-server" /></svg></div><h3>Hospedagem estável</h3><p>Ambiente preparado para sites, portais e aplicações.</p></article><article class="card"><div class="icon-box"><svg class="icon"><use href="#i-cpu" /></svg></div><h3>VPS dedicado</h3><p>Recursos reservados para projetos que exigem mais.</p></article></div>
+          <div class="tab-panel grid-3" data-panel="seg" role="tabpanel" hidden><article class="card"><div class="icon-box"><svg class="icon"><use href="#i-lock" /></svg></div><h3>Certificado SSL</h3><p>Ligação encriptada e cadeado em todas as hospedagens.</p></article><article class="card"><div class="icon-box"><svg class="icon"><use href="#i-database" /></svg></div><h3>Backups</h3><p>Cópias para recuperar o seu site quando necessário.</p></article><article class="card"><div class="icon-box"><svg class="icon"><use href="#i-shield" /></svg></div><h3>Dados protegidos</h3><p>Cada projeto é analisado conforme os dados tratados.</p></article></div>
+          <div class="tab-panel grid-3" data-panel="flex" role="tabpanel" hidden><article class="card"><div class="icon-box"><svg class="icon"><use href="#i-route" /></svg></div><h3>Migração</h3><p>Ajudamos a trazer site, emails e domínio de outro fornecedor.</p></article><article class="card"><div class="icon-box"><svg class="icon"><use href="#i-chart" /></svg></div><h3>Crescimento</h3><p>Comece simples e evolua para VPS quando for preciso.</p></article><article class="card"><div class="icon-box"><svg class="icon"><use href="#i-spark" /></svg></div><h3>Automação</h3><p>Ferramentas de IA ajustadas ao seu negócio.</p></article></div>
+          <div class="tab-panel grid-3" data-panel="sup" role="tabpanel" hidden><article class="card"><div class="icon-box"><svg class="icon"><use href="#i-clock" /></svg></div><h3>24/7</h3><p>Equipa disponível para ajudar quando precisar.</p></article><article class="card"><div class="icon-box"><svg class="icon"><use href="#i-people" /></svg></div><h3>Atendimento humano</h3><p>Comunicação clara, sem jargão técnico.</p></article><article class="card"><div class="icon-box"><svg class="icon"><use href="#i-book" /></svg></div><h3>Explicações</h3><p>Centro de explicações com respostas às dúvidas mais comuns.</p></article></div>
+          
+        </div>
+      </section> -->
+
+      <!-- SUPORTE -->
+      <!-- <section id="suporte">
+        <div class="container">
+          <div class="section-head">
+
+            <h2>Apoio especializado, sempre que precisar</h2>
+            <p>Escolha a forma de contacto que lhe for mais prática.</p>
+          </div>
+          <div class="grid-4">
+            <article class="card"><div class="icon-box"><svg class="icon"><use href="#i-clock" /></svg></div><h3>Suporte 24/7</h3><p>Equipa disponível para esclarecer e resolver.</p></article>
+            <article class="card"><div class="icon-box"><svg class="icon"><use href="#i-book" /></svg></div><h3>Centro de explicações</h3><p>Perguntas frequentes em linguagem simples.</p></article>
+            <article class="card"><div class="icon-box"><svg class="icon"><use href="#i-mail" /></svg></div><h3>Pedido por formulário</h3><p>Descreva o que precisa e respondemos com uma proposta.</p></article>
+            <article class="card"><div class="icon-box"><svg class="icon"><use href="#i-people" /></svg></div><h3>Reunião de apresentação</h3><p>Conversamos sobre o seu projeto e as suas necessidades.</p></article>
+          </div>
+
+          <div class="bento">
+            <div class="bento-item"><svg class="icon"><use href="#i-route" /></svg><strong>Migração assistida</strong><span>Tratamos da mudança do seu site e emails.</span><a href="#contacto" data-plan="Alojamento web — START">Pedir migração</a></div>
+            <div class="bento-item"><svg class="icon"><use href="#i-lock" /></svg><strong>SSL incluído</strong><span>Site seguro, com cadeado.</span></div>
+            <div class="bento-item"><svg class="icon"><use href="#i-globe" /></svg><strong>Domínio .ao</strong><span>Presença angolana forte.</span></div>
+            <div class="bento-item"><svg class="icon"><use href="#i-database" /></svg><strong>Backups</strong><span>Cópias para restaurar o site.</span></div>
+          </div>
+        </div>
+      </section> -->
+
+      <!-- COMPARAÇÃO -->
+      <!-- <section id="comparacao">
+        <div class="container">
+          <div class="section-head">
+  
+            <h2>Hospedagem partilhada vs. VPS</h2>
+            <p>As principais diferenças lado a lado.</p>
+          </div>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th></th><th>Hospedagem partilhada</th><th>Servidor VPS</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>Ideal para</td><td>Sites institucionais, blogs, pequenas lojas</td><td>Sistemas, aplicações, projetos de grande tráfego</td></tr>
+                <tr><td>Recursos</td><td>Partilhados com outros clientes</td><td>Reservados para si</td></tr>
+                <tr><td>Controlo</td><td>Painel simples, gestão feita por nós</td><td>Acesso total ao servidor</td></tr>
+                <tr><td>Conhecimento técnico</td><td>Nenhum</td><td>Recomendado (ou gestão contratada)</td></tr>
+                <tr><td>Custo</td><td>Mais acessível</td><td>Superior</td></tr>
+                <tr><td>Crescimento</td><td>Para projetos pequenos e médios</td><td>Escalável para projetos exigentes</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section> -->
+
+      <!-- SOBRE -->
+      <!-- <section id="sobre">
+        <div class="container about-grid">
+          <div>
+            <div class="section-head">
+             
+              <h2>Mais do que hosting: tecnologia para acelerar o seu negócio</h2>
+            </div>
+            <p>
+              A ECOMULTI é uma empresa de soluções tecnológicas e digitais. Disponibilizamos
+              soluções práticas, seguras e ajustadas à dimensão e aos objectivos de cada
+              organização. Cada projecto é analisado de acordo com os requisitos técnicos, os
+              dados tratados e os resultados pretendidos.
+            </p>
+            <ul class="feature-list">
+              <li><svg class="icon"><use href="#i-check" /></svg> Serviços essenciais centralizados num único parceiro tecnológico</li>
+              <li><svg class="icon"><use href="#i-check" /></svg> Profissionalização da comunicação digital da sua organização</li>
+              <li><svg class="icon"><use href="#i-check" /></svg> Ferramentas para organizar contactos, apoiar o atendimento e simplificar tarefas repetitivas</li>
+            </ul>
+          </div>
+
+          <div class="info-box">
+            <h3>Sem complicação. Com resultado.</h3>
+            <p>
+              Conectamos tecnologia, performance e experiência para que o seu negócio tenha um
+              ambiente digital à altura dos desafios do mercado.
+            </p>
+            <div class="metric-list">
+              <div class="metric"><strong>Domínios</strong><span>Registo e gestão</span></div>
+              <div class="metric"><strong>Web</strong><span>Sites e presença online</span></div>
+              <div class="metric"><strong>VPS</strong><span>Servidor virtual</span></div>
+              <div class="metric"><strong>IA</strong><span>Automação de processos</span></div>
+            </div>
+          </div>
+        </div>
+      </section> -->
+
+      <!-- PROCESSO -->
+      
+
+      <!-- CENTRO DE EXPLICAÇÕES -->
+      <!-- <section id="ajuda">
+        <div class="container">
+          <div class="section-head">
+            
+            <h2>Hospedagem, domínio e outras dúvidas, explicadas sem complicação</h2>
+            <p>Os termos técnicos confundem muita gente. Aqui explicamos cada um com linguagem simples e exemplos do dia a dia.</p>
+          </div>
+
+          <div class="help-tools">
+            <input type="search" id="helpSearch" placeholder="Pesquisar: SSL, DNS, email, backup…" aria-label="Pesquisar nas explicações" />
+          </div>
+          <div class="chips" id="helpChips" style="margin-bottom: 20px">
+            <button class="chip active" data-cat="todos">Todos</button>
+            <button class="chip" data-cat="basico">O básico</button>
+            <button class="chip" data-cat="dominio">Domínio</button>
+            <button class="chip" data-cat="hospedagem">Hospedagem</button>
+            <button class="chip" data-cat="seguranca">Segurança e email</button>
+            <button class="chip" data-cat="negocio">Pagamento e gestão</button>
+          </div>
+
+          <div id="helpList">
+            <details class="faq" data-cat="basico">
+              <summary><svg class="icon"><use href="#i-book" /></svg> Como funciona um site? Domínio + hospedagem + conteúdo <svg class="icon chev"><use href="#i-chevron" /></svg></summary>
+              <div class="answer">
+                <p>Para um site existir na internet são precisas três peças: o <strong>domínio</strong> (o endereço), a <strong>hospedagem</strong> (o espaço onde os ficheiros ficam guardados) e o <strong>conteúdo</strong> (o próprio site).</p>
+                <p class="analogy">Pense numa loja física: o domínio é a morada, a hospedagem é o edifício alugado e o site é a loja montada lá dentro. Sem morada ninguém encontra a loja; sem edifício não há onde a instalar.</p>
+              </div>
+            </details>
+
+            <details class="faq" data-cat="hospedagem basico">
+              <summary><svg class="icon"><use href="#i-server" /></svg> O que é hospedagem web? <svg class="icon chev"><use href="#i-chevron" /></svg></summary>
+              <div class="answer">
+                <p>É o serviço que guarda os ficheiros do seu site (textos, fotografias, base de dados, emails) num computador potente, ligado à internet 24 horas por dia, chamado <strong>servidor</strong>. Quando alguém escreve o seu endereço, o servidor entrega-lhe o site.</p>
+                <p>Pode ter o site no seu próprio computador? Em teoria sim, mas teria de o manter sempre ligado, com internet estável e protegido contra ataques. A hospedagem trata disso por si.</p>
+              </div>
+            </details>
+
+            <details class="faq" data-cat="dominio basico">
+              <summary><svg class="icon"><use href="#i-globe" /></svg> O que é um domínio e porque preciso de um? <svg class="icon chev"><use href="#i-chevron" /></svg></summary>
+              <div class="answer">
+                <p>O domínio é o nome do seu site, como <em>minhaempresa.co.ao</em>. Serve para que os clientes o encontrem sem decorar números (o endereço real de um servidor é uma sequência como 192.0.2.10).</p>
+                <p>Também permite criar emails profissionais (<em>nome@minhaempresa.co.ao</em>) e reforça a confiança na sua marca.</p>
+              </div>
+            </details>
+
+            <details class="faq" data-cat="dominio">
+              <summary><svg class="icon"><use href="#i-globe" /></svg> Qual é a diferença entre domínio e hospedagem? <svg class="icon chev"><use href="#i-chevron" /></svg></summary>
+              <div class="answer">
+                <p>São dois serviços diferentes, que se complementam:</p>
+                <ul>
+                  <li><strong>Domínio:</strong> o nome/endereço. Registado por períodos (normalmente anuais).</li>
+                  <li><strong>Hospedagem:</strong> o espaço onde o site vive. Pago de forma recorrente.</li>
+                </ul>
+                <p>Pode comprar cada um num fornecedor diferente, mas tê-los no mesmo sítio simplifica a gestão e o suporte.</p>
+              </div>
+            </details>
+
+            <details class="faq" data-cat="dominio">
+              <summary><svg class="icon"><use href="#i-globe" /></svg> O que significam .ao, .co.ao, .com e .org? <svg class="icon chev"><use href="#i-chevron" /></svg></summary>
+              <div class="answer">
+                <p>É a <strong>extensão</strong> (ou terminação) do domínio, a parte final do endereço.</p>
+                <ul>
+                  <li><strong>.ao</strong> e <strong>.co.ao</strong>: associados a Angola, ótimos para negócios que servem o mercado angolano.</li>
+                  <li><strong>.com</strong>: a mais conhecida, internacional.</li>
+                  <li><strong>.net</strong> e <strong>.org</strong>: usadas por empresas de tecnologia e organizações.</li>
+                </ul>
+                <p>As regras de registo variam consoante a extensão. A nossa equipa orienta-o nos requisitos.</p>
+              </div>
+            </details>
+
+            <details class="faq" data-cat="dominio">
+              <summary><svg class="icon"><use href="#i-route" /></svg> O que é o DNS? <svg class="icon chev"><use href="#i-chevron" /></svg></summary>
+              <div class="answer">
+                <p>O DNS é como uma <strong>lista telefónica da internet</strong>: traduz o nome do domínio no endereço do servidor onde o site está. É nas definições de DNS que se indica "este domínio aponta para aquele servidor" e para onde vão os emails.</p>
+                <p>Quando se altera o DNS, a mudança pode demorar de algumas horas até 48 horas a propagar-se por todo o mundo. É normal.</p>
+              </div>
+            </details>
+
+            <details class="faq" data-cat="dominio negocio">
+              <summary><svg class="icon"><use href="#i-refresh" /></svg> O domínio é meu? E se esquecer de renovar? <svg class="icon chev"><use href="#i-chevron" /></svg></summary>
+              <div class="answer">
+                <p>O domínio deve ficar registado em <strong>seu nome ou da sua empresa</strong>. Peça sempre os dados do titular. Funciona como um aluguer: tem de ser renovado no prazo, normalmente todos os anos.</p>
+                <p>Se não renovar, o site e os emails deixam de funcionar e, passado algum tempo, o nome fica livre para qualquer pessoa o registar. Avisamos antes do vencimento para isso não acontecer.</p>
+              </div>
+            </details>
+
+            <details class="faq" data-cat="hospedagem">
+              <summary><svg class="icon"><use href="#i-cpu" /></svg> Hospedagem partilhada ou VPS: qual a diferença? <svg class="icon chev"><use href="#i-chevron" /></svg></summary>
+              <div class="answer">
+                <p class="analogy">Hospedagem partilhada é viver num apartamento: partilha o edifício com outros, é mais económico e a manutenção é tratada por nós. Um VPS é uma moradia: tem o seu espaço reservado e mais liberdade, mas também mais responsabilidade.</p>
+                <p>Para a maioria dos sites institucionais e pequenas lojas, a hospedagem partilhada é suficiente. O VPS é indicado quando há muito tráfego, sistemas próprios ou requisitos técnicos especiais. Veja a tabela comparativa mais abaixo.</p>
+              </div>
+            </details>
+
+            <details class="faq" data-cat="hospedagem">
+              <summary><svg class="icon"><use href="#i-clock" /></svg> O que é "uptime" e porque importa? <svg class="icon chev"><use href="#i-chevron" /></svg></summary>
+              <div class="answer">
+                <p>Uptime é a percentagem do tempo em que o servidor está no ar. Quanto mais alto, menos tempo o seu site fica inacessível, o que significa menos clientes perdidos e melhor imagem. Um site fora do ar é uma loja de portas fechadas.</p>
+              </div>
+            </details>
+
+            <details class="faq" data-cat="hospedagem">
+              <summary><svg class="icon"><use href="#i-database" /></svg> O que são largura de banda e espaço em disco? <svg class="icon chev"><use href="#i-chevron" /></svg></summary>
+              <div class="answer">
+                <ul>
+                  <li><strong>Espaço em disco:</strong> quanto o seu site pode guardar (ficheiros, imagens, emails, base de dados).</li>
+                  <li><strong>Largura de banda (tráfego):</strong> quantidade de dados que o site pode enviar aos visitantes. Quantos mais visitantes e páginas pesadas, mais tráfego é usado.</li>
+                </ul>
+                <p>Se o seu site é um cartão-de-visita online, as necessidades são pequenas. Lojas e portais de conteúdo precisam de mais.</p>
+              </div>
+            </details>
+
+            <details class="faq" data-cat="seguranca basico">
+              <summary><svg class="icon"><use href="#i-lock" /></svg> O que é SSL e o cadeado do navegador? <svg class="icon chev"><use href="#i-chevron" /></svg></summary>
+              <div class="answer">
+                <p>O SSL é um certificado que <strong>encripta a ligação</strong> entre o visitante e o site, mostrando o cadeado e o <em>https://</em> no endereço. Protege dados como palavras-passe e formulários.</p>
+                <p>Hoje é essencial: os navegadores marcam como "não seguros" os sites sem SSL, e os motores de pesquisa dão preferência aos que o têm. Nas nossas hospedagens, o SSL está incluído.</p>
+              </div>
+            </details>
+
+            <details class="faq" data-cat="seguranca">
+              <summary><svg class="icon"><use href="#i-mail" /></svg> Posso ter email com o nome da minha empresa? <svg class="icon chev"><use href="#i-chevron" /></svg></summary>
+              <div class="answer">
+                <p>Sim. Com um domínio e hospedagem pode criar contas como <em>geral@minhaempresa.co.ao</em> ou <em>vendas@minhaempresa.co.ao</em>, uma por pessoa ou por departamento.</p>
+                <p>Transmite muito mais profissionalismo do que um email gratuito e pode ser consultado no telemóvel, no computador ou no navegador (webmail).</p>
+              </div>
+            </details>
+
+            <details class="faq" data-cat="seguranca">
+              <summary><svg class="icon"><use href="#i-shield" /></svg> Fazem cópias de segurança (backups)? <svg class="icon chev"><use href="#i-chevron" /></svg></summary>
+              <div class="answer">
+                <p>Um backup é uma cópia do seu site guardada à parte. Se algo correr mal (erro, ataque, apagar por engano) é possível restaurar a versão anterior. Fale com a nossa equipa para saber a frequência e a retenção do plano que escolher.</p>
+              </div>
+            </details>
+
+            <details class="faq" data-cat="negocio basico">
+              <summary><svg class="icon"><use href="#i-spark" /></svg> O que é a automação com Inteligência Artificial? <svg class="icon chev"><use href="#i-chevron" /></svg></summary>
+              <div class="answer">
+                <p>É o uso de ferramentas inteligentes para fazer, de forma automática, tarefas repetitivas do dia a dia: organizar contactos de clientes, apoiar o atendimento ou responder a pedidos frequentes.</p>
+                <p class="analogy">É como ter um assistente que trata do trabalho rotineiro, para que a sua equipa se concentre no que exige decisão humana.</p>
+                <p>Cada projecto é analisado de acordo com os requisitos técnicos, os dados tratados e os resultados pretendidos.</p>
+              </div>
+            </details>
+
+            <details class="faq" data-cat="negocio">
+              <summary><svg class="icon"><use href="#i-wrench" /></svg> Preciso de conhecimentos técnicos? <svg class="icon chev"><use href="#i-chevron" /></svg></summary>
+              <div class="answer">
+                <p>Não. Pode pedir-nos que configuremos tudo: domínio, hospedagem, SSL, emails e publicação do site. Depois, o suporte técnico ajuda sempre que precisar.</p>
+              </div>
+            </details>
+
+            <details class="faq" data-cat="negocio">
+              <summary><svg class="icon"><use href="#i-route" /></svg> Posso mudar o meu site ou domínio de outro fornecedor para a Ecomulti? <svg class="icon chev"><use href="#i-chevron" /></svg></summary>
+              <div class="answer">
+                <p>Sim. Tratamos da migração do site e dos emails e, no caso do domínio, da transferência, procurando evitar que fique sem serviço. Contacte-nos e indique onde está tudo atualmente.</p>
+              </div>
+            </details>
+
+            <div class="no-results" id="noResults">Não encontrámos nada com esse termo. <a href="#contacto" style="color: var(--primary-2); font-weight: 700">Pergunte-nos diretamente</a>.</div>
+          </div>
+        </div>
+      </section> -->
+
+      <!-- CONTACTO -->
+      <section id="contacto">
+        <div class="container">
+          <div class="contact-grid">
+            <div>
+              <small style="text-transform: uppercase; letter-spacing: 0.12em; font-weight: 700; font-size: 0.78rem; opacity: 0.75">Vamos conversar?</small>
+              <h2>Crie uma presença digital forte e confiável com a Ecomulti</h2>
+              <p>Teremos todo o gosto em agendar uma breve reunião de apresentação para compreender as necessidades da sua organização e identificar oportunidades de colaboração.</p>
+              <ul class="contact-points">
+                <li><svg class="icon"><use href="#i-clock" /></svg> Suporte 24/7</li>
+                <li><svg class="icon"><use href="#i-mail" /></svg> Resposta com proposta personalizada</li>
+                <li><svg class="icon"><use href="#i-shield" /></svg> Os seus dados são usados apenas para o contacto</li>
+              </ul>
+            </div>
+
+            <form class="contact" id="contactForm" novalidate>
+              <label>Nome
+                <input type="text" name="nome" required autocomplete="name" />
+              </label>
+              <label>Email ou telefone
+                <input type="text" name="contacto" required autocomplete="email" />
+              </label>
+              <label>Serviço pretendido
+                <select name="servico" id="servicoSelect">
+                  <option>Não sei / preciso de aconselhamento</option>
+                  <optgroup label="Alojamento web (anual)">
+                    <option>Alojamento web — START</option>
+                    <option>Alojamento web — PRO</option>
+                    <option>Alojamento web — BUSINESS</option>
+                  </optgroup>
+                  <optgroup label="Website + 12 meses de alojamento">
+                    <option>Website + alojamento — START</option>
+                    <option>Website + alojamento — PRO</option>
+                    <option>Website + alojamento — BUSINESS</option>
+                  </optgroup>
+                  <optgroup label="Gestão e manutenção (mensal)">
+                    <option>Gestão e manutenção — START</option>
+                    <option>Gestão e manutenção — PRO</option>
+                    <option>Gestão e manutenção — BUSINESS</option>
+                  </optgroup>
+                  <option>Registo de domínio</option>
+                  <option>Servidor VPS</option>
+                  <option>Automação com Inteligência Artificial</option>
+                  <option>Suporte e manutenção</option>
+                  <option>Reunião de apresentação</option>
+                </select>
+              </label>
+              <label>Mensagem
+                <textarea name="mensagem" rows="4" id="mensagem"></textarea>
+              </label>
+              <button class="btn btn-primary" type="submit">Enviar pedido</button>
+              <p class="form-msg" id="formMsg" role="status"></p>
+            </form>
+          </div>
+        </div>
+      </section>
+        </main>
+
+    <footer>
+      <div class="container">
+        <div class="footer-cols">
+          <div>
+            <img src="imagens/fatia1.png" alt="Ecomulti" />
+            <p>Soluções tecnológicas e digitais para empresas e profissionais em Angola.</p>
+          </div>
+          <div>
+            <h4>Serviços</h4>
+            <a href="dominios.html">Domínios</a>
+            <a href="hospedagem-ecomulti.html">Hospedagem</a>
+            <a href="#servicos">Servidores VPS</a>
+            <a href="desenvolvimento-ecomulti.html">Websites e lojas</a>
+            <a href="email-corporativo-ecomulti.html">E-mails profissionais</a>
+            <a href="#servicos">Automação com IA</a>
+          </div>
+          <div>
+            <h4>Ajuda</h4>
+            <a href="#assistente">Assistente de escolha</a>
+            <a href="#contacto">Suporte</a>
+          </div>
+          <div>
+            <h4>Empresa</h4>
+            <a href="#sobre">Sobre a Ecomulti</a>
+            <a href="#missao">Missão, visão e valores</a>
+            <a href="#porque">Porquê a Ecomulti</a>
+            <a href="#processo">Como trabalhamos</a>
+            <a href="#contacto">Contacto</a>
+          </div>
+        </div>
+        <div class="footer-row">
+          <div>© 2026 Ecomulti. Todos os direitos reservados.</div>
+          <div>Hospedagem • Domínios • Websites • VPS • IA</div>
+        </div>
+      </div>
+    </footer>
+
+    <button class="to-top" id="toTop" aria-label="Voltar ao topo">
+      <svg class="icon"><use href="#i-up" /></svg>
+    </button>
+
+    <div class="whatsapp">
+      <a href="https://wa.me/244923340895">
+      <img src="imagens/whatsapp.png" alt="whatsappIcon">
+    </a>
+  </div>
+
+    <script src="config.js"></script>
+    <!-- 1º: motor partilhado -->
+<script src="api/catalogo.php"></script>
+<script src="dominio.js"></script>
+<!-- 3º: lógica da página -->
+<script>
+/* =====================================================
+   CONFIGURAÇÃO DE CONTACTO
+   Preencha estes campos para que formulários funcionem.
+   whatsapp: só números com indicativo, ex. "244900000000"
+   ===================================================== */
+const CONTACTO = window.CONTACTO || { email: "", whatsapp: "" }; /* editar em config.js */
+
+const $  = (s, el = document) => el.querySelector(s);
+const $$ = (s, el = document) => [...el.querySelectorAll(s)];
+
+/* Referência ao motor de domínios */
+const DominioChecker = window.DominioChecker;
+const EXTENSOES = DominioChecker ? DominioChecker.EXTENSOES : [".ao", ".co.ao", ".com", ".net", ".org"];
+
+/* ---------- Menu móvel ---------- */
+const menu = $("#menu");
+const toggle = $("#menuToggle");
+if (toggle && menu) {
+  toggle.addEventListener("click", () => {
+    const open = menu.classList.toggle("open");
+    toggle.setAttribute("aria-expanded", open);
+  });
+  $$("#menu a").forEach((a) =>
+    a.addEventListener("click", () => {
+      menu.classList.remove("open");
+      toggle.setAttribute("aria-expanded", "false");
+    })
+  );
+}
+
+/* ---------- Botão voltar ao topo ---------- */
+const toTop = $("#toTop");
+if (toTop) {
+  window.addEventListener("scroll", () => {
+    toTop.classList.toggle("show", window.scrollY > 600);
+  });
+  toTop.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
+}
+
+/* ---------- Envio de pedidos (WhatsApp ou email) ---------- */
+function enviarPedido(texto, assunto) {
+  if (CONTACTO.whatsapp) {
+    window.open(`https://wa.me/${CONTACTO.whatsapp}?text=${encodeURIComponent(texto)}`, "_blank", "noopener");
+    return true;
+  }
+  if (CONTACTO.email) {
+    window.location.href = `mailto:${CONTACTO.email}?subject=${encodeURIComponent(assunto)}&body=${encodeURIComponent(texto)}`;
+    return true;
+  }
+  return false;
+}
+
+/* ---------- Verificação de domínio (motor partilhado) ---------- */
+const domainForm = $("#domainForm");
+const domainResult = $("#domainResult");
+let temporizador;
+
+async function pesquisarDominio() {
+  if (!DominioChecker) {
+    if (domainResult) {
+      domainResult.classList.add("show");
+      domainResult.textContent = "Motor de verificação indisponível. Recarregue a página.";
+    }
+    return;
+  }
+
+  const nome = DominioChecker.normalizarNome($("#domainName").value);
+  if (!domainResult) return;
+  domainResult.classList.add("show");
+
+  if (!nome) { domainResult.classList.remove("show"); return; }
+  if (!DominioChecker.nomeValido(nome)) {
+    domainResult.textContent =
+      "Use apenas letras, números e hífen (sem espaços nem símbolos, e sem hífen no início ou fim).";
+    return;
+  }
+
+  DominioChecker.guardarUltimoNome(nome);
+
+  const escolhida = $("#domainExt").value;
+  const ordem = [escolhida, ...EXTENSOES.filter((e) => e !== escolhida)];
+
+  /* ---------- Desenhar linhas "a verificar" ---------- */
+  const lista = document.createElement("div");
+  lista.className = "dr-list";
+  const linhas = ordem.map((ext, i) => {
+    const dominio = nome + ext;
+    const row = document.createElement("div");
+    row.className = "dr-row" + (i === 0 ? " main" : "");
+    row.style.setProperty("--d", `${i * 0.06}s`);
+    row.dataset.state = "loading";
+    row.innerHTML =
+      '<span class="dr-name"></span>' +
+      '<span class="dr-status"><span class="dr-dot"></span><span>A verificar…</span></span>' +
+      '<a class="dr-action" href="#contacto" hidden>Pedir registo</a>';
+    $(".dr-name", row).textContent = dominio;
+    lista.append(row);
+    return { row, dominio, ext };
+  });
+
+  const nota = document.createElement("p");
+  nota.className = "dr-note";
+  nota.innerHTML =
+    'Verificação automática e indicativa. ' +
+    '<a href="dominios-ecomulti.html?nome=' + encodeURIComponent(nome) + '">Ver todas as extensões e preços →</a>';
+  domainResult.replaceChildren(lista, nota);
+
+  /* ---------- Preencher com os resultados reais ---------- */
+  const resultados = await DominioChecker.verificarVarias(nome, ordem);
+  resultados.forEach(({ ext, estado, dominio }) => {
+    const linha = linhas.find(l => l.ext === ext);
+    if (!linha) return;
+    const { row } = linha;
+    row.dataset.state = estado;
+    $(".dr-status span:last-child", row).textContent = DominioChecker.ESTADOS[estado];
+    const acao = $(".dr-action", row);
+    const disponivel = ["free", "probable", "unknown"].includes(estado);
+    acao.hidden = !disponivel;
+    if (disponivel) {
+      acao.href = "dominios-ecomulti.html?nome=" + encodeURIComponent(nome) + "&ext=" + encodeURIComponent(ext);
+      acao.textContent = "Adicionar ao orçamento";
+    }
+  });
+}
+
+if (domainForm) {
+  domainForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    clearTimeout(temporizador);
+    pesquisarDominio();
+  });
+  $("#domainName").addEventListener("input", () => {
+    clearTimeout(temporizador);
+    temporizador = setTimeout(pesquisarDominio, 700);
+  });
+  $("#domainExt").addEventListener("change", pesquisarDominio);
+}
+
+/* ---------- Assistente de escolha ---------- */
+const wizard = $("#wizard");
+if (wizard) {
+  wizard.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const f = new FormData(e.target);
+    const q1 = f.get("q1"), q2 = f.get("q2"), q3 = f.get("q3");
+
+    let plano, motivo;
+    if (q1 === "app" || q3 === "muitas") {
+      plano = "Servidor VPS";
+      motivo = "Para sistemas próprios ou muito tráfego, recursos reservados dão mais desempenho e controlo.";
+    } else if (q1 === "loja") {
+      plano = "Website + alojamento — BUSINESS";
+      motivo = "Uma loja online / e-commerce é desenvolvida à medida, com 12 meses de alojamento incluídos (valor sob consulta).";
+    } else if (q2 === "nada") {
+      plano = "Website + alojamento — PRO";
+      motivo = "Como parte do zero, criamos o seu website (até 5 páginas) com 12 meses de alojamento incluídos, por 299.900 Kz.";
+    } else {
+      plano = "Alojamento web — START";
+      motivo = "Já tem parte do caminho feito. O alojamento START (5 GB SSD e 5 e-mails) custa 39.900 Kz por ano.";
+    }
+
+    const box = $("#wizardResult");
+    box.innerHTML = "";
+    const h = document.createElement("h3");
+    h.textContent = `Recomendação: ${plano}`;
+    const p = document.createElement("p");
+    p.textContent = motivo;
+    const a = document.createElement("a");
+    a.className = "btn btn-primary";
+    a.href = "#contacto";
+    a.textContent = "Pedir proposta";
+    a.addEventListener("click", () => {
+      $("#servicoSelect").value = plano;
+    });
+    box.append(h, p, a);
+    box.classList.add("show");
+    box.focus();
+  });
+}
+
+/* ---------- Botões "Pedir proposta" dos planos ---------- */
+$$("[data-plan]").forEach((el) =>
+  el.addEventListener("click", () => {
+    const sel = $("#servicoSelect");
+    if (sel) sel.value = el.dataset.plan;
+  })
+);
+
+/* ---------- Centro de explicações: pesquisa + categorias ---------- */
+let categoria = "todos";
+const items = $$("#helpList details.faq");
+const search = $("#helpSearch");
+
+function filtrar() {
+  if (!search) return;
+  const termo = search.value.trim().toLowerCase();
+  let visiveis = 0;
+  items.forEach((it) => {
+    const cats = it.dataset.cat.split(" ");
+    const okCat = categoria === "todos" || cats.includes(categoria);
+    const okTexto = !termo || it.textContent.toLowerCase().includes(termo);
+    const mostrar = okCat && okTexto;
+    it.hidden = !mostrar;
+    if (mostrar) visiveis++;
+  });
+  const noResults = $("#noResults");
+  if (noResults) noResults.style.display = visiveis ? "none" : "block";
+}
+
+if (search) search.addEventListener("input", filtrar);
+const helpChips = $("#helpChips");
+if (helpChips) {
+  helpChips.addEventListener("click", (e) => {
+    const chip = e.target.closest(".chip");
+    if (!chip) return;
+    categoria = chip.dataset.cat;
+    $$("#helpChips .chip").forEach((c) => c.classList.toggle("active", c === chip));
+    filtrar();
+  });
+}
+
+/* ---------- Animações de entrada ao rolar ---------- */
+(function () {
+  const alvos = $$(
+    ".section-head, .card, .step, .bento-item, .domain-box, .banner, .wizard, .table-wrap, .contact-grid, details.faq, .info-box, .pillars-row, .feature-list li"
+  );
+  if (!("IntersectionObserver" in window) || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  const io = new IntersectionObserver(
+    (entradas) => {
+      entradas.forEach((en) => {
+        if (!en.isIntersecting) return;
+        const el = en.target;
+        io.unobserve(el);
+        el.classList.add("in");
+        setTimeout(() => {
+          el.classList.remove("reveal", "in");
+          el.style.removeProperty("--d");
+        }, 1100);
+      });
+    },
+    { threshold: 0.12, rootMargin: "0px 0px -40px 0px" }
+  );
+  const contagem = new Map();
+  alvos.forEach((el) => {
+    const pai = el.parentElement;
+    const n = contagem.get(pai) || 0;
+    contagem.set(pai, n + 1);
+    el.style.setProperty("--d", `${Math.min(n, 5) * 0.08}s`);
+    el.classList.add("reveal");
+    io.observe(el);
+  });
+})();
+
+/* ---------- Sombra do topo ao rolar ---------- */
+const topbar = $(".topbar");
+if (topbar) {
+  window.addEventListener("scroll", () => topbar.classList.toggle("scrolled", window.scrollY > 8), { passive: true });
+}
+
+/* ---------- Efeito futurista: luz nos cartões ---------- */
+document.addEventListener("pointermove", (e) => {
+  const c = e.target.closest(".card, .step");
+  if (!c) return;
+  const r = c.getBoundingClientRect();
+  c.style.setProperty("--mx", `${e.clientX - r.left}px`);
+  c.style.setProperty("--my", `${e.clientY - r.top}px`);
+}, { passive: true });
+
+/* ---------- Abas (vantagens e planos) ---------- */
+["#featTabs", "#planTabs"].forEach((sel) => {
+  const tabs = $(sel);
+  if (!tabs) return;
+  const panels = $$(".tab-panel", tabs.parentElement);
+  tabs.addEventListener("click", (e) => {
+    const tab = e.target.closest("[data-tab]");
+    if (!tab) return;
+    $$(".chip", tabs).forEach((c) => {
+      const on = c === tab;
+      c.classList.toggle("active", on);
+      c.setAttribute("aria-selected", on);
+    });
+    panels.forEach((p) => (p.hidden = p.dataset.panel !== tab.dataset.tab));
+  });
+});
+
+/* ---------- Formulário de contacto ---------- */
+const contactForm = $("#contactForm");
+if (contactForm) {
+  contactForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const f = new FormData(e.target);
+    const msg = $("#formMsg");
+    const nome = (f.get("nome") || "").trim();
+    const contacto = (f.get("contacto") || "").trim();
+
+    if (!nome || !contacto) {
+      msg.textContent = "Indique o seu nome e um email ou telefone para o contactarmos.";
+      return;
+    }
+
+    const texto =
+      `Olá, sou ${nome}.\n` +
+      `Serviço: ${f.get("servico")}\n` +
+      `Contacto: ${contacto}\n` +
+      (f.get("mensagem") ? `Mensagem: ${f.get("mensagem")}` : "");
+
+    if (enviarPedido(texto, `Pedido de proposta - ${f.get("servico")}`)) {
+      msg.textContent = "Obrigado! A abrir o seu aplicativo para concluir o envio.";
+    } else {
+      msg.textContent = "O envio ainda não está configurado neste site. Por favor, tente mais tarde.";
+    }
+  });
+}
+
+/* ---------- Carrossel (se existir) ---------- */
+document.querySelectorAll('.carousel').forEach(carousel => {
+  const track = carousel.querySelector('.carousel-track');
+  const prev  = carousel.querySelector('.prev');
+  const next  = carousel.querySelector('.next');
+  if (!track || !prev || !next) return;
+
+  const step = () => {
+    const card = track.querySelector('.card');
+    if (!card) return 0;
+    const gap = parseFloat(getComputedStyle(track).columnGap) || 0;
+    return card.offsetWidth + gap;
+  };
+
+  const update = () => {
+    prev.disabled = track.scrollLeft <= 2;
+    next.disabled = track.scrollLeft >= track.scrollWidth - track.clientWidth - 2;
+  };
+
+  prev.addEventListener('click', () => track.scrollBy({ left: -step(), behavior: 'smooth' }));
+  next.addEventListener('click', () => track.scrollBy({ left:  step(), behavior: 'smooth' }));
+
+  track.addEventListener('scroll', update, { passive: true });
+  new ResizeObserver(update).observe(track);
+  update();
+});
+</script>
+  </body>
+</html>

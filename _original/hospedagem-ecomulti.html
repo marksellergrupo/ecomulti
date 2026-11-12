@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="pt-AO">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Planos de hospedagem web da ECOMULTI. Compare planos e calcule o valor da sua subscrição para 1, 2 ou 3 anos.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="inicio.css">
+  <link rel="icon" type="image/x-icon" href="imagens/logo 03.png">
+  <title>Hospedagem Web | ECOMULTI</title>
+</head>
+<body>
+  <header class="topbar">
+    <div class="container nav">
+      <a class="brand" href="index.html" aria-label="Ecomulti - início">
+        <img src="imagens/fatia1.png" alt="Logo Ecomulti" />
+      </a>
+      <button class="menu-toggle" id="menuToggle" type="button" aria-label="Abrir menu" aria-expanded="false" aria-controls="menu">
+        <span aria-hidden="true">☰</span>
+      </button>
+      <nav class="nav-links" id="menu" aria-label="Menu principal">
+        <a href="index.html#dominio">Domínios</a>
+        <a href="email-corporativo-ecomulti.html">E-mail</a>
+        <a href="desenvolvimento-ecomulti.html">Websites</a>
+        <a href="hospedagem-ecomulti.html" aria-current="page">Hospedagem</a>
+        <a href="#contacto">Contacto</a>
+      </nav>
+      <a class="btn btn-primary" href="ecomulti-pagamento.html" target="_blank">Pedir proposta</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" id="inicio">
+      <div class="container hero-wrap">
+        <div>
+          <h1>A sua presença online começa com uma hospedagem de confiança.</h1>
+          <p class="lead">Coloque o seu site online com uma solução preparada para acompanhar o crescimento do seu negócio. Escolha o plano ideal e saiba quanto vai pagar por 1, 2 ou 3 anos.</p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="#planos">Explorar planos <span aria-hidden="true">→</span></a>
+            <a class="btn btn-secondary" href="#calculadora">Calcular subscrição</a>
+          </div>
+          <ul class="hero-list">
+            <li><svg class="icon"><use href="#i-check" /></svg> Certificado SSL incluído</li>
+            <li><svg class="icon"><use href="#i-check" /></svg> E-mail profissional</li>
+            <li><svg class="icon"><use href="#i-check" /></svg> Backups e suporte</li>
+            <li><svg class="icon"><use href="#i-check" /></svg> Painel de gestão simples</li>
+          </ul>
+        </div>
+        <!-- <div class="hero-art" aria-hidden="true">
+          <svg viewBox="0 0 400 260" role="img">
+            <rect x="30" y="30" width="340" height="200" rx="18" fill="none" stroke="currentColor" stroke-width="2"/>
+            <rect x="50" y="55" width="90" height="14" rx="7" fill="currentColor" opacity=".8"/>
+            <rect x="50" y="85" width="300" height="10" rx="5" fill="currentColor" opacity=".35"/>
+            <rect x="50" y="105" width="260" height="10" rx="5" fill="currentColor" opacity=".35"/>
+            <rect x="50" y="140" width="130" height="60" rx="10" fill="currentColor" opacity=".18"/>
+            <rect x="195" y="140" width="155" height="60" rx="10" fill="currentColor" opacity=".28"/>
+          </svg>
+        </div> -->
+      </div>
+    </section>
+
+    <section id="hospedagem">
+      <div class="container">
+        <div class="about-grid">
+          <div>
+            <div class="section-head">
+              <small>Porquê hospedar connosco?</small>
+              <h2>O seu site precisa de uma casa na Internet.</h2>
+              <p>A hospedagem web guarda os ficheiros, as imagens e os dados do seu site para que as pessoas possam visitá-lo pela Internet. Com o plano adequado, a sua empresa apresenta os seus serviços e mantém uma presença digital profissional.</p>
+            </div>
+            <ul class="feature-list">
+              <li><svg class="icon"><use href="#i-check" /></svg> Recursos de hospedagem adequados ao tamanho do projecto</li>
+              <li><svg class="icon"><use href="#i-check" /></svg> Certificado SSL incluído nos planos apresentados</li>
+              <li><svg class="icon"><use href="#i-check" /></svg> Contas de e-mail associadas ao seu domínio</li>
+              <li><svg class="icon"><use href="#i-check" /></svg> Apoio técnico para gerir o serviço</li>
+            </ul>
+          </div>
+          <div class="info-box">
+            <h3>Uma base digital sólida</h3>
+            <p>Comece com o essencial e evolua conforme o seu negócio cresce.</p>
+            <div class="metric-list">
+              <div class="metric"><strong>SSL</strong><span>Segurança incluída</span></div>
+              <div class="metric"><strong>24/7</strong><span>Disponibilidade do site</span></div>
+              <div class="metric"><strong>SSD</strong><span>Armazenamento rápido</span></div>
+              <div class="metric"><strong>Backups</strong><span>Protecção dos dados</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="alt plans-section" id="planos">
+      <div class="container">
+        <div class="section-head">
+          <small>Os nossos planos</small>
+          <h2>Escolha a hospedagem certa para si.</h2>
+          <p>Comece com o essencial ou escolha mais recursos para o seu negócio. Seleccione um plano para o calcular na secção de subscrição.</p>
+        </div>
+        <div class="plans">
+          <article class="card plan">
+            <span class="tag">Para começar</span>
+            <h3>Starter</h3>
+            <p>Ideal para pequenos sites e projectos pessoais.</p>
+            <div class="price"><strong data-preco="hospedagem.starter">2.500 Kz</strong> <span>/ mês</span></div>
+            <ul>
+              <li><svg class="icon"><use href="#i-check" /></svg> 5 GB de armazenamento SSD</li>
+              <li><svg class="icon"><use href="#i-check" /></svg> 1 website</li>
+              <li><svg class="icon"><use href="#i-check" /></svg> 5 contas de e-mail</li>
+              <li><svg class="icon"><use href="#i-check" /></svg> Certificado SSL</li>
+              <li><svg class="icon"><use href="#i-check" /></svg> Painel de gestão</li>
+            </ul>
+            <button class="btn btn-secondary choose-plan" type="button" data-plan="starter">Calcular este plano</button>
+          </article>
+
+          <article class="card plan featured">
+            <span class="tag">Mais popular</span>
+            <h3>Business</h3>
+            <p>Para empresas que querem uma presença digital profissional.</p>
+            <div class="price"><strong data-preco="hospedagem.business">5.500 Kz</strong> <span>/ mês</span></div>
+            <ul>
+              <li><svg class="icon"><use href="#i-check" /></svg> 20 GB de armazenamento SSD</li>
+              <li><svg class="icon"><use href="#i-check" /></svg> Até 5 websites</li>
+              <li><svg class="icon"><use href="#i-check" /></svg> 20 contas de e-mail</li>
+              <li><svg class="icon"><use href="#i-check" /></svg> Certificado SSL</li>
+              <li><svg class="icon"><use href="#i-check" /></svg> Backups diários</li>
+            </ul>
+            <button class="btn btn-primary choose-plan" type="button" data-plan="business">Calcular este plano</button>
+          </article>
+
+          <article class="card plan">
+            <span class="tag">Mais recursos</span>
+            <h3>Premium</h3>
+            <p>Para projectos com maiores necessidades de recursos.</p>
+            <div class="price"><strong data-preco="hospedagem.premium">12.000 Kz</strong> <span>/ mês</span></div>
+            <ul>
+              <li><svg class="icon"><use href="#i-check" /></svg> 50 GB de armazenamento SSD</li>
+              <li><svg class="icon"><use href="#i-check" /></svg> Até 15 websites</li>
+              <li><svg class="icon"><use href="#i-check" /></svg> 50 contas de e-mail</li>
+              <li><svg class="icon"><use href="#i-check" /></svg> Certificado SSL</li>
+              <li><svg class="icon"><use href="#i-check" /></svg> Backups e suporte prioritário</li>
+            </ul>
+            <button class="btn btn-secondary choose-plan" type="button" data-plan="premium">Calcular este plano</button>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="calculadora">
+      <div class="container">
+        <div class="section-head">
+          <small>Calculadora de subscrição</small>
+          <h2>Calcule o custo para 1, 2 ou 3 anos.</h2>
+          <p>Escolha o plano e o tempo de subscrição. O total será actualizado automaticamente, incluindo os descontos ilustrativos de subscrições longas.</p>
+        </div>
+        <div class="calculator-wrap">
+          <div class="calculator">
+            <h3>Configure a sua subscrição</h3>
+            <p>Altere as opções abaixo para comparar os valores.</p>
+            <div class="field">
+              <label for="plano">Plano de hospedagem</label>
+              <select id="plano">
+                <option value="starter" data-preco="hospedagem.starter" data-modelo="Starter — {}/mês">Starter — 2.500 Kz/mês</option>
+                <option value="business" selected data-preco="hospedagem.business" data-modelo="Business — {}/mês">Business — 5.500 Kz/mês</option>
+                <option value="premium" data-preco="hospedagem.premium" data-modelo="Premium — {}/mês">Premium — 12.000 Kz/mês</option>
+              </select>
+            </div>
+            <div class="field">
+              <span class="field-label">Tempo de subscrição</span>
+              <div class="duration-options">
+                <div class="duration-option">
+                  <input type="radio" id="ano1" name="duracao" value="1" checked>
+                  <label for="ano1"><strong>1 ano</strong><span>12 meses</span></label>
+                </div>
+                <div class="duration-option">
+                  <input type="radio" id="ano2" name="duracao" value="2">
+                  <label for="ano2"><strong>2 anos</strong><span>24 meses</span></label>
+                </div>
+                <div class="duration-option">
+                  <input type="radio" id="ano3" name="duracao" value="3">
+                  <label for="ano3"><strong>3 anos</strong><span>36 meses</span></label>
+                </div>
+              </div>
+            </div>
+            <p class="field-hint">Descontos: 0% para 1 ano, <span data-preco="regra.desconto_2anos">10%</span> para 2 anos e <span data-preco="regra.desconto_3anos">15%</span> para 3 anos.</p>
+            <div class="field">
+              <label for="dominioSite">Domínio do site</label>
+              <input type="text" id="dominioSite" placeholder="ex.: minhaempresa.ao" autocomplete="off" autocapitalize="off" spellcheck="false">
+              <p class="field-hint" id="dominioAjuda">O alojamento é criado para este domínio. Ainda não tem um? Registe-o em <a href="dominios.html">Domínios</a>.</p>
+            </div>
+          </div>
+
+          <aside class="summary" aria-live="polite" aria-atomic="true">
+            <h3>Resumo da subscrição</h3>
+            <p>Estimativa do valor a pagar pelo período seleccionado.</p>
+            <div class="summary-line"><span>Plano escolhido</span><strong id="resumoPlano">Business</strong></div>
+            <div class="summary-line"><span>Duração</span><strong id="resumoDuracao">1 ano (12 meses)</strong></div>
+            <div class="summary-line"><span>Preço mensal</span><strong id="precoMensal">5.500 Kz</strong></div>
+            <div class="summary-line"><span>Subtotal</span><strong id="subtotal">66.000 Kz</strong></div>
+            <div class="summary-line"><span>Desconto</span><strong id="valorDesconto">0 Kz (0%)</strong></div>
+            <div class="summary-total">
+              <span>Total estimado</span>
+              <strong id="total">66.000 Kz</strong>
+              <span class="savings" id="economia" hidden></span>
+            </div>
+            <button class="btn" id="solicitarPlano" type="button">Solicitar este plano <span aria-hidden="true">→</span></button>
+            <p class="fine-print">Valores fictícios para demonstração. O preço final, impostos e condições devem ser confirmados pela ECOMULTI.</p>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <section class="alt" id="perguntas">
+      <div class="container">
+        <div class="section-head">
+          <small>Dúvidas frequentes</small>
+          <h2>Antes de escolher o seu plano.</h2>
+        </div>
+        <details class="faq">
+          <summary><svg class="icon"><use href="#i-help" /></svg> O que preciso para hospedar um site? <svg class="icon chev"><use href="#i-chevron" /></svg></summary>
+          <div class="answer"><p>Normalmente precisa de um domínio e de um plano de hospedagem. Se ainda não tiver domínio, contacte a ECOMULTI para verificar as opções disponíveis, incluindo domínios .ao.</p></div>
+        </details>
+        <details class="faq">
+          <summary><svg class="icon"><use href="#i-help" /></svg> Posso ter e-mail profissional? <svg class="icon chev"><use href="#i-chevron" /></svg></summary>
+          <div class="answer"><p>Os planos incluem diferentes quantidades de contas de e-mail. Confirme os limites e recursos do plano antes de contratar.</p></div>
+        </details>
+        <details class="faq">
+          <summary><svg class="icon"><use href="#i-help" /></svg> Posso pagar por 2 ou 3 anos? <svg class="icon chev"><use href="#i-chevron" /></svg></summary>
+          <div class="answer"><p>Esta página permite simular períodos de 1, 2 ou 3 anos. A possibilidade de contratar e os descontos reais devem ser confirmados com a ECOMULTI.</p></div>
+        </details>
+        <details class="faq">
+          <summary><svg class="icon"><use href="#i-help" /></svg> Os preços apresentados são definitivos? <svg class="icon chev"><use href="#i-chevron" /></svg></summary>
+          <div class="answer"><p>Não. São preços fictícios usados para demonstrar a página e a calculadora. Devem ser substituídos pelos preços e condições comerciais aprovados pela empresa.</p></div>
+        </details>
+      </div>
+    </section>
+
+    <section id="contacto">
+      <div class="container">
+        <div class="contact-grid">
+          <div>
+            <h2>Vamos colocar o seu negócio online?</h2>
+            <p>Escolha um plano de hospedagem ou fale com a nossa equipa para encontrar uma solução adequada ao seu projecto.</p>
+            <ul class="contact-points">
+              <li><svg class="icon"><use href="#i-mail" /></svg> suporte@ecomulti.ao</li>
+              <li><svg class="icon"><use href="#i-check" /></svg> Resposta em horário útil</li>
+            </ul>
+          </div>
+          <form class="contact" id="formContacto" novalidate>
+            <label>Nome
+              <input type="text" name="nome" required>
+            </label>
+            <label>E-mail
+              <input type="email" name="email" required>
+            </label>
+            <label>Plano de interesse
+              <select name="plano">
+                <option>Starter</option>
+                <option selected>Business</option>
+                <option>Premium</option>
+              </select>
+            </label>
+            <label>Mensagem
+              <textarea name="mensagem" rows="4" required></textarea>
+            </label>
+            <button class="btn btn-primary" type="submit">Enviar pedido</button>
+            <p class="form-msg" id="formMsg" aria-live="polite"></p>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div class="footer-cols">
+        <div>
+          <img src="imagens/fatia1.png" alt="Logo Ecomulti">
+          <p>Presença digital profissional para empresas angolanas.</p>
+        </div>
+        <div>
+          <h4>Serviços</h4>
+          <a href="hospedagem-ecomulti.html">Hospedagem</a>
+          <a href="email-corporativo-ecomulti.html">E-mail corporativo</a>
+          <a href="desenvolvimento-ecomulti.html">Desenvolvimento web</a>
+        </div>
+        <div>
+          <h4>Empresa</h4>
+          <a href="index.html#sobre">Sobre</a>
+          <a href="#contacto">Contacto</a>
+        </div>
+        <div>
+          <h4>Contacto</h4>
+          <a href="mailto:suporte@ecomulti.ao">suporte@ecomulti.ao</a>
+        </div>
+      </div>
+      <div class="footer-row">
+        <span>© <span id="anoAtual"></span> ECOMULTI. Todos os direitos reservados.</span>
+        <a href="#inicio">Voltar ao topo ↑</a>
+      </div>
+    </div>
+  </footer>
+
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol>
+    <symbol id="i-help" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 1 1 4 2c-.8.7-1.5 1.2-1.5 2.5"/><path d="M12 17h.01"/></symbol>
+    <symbol id="i-chevron" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol>
+    <symbol id="i-mail" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></symbol>
+  </svg>
+
+  <script src="api/catalogo.php"></script>
+  <script>
+    /* ---------- 1. Dados ---------- */
+    const planos = {
+      starter:  { nome: "Starter", precoMensal: precoDe("hospedagem.starter") },
+      business: { nome: "Business", precoMensal: precoDe("hospedagem.business") },
+      premium:  { nome: "Premium", precoMensal: precoDe("hospedagem.premium") }
+    };
+    const descontos = { 1: 0, 2: precoDe("regra.desconto_2anos"), 3: precoDe("regra.desconto_3anos") };
+
+    /* ---------- 2. Helpers ---------- */
+    const formatarKz = (v) => new Intl.NumberFormat("pt-AO", { maximumFractionDigits: 0 }).format(v) + " Kz";
+    const obterDuracao = () => {
+      const sel = document.querySelector('input[name="duracao"]:checked');
+      return Number(sel ? sel.value : 1);
+    };
+
+    /* ---------- 3. Carrinho ---------- */
+    function adicionarAoCarrinho(item) {
+      const chave = "ecomulti_orcamento";
+      const lista = JSON.parse(localStorage.getItem(chave) || "[]");
+      const assinatura = JSON.stringify({ s: item.servico, p: item.plano, d: item.detalhes });
+      if (!lista.some(i => JSON.stringify({ s: i.servico, p: i.plano, d: i.detalhes }) === assinatura)) {
+        item.id = Date.now() + "-" + Math.random().toString(36).slice(2, 7);
+        item.criadoEm = new Date().toISOString();
+        lista.push(item);
+        localStorage.setItem(chave, JSON.stringify(lista));
+      }
+      window.location.href = "orcamento-ecomulti.html";
+    }
+
+    /* ---------- 4. DOM refs ---------- */
+    const seletorPlano = document.getElementById("plano");
+    const opcoesDuracao = document.querySelectorAll('input[name="duracao"]');
+    const resumoPlano = document.getElementById("resumoPlano");
+    const resumoDuracao = document.getElementById("resumoDuracao");
+    const precoMensal = document.getElementById("precoMensal");
+    const subtotalEl = document.getElementById("subtotal");
+    const valorDescontoEl = document.getElementById("valorDesconto");
+    const totalEl = document.getElementById("total");
+    const economiaEl = document.getElementById("economia");
+    const solicitarPlano = document.getElementById("solicitarPlano");
+
+    /* ---------- 5. calcularSubscricao ---------- */
+    function calcularSubscricao() {
+      const plano = planos[seletorPlano.value];
+      const anos = obterDuracao();
+      const meses = anos * 12;
+      const subtotal = plano.precoMensal * meses;
+      const pct = descontos[anos] || 0;
+      const desconto = Math.round(subtotal * pct / 100);
+      const total = subtotal - desconto;
+
+      resumoPlano.textContent = plano.nome;
+      resumoDuracao.textContent = `${anos} ${anos === 1 ? "ano" : "anos"} (${meses} meses)`;
+      precoMensal.textContent = formatarKz(plano.precoMensal);
+      subtotalEl.textContent = formatarKz(subtotal);
+      valorDescontoEl.textContent = `${formatarKz(desconto)} (${pct}%)`;
+      totalEl.textContent = formatarKz(total);
+
+      if (desconto > 0) {
+        economiaEl.hidden = false;
+        economiaEl.textContent = `Poupa ${formatarKz(desconto)}`;
+      } else {
+        economiaEl.hidden = true;
+        economiaEl.textContent = "";
+      }
+
+      solicitarPlano.dataset.plano = seletorPlano.value;
+      solicitarPlano.dataset.anos = String(anos);
+      solicitarPlano.dataset.total = String(total);
+    }
+
+    /* ---------- 6. Eventos da calculadora ---------- */
+    seletorPlano.addEventListener("change", calcularSubscricao);
+    opcoesDuracao.forEach(o => o.addEventListener("change", calcularSubscricao));
+
+    document.querySelectorAll(".choose-plan").forEach(btn => {
+      btn.addEventListener("click", () => {
+        seletorPlano.value = btn.dataset.plan;
+        calcularSubscricao();
+        document.getElementById("calculadora").scrollIntoView({ behavior: "smooth" });
+      });
+    });
+
+    /* ---------- 7. Solicitar → carrinho ---------- */
+    const dominioInput = document.getElementById("dominioSite");
+    const dominioAjuda = document.getElementById("dominioAjuda");
+    const ajudaOriginal = dominioAjuda.innerHTML;
+
+    // Aceita "https://www.MinhaEmpresa.ao/" e guarda "minhaempresa.ao"
+    function obterDominio() {
+      const d = dominioInput.value.trim().toLowerCase()
+        .replace(/^https?:\/\//, "").replace(/^www\./, "").replace(/\/.*$/, "");
+      return /^(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z]{2,}$/.test(d) ? d : null;
+    }
+
+    dominioInput.addEventListener("input", () => {
+      dominioAjuda.innerHTML = ajudaOriginal;
+      dominioAjuda.classList.remove("field-error");
+    });
+
+    solicitarPlano.addEventListener("click", () => {
+      const dominio = obterDominio();
+      if (!dominio) {
+        dominioAjuda.textContent = "Indique um domínio válido, por exemplo minhaempresa.ao.";
+        dominioAjuda.classList.add("field-error");
+        dominioInput.focus();
+        return;
+      }
+
+      const plano = planos[seletorPlano.value];
+      const anos = obterDuracao();
+      const meses = anos * 12;
+      const subtotal = plano.precoMensal * meses;
+      const pct = descontos[anos] || 0;
+      const desconto = Math.round(subtotal * pct / 100);
+      const total = subtotal - desconto;
+
+      adicionarAoCarrinho({
+        servico: "hospedagem",
+        config: { plano: seletorPlano.value, anos, dominio },
+        servicoLabel: "Hospedagem Web",
+        plano: plano.nome,
+        detalhes: [
+          `Domínio: ${dominio}`,
+          `Duração: ${anos} ${anos === 1 ? "ano" : "anos"} (${meses} meses)`,
+          `Preço mensal: ${formatarKz(plano.precoMensal)}`,
+          `Desconto: ${pct}%`
+        ],
+        total: total
+      });
+    });
+
+    /* ---------- 8. Formulário (demo) ---------- */
+    const form = document.getElementById("formContacto");
+    const formMsg = document.getElementById("formMsg");
+    if (form) {
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        formMsg.textContent = "Obrigado! O seu pedido foi registado (demonstração).";
+        form.reset();
+      });
+    }
+
+    /* ---------- 9. Menu mobile ---------- */
+    const menuToggle = document.getElementById("menuToggle");
+    const menu = document.getElementById("menu");
+    if (menuToggle && menu) {
+      menuToggle.addEventListener("click", () => {
+        const aberto = menu.classList.toggle("open");
+        menuToggle.setAttribute("aria-expanded", String(aberto));
+      });
+      menu.querySelectorAll("a").forEach(link => {
+        link.addEventListener("click", () => {
+          menu.classList.remove("open");
+          menuToggle.setAttribute("aria-expanded", "false");
+        });
+      });
+    }
+
+    /* ---------- 10. Init ---------- */
+    document.getElementById("anoAtual").textContent = new Date().getFullYear();
+    calcularSubscricao();
+  </script>
+</body>
+</html>

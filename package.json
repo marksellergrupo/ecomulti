@@ -1,0 +1,18 @@
+{
+  "name": "ecomulti-site",
+  "private": true,
+  "type": "module",
+  "description": "Site ECOMULTI + agente de atendimento (site e WhatsApp) em Netlify Functions",
+  "scripts": {
+    "precos": "node ferramentas/sincronizar-precos.mjs",
+    "preview": "node ferramentas/preparar-preview.mjs",
+    "testar": "node ferramentas/testar-agente.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^1.7.0",
+    "@netlify/blobs": "^11.1.9"
+  }
+}
