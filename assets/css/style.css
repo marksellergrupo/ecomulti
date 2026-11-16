@@ -779,3 +779,47 @@ footer nav a:hover, .footer-contact a:hover { color: #fff; }
   .toast span { flex: 1; }
   .to-top { right: 21px; bottom: 82px; }
 }
+
+/* =========================================================
+   POPUP PROMOCIONAL (assets/js/promo.js)
+   ========================================================= */
+.promo {
+  width: min(880px, calc(100vw - 32px)); max-height: calc(100dvh - 32px);
+  padding: 0; border: 0; border-radius: var(--radius); background: var(--bg); color: var(--text);
+  box-shadow: 0 30px 80px rgba(5, 11, 38, 0.45); overflow: hidden;
+  display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  animation: promo-entrar 0.28s ease-out;
+}
+.promo:not([open]) { display: none; }
+.promo::backdrop { background: rgba(5, 11, 38, 0.72); backdrop-filter: blur(3px); }
+.promo.saindo { opacity: 0; transform: translateY(8px) scale(0.98); transition: opacity 0.18s, transform 0.18s; }
+.promo-arte { background: var(--navy-900); display: flex; align-items: center; justify-content: center; min-height: 0; }
+.promo-arte img { display: block; width: 100%; height: 100%; max-height: calc(100dvh - 32px); object-fit: contain; }
+.promo-corpo { padding: 40px 32px 28px; display: flex; flex-direction: column; justify-content: center; overflow-y: auto; }
+.promo-corpo .eyebrow { margin-bottom: 10px; }
+.promo-corpo h2 { font-size: clamp(1.4rem, 1.2vw + 1rem, 1.9rem); line-height: 1.2; color: var(--ink); margin: 0 0 12px; }
+.promo-corpo p { color: var(--muted); margin: 0 0 24px; }
+.promo-accoes { display: grid; gap: 10px; }
+.promo-accoes .btn { width: 100%; justify-content: center; }
+.promo-depois { margin-top: 14px; align-self: center; background: none; border: 0; color: var(--muted); font: inherit; font-size: 0.9rem; text-decoration: underline; cursor: pointer; padding: 6px; }
+.promo-depois:hover { color: var(--ink); }
+.promo-fechar {
+  position: absolute; top: 12px; right: 12px; z-index: 1; width: 40px; height: 40px; border-radius: 50%;
+  border: 0; background: rgba(255, 255, 255, 0.92); color: var(--ink); font-size: 1.6rem; line-height: 1; cursor: pointer;
+  box-shadow: 0 4px 14px rgba(5, 11, 38, 0.25);
+}
+.promo-fechar:hover { background: #fff; }
+.promo-fechar:focus-visible, .promo-depois:focus-visible { outline: 3px solid var(--aqua); outline-offset: 2px; }
+@keyframes promo-entrar { from { opacity: 0; transform: translateY(12px) scale(0.98); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .promo, .promo.saindo { animation: none; transition: none; } }
+@media (max-width: 720px) {
+  .promo { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto auto; overflow-y: auto; }
+  .promo-arte img { width: auto; height: auto; max-width: 100%; max-height: 56dvh; }
+  .promo-corpo { padding: 22px 20px 18px; overflow: visible; }
+  .promo-corpo h2 { font-size: 1.3rem; }
+  .promo-corpo p { margin-bottom: 18px; font-size: 0.95rem; }
+}
+@media (max-width: 720px) and (max-height: 760px) {
+  .promo-arte img { max-height: 44dvh; }
+  .promo-corpo p { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+}
