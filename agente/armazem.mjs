@@ -2,6 +2,7 @@
    Fora do Netlify (testes locais) usa memória. */
 import { getStore } from "@netlify/blobs";
 import { estadoNovo } from "./nucleo.mjs";
+import { gravarPedidoBD, pedidoDoAgente } from "./bd.mjs";
 
 const memoria = new Map();
 function lojaMemoria(nome) {
@@ -35,6 +36,7 @@ export async function gravarConversa(id, estado) {
 const chaveTempo = () => new Date().toISOString().replace(/[:.]/g, "-");
 export async function guardarPedido(p) {
   await loja("agente-pedidos").setJSON(`${chaveTempo()}_${p.numero}`, p);
+  await gravarPedidoBD(pedidoDoAgente(p));   // cópia no MySQL da AngoWeb (se BD_URL estiver definido); nunca falha
 }
 export async function registarAviso(a) {
   await loja("agente-avisos").setJSON(`${chaveTempo()}_${Math.random().toString(36).slice(2, 7)}`, { ...a, data: new Date().toISOString() });

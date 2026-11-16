@@ -66,7 +66,7 @@ export function precificar(item) {
     if (!d) return { erro: `Domínio inválido: "${item.dominio || item.plano || ""}". Extensões aceites: ${EXTENSOES.join(", ")}.` };
     const anos = inteiro(item.anos, 1, 3, 1);
     return { linha: {
-      servico: "dominio", servicoLabel: "Registo de domínio", icon: "globe", plano: d.dominio,
+      servico: "dominio", servicoLabel: "Registo de domínio", icon: "globe", plano: d.dominio, anos,
       detalhes: [`Registo por ${anos} ${anos === 1 ? "ano" : "anos"}`, "Disponibilidade confirmada pela ECOMULTI antes do registo"],
       total: preco("dominio" + d.ext) * anos
     } };
@@ -81,7 +81,7 @@ export function precificar(item) {
     const mensal = preco(plano.chave), subtotal = mensal * 12 * anos, pct = descontoAnos(anos);
     const rotulo = s === "hospedagem" ? "Hospedagem" : "E-mail profissional";
     return { linha: {
-      servico: s, servicoLabel: rotulo, icon: s === "hospedagem" ? "server" : "mail", plano: plano.nome,
+      servico: s, servicoLabel: rotulo, icon: s === "hospedagem" ? "server" : "mail", plano: plano.nome, anos, dominio,
       substitui: s + ":" + dominio,
       detalhes: [`Domínio: ${dominio}`, `${anos} ${anos === 1 ? "ano" : "anos"} (${anos * 12} meses) × ${kz(mensal)}/mês`, pct ? `Desconto de ${pct}% incluído` : null].filter(Boolean),
       total: subtotal - Math.round((subtotal * pct) / 100)
