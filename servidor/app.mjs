@@ -7,7 +7,7 @@ import { readFile } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 import { extname, normalize, join } from "node:path";
 import { Readable } from "node:stream";
-import { consultaSQL, mysqlConfigurado } from "../agente/armazem.mjs";
+import { consultaSQL, mysqlConfigurado, ligacaoBD } from "../agente/armazem.mjs";
 import limpar from "./rotas/limpar.mjs";
 
 const raiz = fileURLToPath(new URL("..", import.meta.url));
@@ -44,9 +44,12 @@ async function catalogo() {
 }
 
 async function saude() {
-  let bd = "sem base de dados (memória)";
-  if (mysqlConfigurado()) { try { await consultaSQL("SELECT 1"); bd = "ok"; } catch (e) { bd = "erro: " + e.code; } }
-  return new Response(JSON.stringify({ ok: true, bd, node: process.version }), { headers: { "content-type": "application/json", "cache-control": "no-store" } });
+  let bd = "sem base de dados (memória)", ligacao;
+  if (mysqlConfigurado()) {
+    ligacao = ligacaoBD().via;
+    try { await consultaSQL("SELECT 1"); bd = "ok"; } catch (e) { bd = "erro: " + e.code; }
+  }
+  return new Response(JSON.stringify({ ok: true, bd, ligacao, node: process.version }), { headers: { "content-type": "application/json", "cache-control": "no-store" } });
 }
 
 /* IP do cliente: o servidor web (LiteSpeed/Apache) acrescenta-o no fim do X-Forwarded-For */

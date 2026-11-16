@@ -3,6 +3,7 @@
    criada automaticamente na primeira utilização.
    Variáveis: DB_NOME, DB_UTILIZADOR, DB_SENHA, DB_HOST (localhost), DB_PORTA (3306).
    Sem DB_NOME (testes locais) usa memória. */
+import { existsSync } from "node:fs";
 import { estadoNovo } from "./nucleo.mjs";
 import { gravarPedidoBD, pedidoDoAgente } from "./bd.mjs";
 
@@ -22,11 +23,22 @@ function lojaMemoria(nome) {
 export const mysqlConfigurado = () => Boolean(process.env.DB_NOME);
 let piscina = null, tabelaPronta = null;
 
+/* Em "localhost" o cPanel dá as permissões à ligação pelo socket (como o PHP faz);
+   por TCP (127.0.0.1) o MySQL aceita a senha mas recusa o acesso à base (ER_DBACCESS_DENIED_ERROR).
+   DB_SOCKET força um caminho; DB_HOST=127.0.0.1 força TCP. */
+const SOCKETS = ["/var/lib/mysql/mysql.sock", "/var/run/mysqld/mysqld.sock", "/run/mysqld/mysqld.sock", "/tmp/mysql.sock"];
+export function ligacaoBD() {
+  const host = process.env.DB_HOST || "localhost";
+  const socket = process.env.DB_SOCKET || (host === "localhost" ? SOCKETS.find((s) => existsSync(s)) : undefined);
+  return socket ? { socketPath: socket, via: "socket " + socket } : { host, port: Number(process.env.DB_PORTA || 3306), via: `tcp ${host}:${process.env.DB_PORTA || 3306}` };
+}
+
 async function bd() {
   if (!piscina) {
     const mysql = (await import("mysql2/promise")).default;
+    const { via, ...ligacao } = ligacaoBD();
     piscina = mysql.createPool({
-      host: process.env.DB_HOST || "localhost", port: Number(process.env.DB_PORTA || 3306),
+      ...ligacao,
       database: process.env.DB_NOME, user: process.env.DB_UTILIZADOR, password: process.env.DB_SENHA,
       charset: "utf8mb4", connectionLimit: 5, waitForConnections: true
     });
