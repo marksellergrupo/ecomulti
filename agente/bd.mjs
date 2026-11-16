@@ -1,7 +1,7 @@
 /* Base de dados MySQL da ECOMULTI (na AngoWeb), através de ferramentas/api-bd/api-bd.php.
    Variáveis: BD_URL (ex.: https://ecomulti.ao/api-bd.php) e BD_CHAVE (igual a chave_api no config-bd.php).
    Sem estas variáveis não faz nada. Nunca lança erros: se a BD falhar, o pedido continua
-   guardado no Netlify Blobs e o erro fica nos logs ("[bd] ..."). */
+   guardado na tabela app_dados e o erro fica nos logs ("[bd] ..."). */
 
 export const bdConfigurada = () => Boolean(process.env.BD_URL && (process.env.BD_CHAVE || "").trim());
 

@@ -4,7 +4,7 @@
 
    Dois modos:
    • Directo (testes no seu computador): VINTEI_API_KEY.
-   • Produção (Netlify, sem IP fixo): os pedidos passam pelo proxy PHP na AngoWeb
+   • Produção (servidor Node na AngoWeb): os pedidos passam pelo proxy PHP na AngoWeb
      (ferramentas/proxy-20i/proxy-20i.php), que tem IP fixo e guarda a chave da 20i.
      VINTEI_URL = endereço do proxy terminado em "?p=" e VINTEI_PROXY_CHAVE = segredo partilhado. */
 

@@ -5,7 +5,7 @@ import { validarToken } from "./admin-auth.mjs";
 export const json = (corpo, estado = 200, extra = {}) =>
   new Response(JSON.stringify(corpo), { status: estado, headers: { "content-type": "application/json; charset=utf-8", "cache-control": "no-store", ...extra } });
 
-/* CORS: o site pode estar na Hostinger e a API no Netlify. Origens em BLOG_ORIGENS (ou AGENTE_ORIGENS). */
+/* CORS: só é preciso se o site e a API estiverem em domínios diferentes. Origens em BLOG_ORIGENS (ou AGENTE_ORIGENS). */
 export function cabecalhosCors(req, metodos = "GET,POST,DELETE,OPTIONS") {
   const origem = req.headers.get("origin");
   const permitidas = (process.env.BLOG_ORIGENS || process.env.AGENTE_ORIGENS || "https://www.ecomulti.ao,https://ecomulti.ao").split(",").map((s) => s.trim());
@@ -28,7 +28,8 @@ export const semChave = () => !process.env.PAINEL_CHAVE || process.env.PAINEL_CH
 export const negar = (cors) => new Promise((ok) => setTimeout(ok, 600)).then(() => json({ erro: "Sessão expirada ou sem permissão. Entre novamente." }, 401, cors));
 
 export const hash = (s) => createHash("sha256").update(s).digest("hex");
-export const ipDe = (req) => (req.headers.get("x-nf-client-connection-ip") || (req.headers.get("x-forwarded-for") || "").split(",")[0] || "desconhecido").trim();
+/* IP do cliente: definido pelo servidor (servidor/app.mjs) a partir do servidor web; o cliente não o consegue falsificar */
+export const ipDe = (req) => (req.headers.get("x-ip-cliente") || (req.headers.get("x-forwarded-for") || "").split(",").pop() || "desconhecido").trim();
 
 /* número de pedido/venda: ECO-AAMMDD-XXXX (data de Luanda) */
 export function novoNumero(agora = new Date()) {

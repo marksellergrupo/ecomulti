@@ -9,7 +9,7 @@ return [
     'base'       => 'ecomulti_ecomulti',
     'utilizador' => 'COLE-AQUI-O-UTILIZADOR-MYSQL',
     'senha'      => 'COLE-AQUI-A-SENHA-MYSQL',
-    // Segredo partilhado com o Netlify (variável BD_CHAVE). 24+ caracteres aleatórios,
+    // Segredo partilhado com o servidor Node (variável BD_CHAVE). 24+ caracteres aleatórios,
     // diferente do segredo do proxy da 20i.
     'chave_api'  => 'COLE-AQUI-UM-SEGREDO-LONGO-E-ALEATORIO',
 ];

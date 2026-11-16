@@ -21,18 +21,17 @@ window.ECOMULTI = {
     }
   },
 
-  /* Assistente de atendimento (chat). "endpoint" é o endereço do agente com IA.
-     No Netlify fica "/api/agente". Se o site estiver noutro servidor (ex.: Hostinger),
-     use o endereço completo, ex.: "https://ecomulti-preview.netlify.app/api/agente".
-     Sem agente disponível, o chat funciona em modo guiado (sem IA). */
+  /* Endereços da API. Todos são servidos pelo servidor Node.js da ECOMULTI no mesmo domínio
+     (cPanel da AngoWeb, "Setup Node.js App" em ecomulti.ao/api — ver LEIA-ME.md).
+
+     Assistente de atendimento (chat). Sem agente disponível (ou sem chave da IA),
+     o chat funciona em modo guiado (sem IA). */
   agente: {
     endpoint: "/api/agente"
   },
 
-  /* Blog e newsletter. Endereços das funções (Netlify). No Netlify ficam "/api/...".
-     Se o site estiver na Hostinger, use o endereço completo, ex.:
-     "https://ecomulti-preview.netlify.app/api/blog" (e autorize o domínio em BLOG_ORIGENS).
-     Sem API, o blog mostra os artigos de blog/posts.json e a newsletter abre o e-mail/WhatsApp. */
+  /* Blog e newsletter. Sem API, o blog mostra os artigos de blog/posts.json
+     e a newsletter abre o e-mail/WhatsApp. */
   blog: {
     endpoint: "/api/blog",
     ficheiro: "blog/posts.json"

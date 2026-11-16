@@ -1,9 +1,8 @@
 <?php
 /* API da base de dados ECOMULTI (vai na hospedagem da AngoWeb, ao lado do proxy-20i.php).
 
-   O Netlify não liga directamente ao MySQL da AngoWeb (não tem IP fixo e o MySQL não
-   deve ficar aberto à internet). Esta API corre na AngoWeb, liga ao MySQL localmente
-   e só aceita pedidos com o cabeçalho X-Api-Chave correcto.
+   O servidor Node usa-a para gravar os pedidos nas tabelas clientes / encomendas / encomenda_itens.
+   Corre na AngoWeb, liga ao MySQL localmente e só aceita pedidos com o cabeçalho X-Api-Chave correcto.
 
    Acções:
      GET  api-bd.php?acao=ping    → confirma a ligação à base de dados

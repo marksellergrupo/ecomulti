@@ -9,7 +9,7 @@ process.env.ANTHROPIC_BASE_URL = "http://127.0.0.1:8787";
 const srv = await iniciarApiFalsa(8787);
 
 const { executarTurno, estadoNovo, MODELO } = await import("../agente/nucleo.mjs");
-const funcao = (await import("../netlify/functions/agente.mjs")).default;
+const funcao = (await import("../servidor/rotas/agente.mjs")).default;
 
 let ok = 0;
 const teste = async (nome, fn) => { try { await fn(); ok++; console.log("✔", nome); } catch (e) { console.error("✘", nome, "\n  ", e.message); process.exitCode = 1; } };

@@ -356,7 +356,7 @@
   };
   function adicionarSubmenus() {
     $$("#menu > a").forEach((a) => {
-      // aceita "pagina.html", "/pagina" e "/pagina.html" (o Netlify reescreve os links sem .html)
+      // aceita "pagina.html", "/pagina" e "/pagina.html" (alguns servidores servem os links sem .html)
       const pagina = (a.getAttribute("href") || "").split(/[?#]/)[0].replace(/^\/+/, "").replace(/\.html$/, "");
       const sub = SUBMENUS[pagina];
       if (!sub) return;

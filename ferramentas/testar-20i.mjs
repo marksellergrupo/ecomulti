@@ -106,7 +106,7 @@ else {
   const proc = spawn(php, ["-S", "127.0.0.1:8790", "-t", join(dir, "public_html")], { stdio: "ignore" });
   for (let i = 0; i < 50; i++) { try { await fetch("http://127.0.0.1:8790/"); break; } catch { await new Promise((ok) => setTimeout(ok, 100)); } }
 
-  delete process.env.VINTEI_API_KEY;   // em produção o Netlify não tem a chave da 20i
+  delete process.env.VINTEI_API_KEY;   // em produção o servidor Node não tem a chave da 20i (fica no config-20i.php)
   Object.assign(process.env, { VINTEI_URL: "http://127.0.0.1:8790/proxy-20i.php?p=", VINTEI_PROXY_CHAVE: segredo });
   try {
     await teste("proxy PHP: verificar() via proxy, chave da 20i só no proxy", async () => {
@@ -129,8 +129,8 @@ else {
       assert.equal(pedidos20i.length, antes, "nada chegou à 20i");
     });
 
-    /* Painel admin → Netlify (admin.mjs) → proxy PHP → 20i falsa */
-    const admin = (await import("../netlify/functions/admin.mjs")).default;
+    /* Painel admin → servidor Node (admin.mjs) → proxy PHP → 20i falsa */
+    const admin = (await import("../servidor/rotas/admin.mjs")).default;
     const chamarAdmin = async (acao, dados = {}, token) => {
       const r = await admin(new Request("http://x/api/admin", { method: "POST", headers: { "content-type": "application/json", ...(token ? { authorization: "Bearer " + token } : {}) }, body: JSON.stringify({ acao, ...dados }) }));
       return { estado: r.status, corpo: await r.json() };

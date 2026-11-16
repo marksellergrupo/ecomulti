@@ -110,7 +110,7 @@ try {
   });
 
   await teste("página de orçamento (/api/pedido) grava também no MySQL", async () => {
-    const pedido = (await import("../netlify/functions/pedido.mjs")).default;
+    const pedido = (await import("../servidor/rotas/pedido.mjs")).default;
     const n = num();
     const r = await pedido(new Request("http://x/api/pedido", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({
       numero: n, metodo: "Pagamento por referência", total: 136800,
@@ -123,7 +123,7 @@ try {
   await teste("BD em baixo → o pedido do site continua a funcionar", async () => {
     const url = process.env.BD_URL; process.env.BD_URL = "http://127.0.0.1:9/api-bd.php";
     try {
-      const pedido = (await import("../netlify/functions/pedido.mjs")).default;
+      const pedido = (await import("../servidor/rotas/pedido.mjs")).default;
       const r = await pedido(new Request("http://x/api/pedido", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({
         numero: num(), metodo: "Multicaixa Express", total: 1000, cliente: { nome: "Ana", email: "ana@teste.ao" }, itens: [{ descricao: "Teste", valor: 1000 }] }) }));
       assert.equal(r.status, 200);

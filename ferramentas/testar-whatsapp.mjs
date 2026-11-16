@@ -18,8 +18,8 @@ Object.assign(process.env, {
   WHATSAPP_TOKEN: "token-falso", WHATSAPP_PHONE_NUMBER_ID: "123456", WHATSAPP_APP_SECRET: "segredo-app",
   WHATSAPP_VERIFY_TOKEN: "verifica-123", WHATSAPP_GRAPH_URL: "http://127.0.0.1:8788", EQUIPA_WHATSAPP: "244900000000"
 });
-const webhook = (await import("../netlify/functions/whatsapp.mjs")).default;
-const processar = (await import("../netlify/functions/whatsapp-processar.mjs")).default;
+const webhook = (await import("../servidor/rotas/whatsapp.mjs")).default;
+const processar = (await import("../servidor/rotas/whatsapp-processar.mjs")).default;
 
 let ok = 0;
 const teste = async (nome, fn) => { try { await fn(); ok++; console.log("✔", nome); } catch (e) { console.error("✘", nome, "\n  ", e.message); process.exitCode = 1; } };
@@ -28,7 +28,7 @@ let seq = 0;
 const corpoMsg = (texto, de = "244911111111") => JSON.stringify({ object: "whatsapp_business_account", entry: [{ changes: [{ value: {
   contacts: [{ wa_id: de, profile: { name: "Maria" } }],
   messages: [{ id: "wamid.teste" + seq++, from: de, timestamp: String(Math.floor(Date.now() / 1000)), type: "text", text: { body: texto } }] } }] }] });
-const mandar = async (texto, de) => { const b = corpoMsg(texto, de); await processar(new Request("http://x/.netlify/functions/whatsapp-processar", { method: "POST", headers: { "x-hub-signature-256": assinar(b) }, body: b })); return b; };
+const mandar = async (texto, de) => { const b = corpoMsg(texto, de); await processar(new Request("http://x/api/whatsapp", { method: "POST", headers: { "x-hub-signature-256": assinar(b) }, body: b })); return b; };
 const textosPara = (n) => enviados.filter((e) => e.corpo.to === n && e.corpo.type === "text").map((e) => e.corpo.text.body);
 
 await teste("verificação do webhook (GET)", async () => {

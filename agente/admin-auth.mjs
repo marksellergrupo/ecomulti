@@ -1,6 +1,6 @@
 /* Autenticação do dashboard administrativo.
-   - O utilizador fica guardado (Netlify Blobs) com a senha em hash (scrypt + sal); nunca em texto simples.
-   - Na primeira utilização cria-se o utilizador inicial (ADMIN_EMAIL / ADMIN_SENHA, se definidos nas variáveis do Netlify;
+   - O utilizador fica guardado (base de dados MySQL, tabela app_dados) com a senha em hash (scrypt + sal); nunca em texto simples.
+   - Na primeira utilização cria-se o utilizador inicial (ADMIN_EMAIL / ADMIN_SENHA, se definidos nas variáveis da aplicação Node no cPanel;
      caso contrário, os valores iniciais indicados pela empresa). A senha deve ser alterada no dashboard (Conta).
    - A sessão é um token assinado (HMAC) com validade de 8 horas; mudar a senha invalida todas as sessões. */
 import { scrypt, randomBytes, timingSafeEqual, createHmac, createHash } from "node:crypto";

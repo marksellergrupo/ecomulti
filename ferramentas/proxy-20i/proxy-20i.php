@@ -1,8 +1,8 @@
 <?php
 /* Proxy da API de revenda da 20i para a ECOMULTI (vai na hospedagem da AngoWeb).
 
-   Porquê: a 20i só aceita pedidos de IPs autorizados e o Netlify não tem IP fixo.
-   Este ficheiro corre na AngoWeb (IP fixo), recebe os pedidos do Netlify e
+   Porquê: a 20i só aceita pedidos de IPs autorizados. Este ficheiro corre na AngoWeb (IP autorizado)
+   e guarda a chave da 20i; o servidor Node chama-o com um segredo partilhado e ele
    reencaminha-os para https://api.20i.com com a chave da 20i, que só existe aqui.
 
    Segurança:
@@ -10,7 +10,7 @@
    • só deixa passar os endereços da lista PERMITIDOS (hoje: só consultas);
    • a chave da 20i e a do proxy ficam em config-20i.php, FORA da pasta pública.
 
-   Uso pelo Netlify:  https://SEU-DOMINIO/proxy-20i.php?p=/domain-search/exemplo.com
+   Uso pelo servidor: https://SEU-DOMINIO/proxy-20i.php?p=/domain-search/exemplo.com
    Diagnóstico:       https://SEU-DOMINIO/proxy-20i.php?p=/ip  (com X-Proxy-Chave) → IP de saída a autorizar na 20i */
 
 header('Content-Type: application/json; charset=utf-8');
