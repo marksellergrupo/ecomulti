@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+Disallow: /orcamento-ecomulti.html
+Disallow: /ecomulti-pagamento.html
+Disallow: /blog-admin.html
+Disallow: /admin.html
+Disallow: /painel.html
+
+Sitemap: https://www.ecomulti.ao/sitemap.xml
