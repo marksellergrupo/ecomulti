@@ -2,6 +2,7 @@
    para aparecerem no dashboard como vendas "em aberto". Público, com limites e validação. */
 import { obterItem, gravarItem } from "../../agente/armazem.mjs";
 import { json, cabecalhosCors, hash, ipDe, novoNumero } from "../../agente/util-http.mjs";
+import { gravarPedidoBD } from "../../agente/bd.mjs";
 
 export const config = { path: "/api/pedido" };
 const LIMITE_IP_DIA = Number(process.env.PEDIDO_LIMITE_IP || 20);
@@ -36,6 +37,14 @@ export default async (req) => {
     cliente: { nome, tipo: c.tipo === "Empresa" ? "Empresa" : "Particular", telefone, email: EMAIL.test(email) ? email : "", nif: txt(c.nif, 20).toUpperCase(), morada: txt(c.morada, 200) },
     clienteId: existente?.clienteId || "", itens, total, metodo: txt(d.metodo, 30), estado: "em_aberto", pagoEm: "",
     canal: "orcamento-site", notas: txt(d.notas, 600), criadoEm: existente?.criadoEm || agora, actualizado: agora
+  });
+  // cópia no MySQL da AngoWeb (se BD_URL estiver definido); se falhar, o pedido já está guardado acima
+  const subtotal = itens.reduce((t, i) => t + i.valor, 0);
+  await gravarPedidoBD({
+    numero: id, canal: "orcamento-site", metodo: txt(d.metodo, 30),
+    cliente: { nome, tipo: c.tipo === "Empresa" ? "Empresa" : "Particular", email: EMAIL.test(email) ? email : "", telefone, nif: txt(c.nif, 20).toUpperCase(), morada: txt(c.morada, 200) },
+    itens: itens.map((i) => ({ codigo: "site", descricao: i.descricao, valor: Math.round(i.valor), anos: 1 })),
+    subtotal: Math.round(subtotal), iva: Math.round(Math.max(0, total - subtotal)), total: Math.round(total)
   });
   return json({ ok: true, numero: id }, 200, cors);
 };
