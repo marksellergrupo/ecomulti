@@ -8,8 +8,6 @@
 config-20i.php
 config-bd.php
 
-# pacotes gerados (npm run angoweb) - refazem-se a partir do codigo
-_publicar/angoweb/
-_publicar/assets/
-_publicar/*.zip
-!_publicar/ecomulti-preview.zip
+
+# pacotes gerados (npm run angoweb) e cópias extraídas - refazem-se a partir do código
+_publicar/
