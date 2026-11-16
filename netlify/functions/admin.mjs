@@ -5,6 +5,8 @@
 import { listarTudo, obterItem, gravarItem, apagarItem } from "../../agente/armazem.mjs";
 import { json, cabecalhosCors, ipDe, novoNumero, hash } from "../../agente/util-http.mjs";
 import { utilizador, verificarLogin, emitirToken, validarToken, alterarSenha, bloqueado, registarFalha, limparFalhas } from "../../agente/admin-auth.mjs";
+import { vinteiConfigurado, tiposPacote, criarHospedagem } from "../../agente/vintei.mjs";
+import { dominioValido } from "../../agente/catalogo.mjs";
 
 export const config = { path: "/api/admin" };
 
@@ -47,7 +49,8 @@ function limparVenda(d, antigo) {
   return {
     id, data, cliente, clienteId: antigo?.clienteId || "", itens, total, metodo: METODOS.includes(metodo) ? metodo : metodo || "",
     estado, pagoEm, canal: txt(d.canal, 30) || antigo?.canal || "manual", notas: txt(d.notas, 600),
-    criadoEm: antigo?.criadoEm || agora(), actualizado: agora()
+    criadoEm: antigo?.criadoEm || agora(), actualizado: agora(),
+    ...(antigo?.vintei ? { vintei: antigo.vintei } : {})   // a activação na 20i nunca se perde ao editar
   };
 }
 
@@ -148,6 +151,40 @@ const ACCOES = {
     await gravarItem(VENDAS, v.id, v);
     return { ok: true, venda: v };
   },
+  /* ---- 20i: criar a hospedagem de uma venda paga (botão manual no painel) ---- */
+  async "vintei.tipos"() {
+    if (!vinteiConfigurado()) throw erro("A ligação à 20i não está configurada no Netlify (VINTEI_URL e VINTEI_PROXY_CHAVE).", 503);
+    try { return { tipos: await tiposPacote() }; }
+    catch (e) { throw erro("Não foi possível ler os pacotes da 20i: " + e.message, 502); }
+  },
+  async "vintei.activar"(d, sessao) {
+    if (!vinteiConfigurado()) throw erro("A ligação à 20i não está configurada no Netlify (VINTEI_URL e VINTEI_PROXY_CHAVE).", 503);
+    if (!idSeguro(d.id)) throw erro("Pedido inválido.");
+    const tipo = txt(d.tipo, 40);
+    if (!/^[A-Za-z0-9_-]{1,40}$/.test(tipo)) throw erro("Escolha o tipo de pacote da 20i.");
+    const dominio = txt(d.dominio, 253).toLowerCase().replace(/^https?:\/\//, "").replace(/^www\./, "").replace(/\/.*$/, "");
+    if (!dominioValido(dominio)) throw erro("Indique um domínio válido (ex.: empresa.ao).");
+    const v = await obterItem(VENDAS, d.id);
+    if (!v) throw erro("Venda não encontrada.", 404);
+    if (v.estado !== "pago") throw erro("Só vendas pagas podem ser activadas na 20i.");
+    if (v.vintei?.pacoteId) throw erro(`Esta venda já foi activada na 20i (pacote ${v.vintei.pacoteId}).`, 409);
+    if (v.vintei?.aActivar && Date.now() - Date.parse(v.vintei.aActivar) < 120000) throw erro("A activação desta venda já está em curso. Aguarde um momento.", 409);
+
+    v.vintei = { aActivar: agora(), tipo, dominio };          // trava contra duplo clique
+    await gravarItem(VENDAS, v.id, v);
+    try {
+      const { pacoteId } = await criarHospedagem({ tipo, dominio });
+      v.vintei = { pacoteId, tipo, tipoNome: txt(d.tipoNome, 80), dominio, em: agora(), por: sessao?.email || "" };
+    } catch (e) {
+      v.vintei = { erro: txt(e.message, 300), tipo, dominio, em: agora() };
+      await gravarItem(VENDAS, v.id, v);
+      throw erro("A 20i não criou a hospedagem: " + e.message, 502);
+    }
+    v.actualizado = agora();
+    await gravarItem(VENDAS, v.id, v);
+    return { ok: true, venda: v };
+  },
+
   async "vendas.apagar"(d) {
     if (!idSeguro(d.id)) throw erro("Pedido inválido.");
     await apagarItem(VENDAS, d.id);

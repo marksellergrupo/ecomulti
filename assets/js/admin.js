@@ -203,6 +203,7 @@
         <td>${esc(v.metodo || "—")}</td><td class="n"><strong>${kz(v.total)}</strong></td><td><span class="adm-badge ${c}">${t}</span>${v.pagoEm ? `<small>${dCurta(v.pagoEm)}</small>` : ""}</td>
         <td><div class="adm-acc">
           ${v.estado === "em_aberto" ? `<button class="adm-b ok" data-act="venda-pagar" data-id="${esc(v.id)}">Marcar paga</button>${wa ? `<a class="adm-b wa" href="${esc(wa)}" target="_blank" rel="noopener">Cobrar</a>` : ""}` : `<button class="adm-b" data-act="venda-reabrir" data-id="${esc(v.id)}">Reabrir</button>`}
+          ${v.estado === "pago" ? (v.vintei && v.vintei.pacoteId ? `<span class="adm-badge pago" title="Pacote ${esc(v.vintei.pacoteId)} · ${esc(v.vintei.dominio)}">20i ✔</span>` : `<button class="adm-b ok" data-act="venda-20i" data-id="${esc(v.id)}">Activar na 20i</button>`) : ""}
           <button class="adm-b" data-act="venda-ver" data-id="${esc(v.id)}">Ver</button><button class="adm-b" data-act="venda-editar" data-id="${esc(v.id)}">Editar</button><button class="adm-b del" data-act="venda-apagar" data-id="${esc(v.id)}">Eliminar</button></div></td></tr>`;
     }).join("") : '<tr><td colspan="8" class="adm-vazio">Nenhuma venda encontrada.</td></tr>';
     $("#vRodape").innerHTML = l.length ? `<tr><td colspan="5">${l.length} ${l.length === 1 ? "venda" : "vendas"}</td><td class="n">${kz(l.reduce((t, v) => t + v.total, 0))}</td><td colspan="2"></td></tr>` : "";
@@ -214,7 +215,9 @@
     abrir(`<div class="adm-md"><h2>Venda ${esc(v.id)}</h2><div class="adm-det"><dl>
       <dt>Estado</dt><dd><span class="adm-badge ${c}">${t}</span></dd><dt>Data</dt><dd>${dCurta(v.data)}</dd>${v.pagoEm ? `<dt>Pago em</dt><dd>${dCurta(v.pagoEm)}</dd>` : ""}
       <dt>Cliente</dt><dd>${esc(cl.nome)} (${esc(cl.tipo)})</dd><dt>Contacto</dt><dd>${esc(cl.telefone || "—")} · ${esc(cl.email || "—")}</dd>${cl.nif ? `<dt>NIF</dt><dd>${esc(cl.nif)}</dd>` : ""}${cl.morada ? `<dt>Morada</dt><dd>${esc(cl.morada)}</dd>` : ""}
-      <dt>Pagamento</dt><dd>${esc(v.metodo || "—")}</dd><dt>Origem</dt><dd>${esc(v.canal || "—")}</dd></dl>
+      <dt>Pagamento</dt><dd>${esc(v.metodo || "—")}</dd><dt>Origem</dt><dd>${esc(v.canal || "—")}</dd>
+      ${v.vintei && v.vintei.pacoteId ? `<dt>20i</dt><dd>Hospedagem activa · pacote <strong>${esc(v.vintei.pacoteId)}</strong> (${esc(v.vintei.tipoNome || v.vintei.tipo)}) · ${esc(v.vintei.dominio)} · ${dCurta(v.vintei.em)}</dd>` : ""}
+      ${v.vintei && v.vintei.erro ? `<dt>20i</dt><dd style="color:var(--err)">Última tentativa falhou: ${esc(v.vintei.erro)}</dd>` : ""}</dl>
       <table class="adm-table" style="min-width:0"><thead><tr><th>Serviço</th><th class="n">Valor</th></tr></thead><tbody>${(v.itens || []).map((i) => `<tr><td>${esc(i.descricao)}</td><td class="n">${kz(i.valor)}</td></tr>`).join("") || '<tr><td colspan="2">—</td></tr>'}</tbody><tfoot><tr><td>Total</td><td class="n">${kz(v.total)}</td></tr></tfoot></table>
       ${v.notas ? `<p><strong>Notas:</strong> ${esc(v.notas)}</p>` : ""}</div>
       <div class="adm-modal-acc"><button class="btn btn-outline btn-sm" type="button" data-fechar>Fechar</button></div></div>`);
@@ -225,6 +228,31 @@
       <div class="r2"><label>Forma de pagamento<select name="metodo">${opcoes(METODOS, v.metodo)}</select></label><label>Data do pagamento<input type="date" name="pagoEm" value="${hoje()}"></label></div>
       <p class="adm-msg err" data-erro></p><div class="adm-modal-acc"><button class="btn btn-outline btn-sm" type="button" data-fechar>Cancelar</button><button class="btn btn-primary btn-sm" type="submit">Confirmar pagamento</button></div></form>`,
     async (f) => { await chamar("vendas.estado", { id, estado: "pago", metodo: f.metodo.value, pagoEm: f.pagoEm.value }); aviso("Venda marcada como paga. Cliente registado."); vVendas(); actualizarBadge(); });
+  };
+  /* 20i: criar a hospedagem de uma venda paga */
+  const DOMINIO_RE = /\b((?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+(?:co\.ao|it\.ao|edu\.ao|org\.ao|ao|com|net|org|pt|co\.uk))\b/i;
+  H["venda-20i"] = async (id) => {
+    const v = vendaPorId(id); if (!v) return;
+    let tipos;
+    try { tipos = (await chamar("vintei.tipos")).tipos || []; } catch (e) { aviso(e.message, "err"); return; }
+    if (!tipos.length) { aviso("A conta 20i não tem tipos de pacote. Crie-os no My20i (Reseller → Package Types).", "err"); return; }
+    const texto = (v.itens || []).map((i) => i.descricao).join(" ") + " " + (v.notas || "");
+    const dom = (texto.match(DOMINIO_RE) || [])[1] || "";
+    const palavras = texto.toLowerCase();
+    const sugerido = tipos.find((t) => t.nome.toLowerCase().split(/\W+/).some((p) => p.length > 2 && palavras.includes(p))) || tipos[0];
+    abrir(`<form><h2>Activar na 20i</h2><p>${esc(v.id)} — ${esc(v.cliente.nome)} · <strong>${kz(v.total)}</strong></p>
+      <label>Pacote de alojamento na 20i<select name="tipo" required>${tipos.map((t) => `<option value="${esc(t.id)}"${t.id === sugerido.id ? " selected" : ""}>${esc(t.nome)}${t.plataforma ? " (" + esc(t.plataforma) + ")" : ""}</option>`).join("")}</select></label>
+      <label>Domínio do site<input type="text" name="dominio" required maxlength="253" placeholder="ex.: empresadocliente.ao" value="${esc(dom)}" autocomplete="off" autocapitalize="off" spellcheck="false"></label>
+      <p style="color:var(--muted);margin:0;font-size:.9rem">Vai ser criado um pacote de alojamento <strong>real</strong> na sua conta 20i. Confirme o pacote e o domínio antes de continuar.</p>
+      <p class="adm-msg err" data-erro></p><div class="adm-modal-acc"><button class="btn btn-outline btn-sm" type="button" data-fechar>Cancelar</button><button class="btn btn-primary btn-sm" type="submit">Criar hospedagem na 20i</button></div></form>`,
+    async (f) => {
+      const b = $("button[type=submit]", f); b.disabled = true; b.textContent = "A criar na 20i…";
+      try {
+        const tipoNome = f.tipo.options[f.tipo.selectedIndex].text;
+        const r = await chamar("vintei.activar", { id, tipo: f.tipo.value, tipoNome, dominio: f.dominio.value });
+        aviso(`Hospedagem criada na 20i (pacote ${r.venda.vintei.pacoteId}).`); vVendas();
+      } catch (e) { b.disabled = false; b.textContent = "Criar hospedagem na 20i"; throw e; }
+    });
   };
   H["venda-reabrir"] = async (id) => { try { await chamar("vendas.estado", { id, estado: "em_aberto" }); aviso("Venda reaberta."); vVendas(); actualizarBadge(); } catch (e) { aviso(e.message, "err"); } };
   H["venda-apagar"] = (id) => confirmar(`Eliminar a venda ${id}? Esta acção não pode ser desfeita.`, async () => { await chamar("vendas.apagar", { id }); aviso("Venda eliminada."); vVendas(); actualizarBadge(); });
