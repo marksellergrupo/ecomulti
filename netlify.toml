@@ -1,6 +1,12 @@
 # Netlify: site (pasta preparada por `npm run preview`) + funções do agente
+# Publicação a partir do GitHub: cada push para o main gera de novo a pasta e publica.
 [build]
+  command = "npm run preview"
   publish = "_publicar/ecomulti-preview"
+
+[build.environment]
+  # @netlify/blobs 11 exige Node 22.12 ou superior
+  NODE_VERSION = "22"
 
 [functions]
   directory = "netlify/functions"
