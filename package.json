@@ -6,7 +6,11 @@
   "scripts": {
     "precos": "node ferramentas/sincronizar-precos.mjs",
     "preview": "node ferramentas/preparar-preview.mjs",
-    "testar": "node ferramentas/testar-agente.mjs"
+    "testar": "node ferramentas/testar-agente.mjs",
+    "testar-20i": "node ferramentas/testar-20i.mjs",
+    "testar-bd": "node ferramentas/testar-bd.mjs",
+    "precos-sql": "node ferramentas/precos-para-sql.mjs",
+    "angoweb": "node ferramentas/preparar-angoweb.mjs"
   },
   "engines": {
     "node": ">=20"

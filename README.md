@@ -44,6 +44,9 @@ Para usar a IA real localmente, defina `ANTHROPIC_API_KEY` antes de iniciar o se
 |---|---|
 | `npm run testar` | Testes do agente com API falsa (sem custos) |
 | `node ferramentas/testar-whatsapp.mjs` | Testes do WhatsApp com API falsa |
+| `npm run testar-bd` | Testes da base de dados (PHP + MySQL do XAMPP, numa base de teste temporária) |
+| `npm run precos-sql` | Gera `ferramentas/api-bd/precos.sql` com os preços do `config.js` para importar no MySQL |
+| `npm run testar-20i` | Testes da ligação à 20i com API falsa (`-- --real` testa a conta real, só leitura) |
 | `npm run precos` | Sincroniza os preços |
 | `npm run preview` | Prepara `_publicar/ecomulti-preview` e copia os preços do `config.js` para o agente |
 
@@ -60,6 +63,8 @@ Os segredos ficam nas **variáveis de ambiente do Netlify**. Nunca os escreva no
 | `PAINEL_CHAVE` | Chave de acesso ao painel (mínimo 12 caracteres) |
 | `WHATSAPP_TOKEN`, `WHATSAPP_PHONE_NUMBER_ID`, `WHATSAPP_APP_SECRET`, `WHATSAPP_VERIFY_TOKEN` | Ligação ao WhatsApp |
 | `EQUIPA_WHATSAPP`, `WHATSAPP_MODELO_AVISO`, `WHATSAPP_MODELO_IDIOMA`, `WHATSAPP_PAUSA_HUMANO_HORAS` | Avisos à equipa |
+| `BD_URL`, `BD_CHAVE` | Cópia dos pedidos e clientes no MySQL da AngoWeb, através de `ferramentas/api-bd/api-bd.php` |
+| `VINTEI_URL`, `VINTEI_PROXY_CHAVE` | Ligação à conta de revenda da 20i através do proxy na AngoWeb (`ferramentas/proxy-20i/`) |
 
 A lista completa, com valores por omissão e o passo a passo da ligação ao WhatsApp, está em [AGENTE-LEIA-ME.md](AGENTE-LEIA-ME.md).
 

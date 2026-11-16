@@ -80,6 +80,11 @@ Defina `PAINEL_CHAVE` (mínimo 12 caracteres; use uma frase longa e aleatória) 
 | `EQUIPA_WHATSAPP` | não | Número que recebe os avisos (só dígitos, ex.: `244923340895`) |
 | `WHATSAPP_MODELO_AVISO` / `WHATSAPP_MODELO_IDIOMA` | não | Modelo aprovado para avisos fora das 24 h / idioma (`pt_PT`) |
 | `WHATSAPP_PAUSA_HUMANO_HORAS` | não | Só se a equipa responder **no mesmo número** (coexistência): horas que o assistente fica calado depois de chamar uma pessoa |
+| `BD_URL` | para o MySQL | Endereço da API da base de dados na AngoWeb (ex.: `https://ecomulti.ao/api-bd.php`). Sem ela, os pedidos ficam só no Netlify |
+| `BD_CHAVE` | para o MySQL | Segredo partilhado com a API (igual a `chave_api` no `config-bd.php`) |
+| `VINTEI_URL` | para a 20i | Endereço do proxy na AngoWeb, terminado em `?p=` (ex.: `https://SEU-DOMINIO/proxy-20i.php?p=`). Ver `ferramentas/proxy-20i/` |
+| `VINTEI_PROXY_CHAVE` | para a 20i | Segredo partilhado com o proxy (igual a `chave_proxy` no `config-20i.php`) |
+| `VINTEI_API_KEY` | não (só testes locais) | Chave da 20i para ligação directa sem proxy. **Não** a ponha no Netlify: em produção a chave fica só no proxy |
 
 ---
 
@@ -119,7 +124,12 @@ netlify deploy --prod --dir _publicar/ecomulti-preview --functions netlify/funct
 | `agente/nucleo.mjs` | Agente: ferramentas e conversa com o Claude |
 | `agente/prompt.mjs` | Instruções do agente (tom, regras, processo de venda) |
 | `agente/catalogo.mjs` | Planos e cálculo de preços (iguais às calculadoras) |
-| `agente/dominios.mjs` | Verificação de domínios no servidor |
+| `agente/dominios.mjs` | Verificação de domínios no servidor (20i, RDAP ou DNS) |
+| `agente/vintei.mjs` | Cliente da API de revenda da 20i |
+| `agente/bd.mjs` | Envia cada pedido (site e agente) para o MySQL; se falhar, o pedido continua no Netlify |
+| `ferramentas/api-bd/` | API PHP do MySQL para a AngoWeb + modelo de `config-bd.php` + `precos.sql` |
+| `ferramentas/proxy-20i/` | Proxy PHP para a AngoWeb (IP fixo autorizado na 20i) + modelo de `config-20i.php` |
+| `ferramentas/vintei-falsa.mjs`, `ferramentas/testar-20i.mjs` | 20i falsa e testes (`npm run testar-20i`; conta real só leitura: `--real`) |
 | `agente/armazem.mjs` | Conversas, pedidos e avisos (Netlify Blobs) |
 | `agente/whatsapp-api.mjs` | Envio de mensagens e avisos pelo WhatsApp |
 | `netlify/functions/agente.mjs` | `/api/agente` — chat do site |

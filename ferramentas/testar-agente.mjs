@@ -2,6 +2,7 @@
    Uso: npm run testar */
 import assert from "node:assert/strict";
 import { iniciarApiFalsa, pedidosRecebidos } from "./api-falsa.mjs";
+import { preco } from "../agente/catalogo.mjs";
 
 process.env.ANTHROPIC_API_KEY = "chave-falsa-de-teste";
 process.env.ANTHROPIC_BASE_URL = "http://127.0.0.1:8787";
@@ -44,7 +45,7 @@ await teste("definir orçamento → linhas com preços oficiais + acção para o
   assert.ok(a, "acção orcamento emitida");
   assert.equal(a.itens.length, 3);
   assert.equal(a.itens[0].total, 280000 + 45000);
-  assert.equal(a.itens[2].total, 118800);
+  assert.equal(a.itens[2].total, Math.round(preco("hospedagem.business") * 24 * (1 - preco("regra.desconto_2anos") / 100)), "Business 2 anos com desconto");
   assert.equal(estado.orcamento.length, 3);
   assert.match(r, /325.000 Kz/);
 });
