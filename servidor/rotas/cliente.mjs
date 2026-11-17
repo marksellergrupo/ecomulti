@@ -7,7 +7,7 @@ import { listarDoCliente } from "../../agente/subscricoes.mjs";
 import { envioDisponivel } from "../../agente/email.mjs";
 
 const PUBLICAS = { registar, confirmar, reenviar, entrar, recuperar, redefinir };
-const PRECISAM_EMAIL = new Set(["registar", "reenviar", "recuperar", "entrar"]);
+const PRECISAM_EMAIL = new Set(["registar", "reenviar", "recuperar"]);   // entrar funciona sempre (contas já confirmadas)
 
 export default async (req) => {
   const cors = cabecalhosCors(req, "POST,OPTIONS");
