@@ -8,7 +8,8 @@ Tudo corre na hospedagem da **AngoWeb**: o site em `public_html`, a API numa apl
 
 - **Site estático** em HTML, CSS e JavaScript, sem dependências no navegador.
 - **Calculadoras e orçamento** para domínios, hospedagem, e-mail e websites. Os pedidos ficam registados no painel e no MySQL.
-- **Painel admin** (`/admin.html`): vendas, clientes, leads, blog e o botão **"Activar na 20i"**, que cria a hospedagem de uma venda paga.
+- **Painel admin** (`/admin.html`): vendas, clientes, subscrições, leads, blog e o botão **"Activar na 20i"**, que cria a hospedagem de uma venda paga.
+- **Área do cliente** (`/cliente.html`): o cliente cria conta (e-mail confirmado por código), entra e vê as suas subscrições e as datas de renovação. Cada serviço de uma venda paga passa a ser uma subscrição.
 - **20i:** verificação de domínios e criação de alojamento, através de um proxy PHP com IP autorizado.
 - **Assistente com IA** (opcional): recomenda serviços, verifica domínios, monta o orçamento e regista o pedido (`ECO-AAMMDD-XXXX`). Sem chave da IA, o chat funciona em modo guiado.
 - **Popups promocionais** nas páginas de serviços.
@@ -31,11 +32,12 @@ ecomulti.ao (AngoWeb)
 | `index.html`, `dominios.html`, `hospedagem-ecomulti.html`, `email-corporativo-ecomulti.html`, `desenvolvimento-ecomulti.html`, `orcamento-ecomulti.html` | Páginas do site |
 | `blog.html`, `artigo.html`, `blog/posts.json` | Blog |
 | `admin.html`, `painel.html` | Painel administrativo e painel do assistente |
+| `cliente.html`, `assets/js/cliente.js` | Área do cliente |
 | `assets/js/config.js` | Contactos, dados da empresa e **todos os preços** |
 | `assets/` | CSS, JavaScript e imagens |
 | `app.cjs` | Arranque da aplicação Node no cPanel |
 | `servidor/app.mjs`, `servidor/rotas/` | Servidor e rotas da API: `admin`, `pedido`, `agente`, `blog`, `newsletter`, `painel`, `whatsapp`, `limpar` |
-| `agente/` | Lógica partilhada: armazenamento MySQL, autenticação, catálogo, 20i, assistente |
+| `agente/` | Lógica partilhada: armazenamento MySQL, autenticação (admin e clientes), subscrições, e-mail, catálogo, 20i, assistente |
 | `ferramentas/proxy-20i/`, `ferramentas/api-bd/` | PHP para a AngoWeb e modelos de configuração |
 | `ferramentas/` | Testes, servidor local, sincronização de preços e pacote para a AngoWeb |
 | `_original/` | Cópia do site antigo, só para referência |
@@ -57,6 +59,7 @@ Para usar o MySQL do XAMPP localmente, defina `DB_NOME`, `DB_UTILIZADOR`, `DB_SE
 |---|---|
 | `npm run local` | Site + API no computador |
 | `npm run testar-servidor` | Testes do servidor por HTTP (usa o MySQL do XAMPP se estiver ligado) |
+| `npm run testar-cliente` | Testes da área do cliente (registo, códigos, sessão, subscrições), sem enviar e-mails |
 | `npm run testar` | Testes do agente com API falsa (sem custos) |
 | `node ferramentas/testar-whatsapp.mjs` | Testes do WhatsApp com API falsa |
 | `npm run testar-20i` | Testes da 20i e do painel com 20i falsa (`-- --real` testa a conta real, só leitura) |
@@ -74,7 +77,9 @@ Os segredos ficam nas **variáveis de ambiente da aplicação Node** (cPanel →
 | `DB_NOME`, `DB_UTILIZADOR`, `DB_SENHA` (`DB_HOST`, `DB_PORTA`) | Base de dados MySQL (obrigatório em produção) |
 | `BD_URL`, `BD_CHAVE` | Cópia dos pedidos nas tabelas `clientes`/`encomendas`, através de `api-bd.php` |
 | `VINTEI_URL`, `VINTEI_PROXY_CHAVE` | Ligação à 20i através de `proxy-20i.php` |
+| `SMTP_HOST`, `SMTP_PORTA`, `SMTP_UTILIZADOR`, `SMTP_SENHA` (`SMTP_REMETENTE`) | Envio dos códigos da área do cliente (conta de e-mail do cPanel; obrigatório para a área do cliente) |
 | `ADMIN_EMAIL`, `ADMIN_SENHA`, `ADMIN_SEGREDO` | Conta inicial do painel e segredo das sessões (opcionais) |
+| `CLIENTE_SEGREDO` | Segredo das sessões da área do cliente (opcional; sem ele é gerado e guardado na base) |
 | `ANTHROPIC_API_KEY`, `AGENTE_MODELO`, `AGENTE_ESFORCO`, `AGENTE_LIMITE_*` | Assistente com IA (opcional) |
 | `PAINEL_CHAVE` | Chave do painel do assistente (`/painel.html`) |
 | `WHATSAPP_*`, `EQUIPA_WHATSAPP` | WhatsApp Business (opcional) |

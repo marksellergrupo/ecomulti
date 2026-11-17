@@ -12,14 +12,16 @@
     "testar-bd": "node ferramentas/testar-bd.mjs",
     "precos-sql": "node ferramentas/precos-para-sql.mjs",
     "angoweb": "node ferramentas/preparar-angoweb.mjs",
-    "testar-servidor": "node ferramentas/testar-servidor.mjs"
+    "testar-servidor": "node ferramentas/testar-servidor.mjs",
+    "testar-cliente": "node ferramentas/testar-cliente.mjs"
   },
   "engines": {
     "node": ">=20"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^1.7.0",
-    "mysql2": "^3.24.6"
+    "mysql2": "^3.24.6",
+    "nodemailer": "^10.6.0"
   },
   "main": "app.cjs"
 }

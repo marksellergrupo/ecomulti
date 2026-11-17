@@ -7,6 +7,7 @@ import { json, cabecalhosCors, ipDe, novoNumero, hash } from "../../agente/util-
 import { utilizador, verificarLogin, emitirToken, validarToken, alterarSenha, bloqueado, registarFalha, limparFalhas } from "../../agente/admin-auth.mjs";
 import { vinteiConfigurado, tiposPacote, criarHospedagem } from "../../agente/vintei.mjs";
 import { dominioValido } from "../../agente/catalogo.mjs";
+import { criarDaVenda, listarTodas, guardar as guardarSubscricao } from "../../agente/subscricoes.mjs";
 
 
 const VENDAS = "admin-vendas", CLIENTES = "admin-clientes", IGNORADOS = "admin-ignorados", LEADS = "newsletter-subs";
@@ -136,6 +137,7 @@ const ACCOES = {
     const v = limparVenda(d, antigo);
     if (v.estado === "pago") v.clienteId = await garantirCliente(v.cliente);
     await gravarItem(VENDAS, v.id, v);
+    await criarDaVenda(v);                       // venda paga → subscrições na área do cliente
     return { ok: true, venda: v };
   },
   async "vendas.estado"(d) {
@@ -148,8 +150,17 @@ const ACCOES = {
     else v.pagoEm = "";
     v.actualizado = agora();
     await gravarItem(VENDAS, v.id, v);
+    await criarDaVenda(v);                       // venda paga → subscrições na área do cliente
     return { ok: true, venda: v };
   },
+
+  /* ---- subscrições (área do cliente) ---- */
+  async "subs.listar"() { return { subscricoes: await listarTodas() }; },
+  async "subs.guardar"(d) {
+    if (!/^[A-Za-z0-9_-]{3,50}$/.test(String(d.id || ""))) throw erro("Pedido inválido.");
+    return { ok: true, subscricao: await guardarSubscricao(d) };
+  },
+
   /* ---- 20i: criar a hospedagem de uma venda paga (botão manual no painel) ---- */
   async "vintei.tipos"() {
     if (!vinteiConfigurado()) throw erro("A ligação à 20i não está configurada no servidor (variáveis VINTEI_URL e VINTEI_PROXY_CHAVE da aplicação Node no cPanel).", 503);

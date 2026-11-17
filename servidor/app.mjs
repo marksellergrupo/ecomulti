@@ -16,6 +16,7 @@ const PORTA = Number(process.env.PORT || process.env.PORTA || 3000);
 
 const ROTAS = {
   "/api/admin": () => import("./rotas/admin.mjs"),
+  "/api/cliente": () => import("./rotas/cliente.mjs"),
   "/api/pedido": () => import("./rotas/pedido.mjs"),
   "/api/agente": () => import("./rotas/agente.mjs"),
   "/api/blog": () => import("./rotas/blog.mjs"),

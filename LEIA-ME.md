@@ -47,7 +47,7 @@ Tudo corre na AngoWeb: **site** (`public_html`), **API** (aplicação Node.js do
 4. **Aplicação Node:** a pasta `ecomulti-servidor/` vai para a sua pasta pessoal (ao lado do `public_html`). No cPanel → **Setup Node.js App → Create Application**:
    - Node.js 20 ou superior · modo **Production**
    - Application root: `ecomulti-servidor` · Application URL: `ecomulti.ao` / `api` · Startup file: `app.cjs`
-   - **Environment variables:** `DB_NOME`, `DB_UTILIZADOR`, `DB_SENHA`, `VINTEI_URL`, `VINTEI_PROXY_CHAVE`, `BD_URL`, `BD_CHAVE` (opcional: `ANTHROPIC_API_KEY`, `ADMIN_EMAIL`, `ADMIN_SENHA`)
+   - **Environment variables:** `DB_NOME`, `DB_UTILIZADOR`, `DB_SENHA`, `VINTEI_URL`, `VINTEI_PROXY_CHAVE`, `BD_URL`, `BD_CHAVE`, e para a área do cliente `SMTP_HOST` (ex.: `mail.ecomulti.ao`), `SMTP_PORTA` (`465`), `SMTP_UTILIZADOR` (ex.: `nao-responder@ecomulti.ao`), `SMTP_SENHA` (opcional: `ANTHROPIC_API_KEY`, `ADMIN_EMAIL`, `ADMIN_SENHA`)
    - **Run NPM Install** e depois **Restart**.
 5. Testar: `https://ecomulti.ao/api/saude` deve responder `{"ok":true,"bd":"ok",...}`; depois entrar em `https://ecomulti.ao/admin.html`.
 

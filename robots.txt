@@ -5,5 +5,6 @@ Disallow: /ecomulti-pagamento.html
 Disallow: /blog-admin.html
 Disallow: /admin.html
 Disallow: /painel.html
+Disallow: /cliente.html
 
 Sitemap: https://www.ecomulti.ao/sitemap.xml

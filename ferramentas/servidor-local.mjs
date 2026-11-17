@@ -3,5 +3,6 @@
    Opcional: $env:ANTHROPIC_API_KEY="..." (chat com IA) e DB_NOME/DB_UTILIZADOR/DB_SENHA/DB_PORTA (MySQL do XAMPP).
    Sem base de dados, guarda tudo em memória (perde-se ao fechar). */
 process.env.SERVIR_SITE = "1";
+process.env.EMAIL_CONSOLA = process.env.EMAIL_CONSOLA || "1";   // sem SMTP, os códigos da área do cliente aparecem nesta consola
 process.env.PORTA = process.env.PORTA || "8099";
 await import("../servidor/app.mjs");

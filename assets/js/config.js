@@ -47,6 +47,10 @@ window.ECOMULTI = {
   pedidos: {
     endpoint: "/api/pedido"
   },
+  /* Área do cliente (cliente.html): conta, confirmação do e-mail e subscrições */
+  cliente: {
+    endpoint: "/api/cliente"
+  },
 
   /* Impostos — confirme com o seu contabilista */
   fiscal: {

@@ -69,6 +69,10 @@ Defina `PAINEL_CHAVE` (mínimo 12 caracteres; use uma frase longa e aleatória) 
 | `DB_HOST`, `DB_PORTA` | não | Por omissão `localhost` e `3306` |
 | `ADMIN_EMAIL`, `ADMIN_SENHA` | não | Conta inicial do painel (criada na primeira utilização; mude a senha no painel) |
 | `ADMIN_SEGREDO` | não | Segredo das sessões do painel (16+ caracteres); sem ele, é gerado e guardado na base |
+| `SMTP_HOST`, `SMTP_PORTA` | para a área do cliente | Servidor de e-mail (ex.: `mail.ecomulti.ao`, porta `465`). Sem SMTP, o registo na área do cliente fica indisponível |
+| `SMTP_UTILIZADOR`, `SMTP_SENHA` | para a área do cliente | Conta de e-mail que envia os códigos (ex.: `nao-responder@ecomulti.ao`) |
+| `SMTP_REMETENTE` | não | Nome e endereço do remetente (por omissão `ECOMULTI <SMTP_UTILIZADOR>`) |
+| `CLIENTE_SEGREDO` | não | Segredo das sessões da área do cliente (16+ caracteres); sem ele, é gerado e guardado na base |
 | `ANTHROPIC_API_KEY` | para a IA | Chave da Anthropic |
 | `AGENTE_MODELO` | não | Modelo (por omissão `claude-opus-5-5`) |
 | `AGENTE_ESFORCO` | não | `low` (por omissão, respostas rápidas) · `medium` · `high` |

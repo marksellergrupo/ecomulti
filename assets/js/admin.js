@@ -124,6 +124,7 @@
     resumo: { titulo: "Resumo", render: vResumo, topo: () => "" },
     vendas: { titulo: "Vendas", render: vVendas, topo: () => '<button class="btn btn-primary btn-sm" data-act="venda-nova">+ Nova venda</button>' },
     clientes: { titulo: "Clientes", render: vClientes, topo: () => '<button class="btn btn-primary btn-sm" data-act="cliente-novo">+ Novo cliente</button>' },
+    subscricoes: { titulo: "Subscrições", render: vSubs, topo: () => "" },
     blog: { titulo: "Blog e secções", render: vBlog, topo: () => '<button class="btn btn-primary btn-sm" data-act="artigo-novo">+ Novo artigo</button>' },
     leads: { titulo: "Newsletter e leads", render: vLeads, topo: () => '<button class="btn btn-primary btn-sm" data-act="lead-novo">+ Novo lead</button>' },
     conta: { titulo: "Conta e segurança", render: vConta, topo: () => "" }
@@ -229,6 +230,53 @@
       <p class="adm-msg err" data-erro></p><div class="adm-modal-acc"><button class="btn btn-outline btn-sm" type="button" data-fechar>Cancelar</button><button class="btn btn-primary btn-sm" type="submit">Confirmar pagamento</button></div></form>`,
     async (f) => { await chamar("vendas.estado", { id, estado: "pago", metodo: f.metodo.value, pagoEm: f.pagoEm.value }); aviso("Venda marcada como paga. Cliente registado."); vVendas(); actualizarBadge(); });
   };
+  /* ================================================================ SUBSCRIÇÕES (área do cliente) */
+  const S = { lista: [], f: "todas", q: "" };
+  const SIT = { activa: ["pago", "Activa"], a_expirar: ["em_aberto", "Renova em breve"], expirada: ["cancelado", "Expirada"], unico: ["fx", "Pagamento único"], cancelada: ["fx", "Cancelada"] };
+  async function vSubs() {
+    S.lista = (await chamar("subs.listar")).subscricoes;
+    vista.innerHTML = `
+      <p style="color:var(--muted);margin:0 0 14px">Criadas automaticamente quando uma venda é paga (um serviço = uma subscrição). O cliente vê-as na <a href="cliente.html" target="_blank" rel="noopener" style="color:var(--blue);font-weight:700">área do cliente</a> se entrar com o mesmo e-mail da venda.</p>
+      <div class="adm-tools"><div class="adm-pills" id="sFiltros" role="group" aria-label="Filtrar subscrições"></div><span class="adm-grow"></span>
+        <input type="search" id="sBusca" placeholder="Pesquisar cliente, e-mail, domínio…" aria-label="Pesquisar subscrições" value="${esc(S.q)}"></div>
+      <div class="adm-scroll"><table class="adm-table"><thead><tr><th>Serviço</th><th>Cliente</th><th>Início</th><th>Renovação</th><th>Estado</th><th></th></tr></thead><tbody id="sCorpo"></tbody></table></div>`;
+    $("#sBusca").addEventListener("input", (e) => { S.q = e.target.value; desenharSubs(); });
+    $("#sFiltros").addEventListener("click", (e) => { const b = e.target.closest("[data-f]"); if (b) { S.f = b.dataset.f; desenharSubs(); } });
+    desenharSubs();
+  }
+  function desenharSubs() {
+    const filtro = (s) => S.f === "todas" || s.situacao === S.f || (S.f === "a_expirar" && s.situacao === "expirada");
+    const n = (f) => S.lista.filter((s) => f === "todas" || s.situacao === f || (f === "a_expirar" && s.situacao === "expirada")).length;
+    $("#sFiltros").innerHTML = [["todas", "Todas"], ["a_expirar", "A renovar / expiradas"], ["activa", "Activas"], ["unico", "Pagamento único"], ["cancelada", "Canceladas"]]
+      .map(([k, t]) => `<button class="adm-pill" data-f="${k}" aria-pressed="${S.f === k}">${t}<b>${n(k)}</b></button>`).join("");
+    const q = S.q.trim().toLowerCase();
+    const l = S.lista.filter((s) => filtro(s) && (!q || [s.servico, s.dominio, s.clienteNome, s.email, s.vendaId].join(" ").toLowerCase().includes(q)));
+    $("#sCorpo").innerHTML = l.length ? l.map((s) => {
+      const [c, t] = SIT[s.situacao] || ["fx", s.situacao];
+      const aviso = s.vendaEstado !== "pago" ? `<small style="color:var(--err)">venda ${esc(s.vendaEstado === "apagada" ? "apagada" : "não paga")} — o cliente não a vê</small>` : (!s.email ? '<small style="color:var(--err)">sem e-mail — o cliente não a vê</small>' : "");
+      return `<tr><td><strong>${esc(s.servico)}</strong><small>${esc(s.dominio || "")}</small></td>
+        <td><strong>${esc(s.clienteNome || "—")}</strong><small>${esc(s.email || "")}</small>${aviso}</td>
+        <td>${dCurta(s.inicio)}</td><td>${s.renovacao ? dCurta(s.renovacao) : "—"}${s.dias != null && s.situacao !== "unico" ? `<small>${s.dias < 0 ? `há ${-s.dias} dias` : `faltam ${s.dias} dias`}</small>` : ""}</td>
+        <td><span class="adm-badge ${c}">${t}</span>${s.editada ? "<small>editada</small>" : ""}</td>
+        <td><div class="adm-acc"><button class="adm-b" data-act="sub-editar" data-id="${esc(s.id)}">Editar</button></div></td></tr>`;
+    }).join("") : '<tr><td colspan="6" class="adm-vazio">Nenhuma subscrição. Aparecem aqui quando uma venda é marcada como paga.</td></tr>';
+  }
+  H["sub-editar"] = (id) => {
+    const s = S.lista.find((x) => x.id === id); if (!s) return;
+    abrir(`<form><h2>Editar subscrição</h2><p style="color:var(--muted);margin-top:0">Venda ${esc(s.vendaId)} · ${esc(s.clienteNome || "")}</p>
+      <label>Serviço<input type="text" name="servico" maxlength="200" required value="${esc(s.servico)}"></label>
+      <div class="r2"><label>Domínio<input type="text" name="dominio" maxlength="253" value="${esc(s.dominio || "")}" placeholder="ex.: empresa.ao"></label>
+        <label>E-mail do cliente<input type="email" name="email" maxlength="254" value="${esc(s.email || "")}"></label></div>
+      <div class="r2"><label>Tipo<select name="tipo"><option value="recorrente"${s.tipo !== "unico" ? " selected" : ""}>Com renovação</option><option value="unico"${s.tipo === "unico" ? " selected" : ""}>Pagamento único</option></select></label>
+        <label>Estado<select name="estado"><option value="activa"${s.estado !== "cancelada" ? " selected" : ""}>Activa</option><option value="cancelada"${s.estado === "cancelada" ? " selected" : ""}>Cancelada (o cliente deixa de a ver)</option></select></label></div>
+      <div class="r2"><label>Início<input type="date" name="inicio" value="${esc(s.inicio || "")}"></label><label>Renovação<input type="date" name="renovacao" value="${esc(s.renovacao || "")}"></label></div>
+      <p class="adm-msg err" data-erro></p><div class="adm-modal-acc"><button class="btn btn-outline btn-sm" type="button" data-fechar>Cancelar</button><button class="btn btn-primary btn-sm" type="submit">Guardar</button></div></form>`,
+    async (f) => {
+      await chamar("subs.guardar", { id, servico: f.servico.value, dominio: f.dominio.value, email: f.email.value, tipo: f.tipo.value, estado: f.estado.value, inicio: f.inicio.value, renovacao: f.renovacao.value });
+      aviso("Subscrição actualizada."); vSubs();
+    });
+  };
+
   /* 20i: criar a hospedagem de uma venda paga */
   const DOMINIO_RE = /\b((?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+(?:co\.ao|it\.ao|edu\.ao|org\.ao|ao|com|net|org|pt|co\.uk))\b/i;
   H["venda-20i"] = async (id) => {

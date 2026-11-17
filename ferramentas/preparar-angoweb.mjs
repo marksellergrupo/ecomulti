@@ -65,6 +65,7 @@ Tudo corre na AngoWeb: site (public_html), API (aplicação Node.js em ecomulti.
    Em "Environment variables" acrescente (ver LEIA-ME.md):
      DB_NOME, DB_UTILIZADOR, DB_SENHA  (os mesmos do config-bd.php)
      VINTEI_URL, VINTEI_PROXY_CHAVE, BD_URL, BD_CHAVE
+     SMTP_HOST, SMTP_PORTA, SMTP_UTILIZADOR, SMTP_SENHA  (área do cliente: envio dos códigos)
      (opcional) ANTHROPIC_API_KEY, ADMIN_EMAIL, ADMIN_SENHA
    Carregue em "Run NPM Install" e depois em "Restart".
    Teste: https://ecomulti.ao/api/saude  → {"ok":true,"bd":"ok",...}
