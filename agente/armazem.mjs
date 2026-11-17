@@ -4,7 +4,7 @@
    Variáveis: DB_NOME, DB_UTILIZADOR, DB_SENHA, DB_HOST (localhost), DB_PORTA (3306).
    Sem DB_NOME (testes locais) usa memória. */
 import { existsSync } from "node:fs";
-import { estadoNovo } from "./nucleo.mjs";
+import { estadoNovo } from "./estado.mjs";
 import { gravarPedidoBD, pedidoDoAgente } from "./bd.mjs";
 
 /* ---------------- memória (testes e desenvolvimento) ---------------- */

@@ -19,7 +19,7 @@ export const agenteActivo = () => Boolean(process.env.ANTHROPIC_API_KEY);
 let cliente;
 const api = () => (cliente ||= new Anthropic({ maxRetries: 2, timeout: 50_000 }));
 
-export const estadoNovo = () => ({ mensagens: [], orcamento: [], pedido: null, humano: null, turnos: 0, criado: Date.now() });
+export { estadoNovo } from "./estado.mjs";
 
 /* ---------------------------- ferramentas ---------------------------- */
 export const FERRAMENTAS = [
