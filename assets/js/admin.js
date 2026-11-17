@@ -205,6 +205,7 @@
         <td><div class="adm-acc">
           ${v.estado === "em_aberto" ? `<button class="adm-b ok" data-act="venda-pagar" data-id="${esc(v.id)}">Marcar paga</button>${wa ? `<a class="adm-b wa" href="${esc(wa)}" target="_blank" rel="noopener">Cobrar</a>` : ""}` : `<button class="adm-b" data-act="venda-reabrir" data-id="${esc(v.id)}">Reabrir</button>`}
           ${v.estado === "pago" ? (v.vintei && v.vintei.pacoteId ? `<span class="adm-badge pago" title="Pacote ${esc(v.vintei.pacoteId)} · ${esc(v.vintei.dominio)}">20i ✔</span>` : `<button class="adm-b ok" data-act="venda-20i" data-id="${esc(v.id)}">Activar na 20i</button>`) : ""}
+          ${v.estado === "pago" ? `<button class="adm-b" data-act="venda-dominio" data-id="${esc(v.id)}">Registar domínio</button>${(v.vinteiDominios || []).filter((r) => r.registoId).map((r) => `<span class="adm-badge pago" title="Registado na 20i a ${esc(dCurta(r.em))}">${esc(r.dominio)} ✔</span>`).join("")}` : ""}
           <button class="adm-b" data-act="venda-ver" data-id="${esc(v.id)}">Ver</button><button class="adm-b" data-act="venda-editar" data-id="${esc(v.id)}">Editar</button><button class="adm-b del" data-act="venda-apagar" data-id="${esc(v.id)}">Eliminar</button></div></td></tr>`;
     }).join("") : '<tr><td colspan="8" class="adm-vazio">Nenhuma venda encontrada.</td></tr>';
     $("#vRodape").innerHTML = l.length ? `<tr><td colspan="5">${l.length} ${l.length === 1 ? "venda" : "vendas"}</td><td class="n">${kz(l.reduce((t, v) => t + v.total, 0))}</td><td colspan="2"></td></tr>` : "";
@@ -218,7 +219,9 @@
       <dt>Cliente</dt><dd>${esc(cl.nome)} (${esc(cl.tipo)})</dd><dt>Contacto</dt><dd>${esc(cl.telefone || "—")} · ${esc(cl.email || "—")}</dd>${cl.nif ? `<dt>NIF</dt><dd>${esc(cl.nif)}</dd>` : ""}${cl.morada ? `<dt>Morada</dt><dd>${esc(cl.morada)}</dd>` : ""}
       <dt>Pagamento</dt><dd>${esc(v.metodo || "—")}</dd><dt>Origem</dt><dd>${esc(v.canal || "—")}</dd>
       ${v.vintei && v.vintei.pacoteId ? `<dt>20i</dt><dd>Hospedagem activa · pacote <strong>${esc(v.vintei.pacoteId)}</strong> (${esc(v.vintei.tipoNome || v.vintei.tipo)}) · ${esc(v.vintei.dominio)} · ${dCurta(v.vintei.em)}</dd>` : ""}
-      ${v.vintei && v.vintei.erro ? `<dt>20i</dt><dd style="color:var(--err)">Última tentativa falhou: ${esc(v.vintei.erro)}</dd>` : ""}</dl>
+      ${v.vintei && v.vintei.erro ? `<dt>20i</dt><dd style="color:var(--err)">Última tentativa falhou: ${esc(v.vintei.erro)}</dd>` : ""}
+      ${(v.vinteiDominios || []).map((r) => r.registoId ? `<dt>Domínio</dt><dd><strong>${esc(r.dominio)}</strong> registado na 20i · ${r.anos} ${r.anos === 1 ? "ano" : "anos"} · titular ${esc(r.titular || "")} · ${dCurta(r.em)}</dd>`
+        : r.erro ? `<dt>Domínio</dt><dd style="color:var(--err)">${esc(r.dominio)}: a última tentativa falhou — ${esc(r.erro)}</dd>` : "").join("")}</dl>
       <table class="adm-table" style="min-width:0"><thead><tr><th>Serviço</th><th class="n">Valor</th></tr></thead><tbody>${(v.itens || []).map((i) => `<tr><td>${esc(i.descricao)}</td><td class="n">${kz(i.valor)}</td></tr>`).join("") || '<tr><td colspan="2">—</td></tr>'}</tbody><tfoot><tr><td>Total</td><td class="n">${kz(v.total)}</td></tr></tfoot></table>
       ${v.notas ? `<p><strong>Notas:</strong> ${esc(v.notas)}</p>` : ""}</div>
       <div class="adm-modal-acc"><button class="btn btn-outline btn-sm" type="button" data-fechar>Fechar</button></div></div>`);
@@ -274,6 +277,42 @@
     async (f) => {
       await chamar("subs.guardar", { id, servico: f.servico.value, dominio: f.dominio.value, email: f.email.value, tipo: f.tipo.value, estado: f.estado.value, inicio: f.inicio.value, renovacao: f.renovacao.value });
       aviso("Subscrição actualizada."); vSubs();
+    });
+  };
+
+  /* 20i: registar um domínio de uma venda paga (compra real) */
+  const DOMINIO_20I_RE = /\b((?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+(?:com|net|org|info|biz|pt|co\.uk|io|online|store|site|tech))\b/i;
+  H["venda-dominio"] = (id) => {
+    const v = vendaPorId(id); if (!v) return; const cl = v.cliente || {};
+    const feitos = (v.vinteiDominios || []).filter((r) => r.registoId).map((r) => r.dominio);
+    const texto = (v.itens || []).map((i) => i.descricao).join(" ") + " " + (v.notas || "");
+    const sugestao = [...texto.matchAll(new RegExp(DOMINIO_20I_RE, "gi"))].map((m) => m[1].toLowerCase()).find((d) => !feitos.includes(d)) || "";
+    const anos = Math.min(Math.max(parseInt((texto.match(/(\d+)\s*anos?\b/i) || [])[1] || "1", 10), 1), 10);
+    abrir(`<form><h2>Registar domínio na 20i</h2><p>${esc(v.id)} — ${esc(cl.nome)} · <strong>${kz(v.total)}</strong></p>
+      ${feitos.length ? `<p style="margin-top:0;color:var(--ok)">Já registados nesta venda: ${feitos.map(esc).join(", ")}</p>` : ""}
+      <div class="r2"><label>Domínio<input type="text" name="dominio" required maxlength="253" value="${esc(sugestao)}" placeholder="ex.: empresadocliente.com" autocomplete="off" autocapitalize="off" spellcheck="false"></label>
+        <label>Período<select name="anos">${[1, 2, 3, 5].map((n) => `<option value="${n}"${n === anos ? " selected" : ""}>${n} ${n === 1 ? "ano" : "anos"}</option>`).join("")}</select></label></div>
+      <p style="margin:4px 0 0;font-weight:800;color:var(--ink)">Titular do domínio (o cliente)</p>
+      <div class="r2"><label>Nome<input type="text" name="nome" required maxlength="120" value="${esc(cl.nome || "")}"></label>
+        <label>Empresa (opcional)<input type="text" name="organizacao" maxlength="120" value="${esc(cl.tipo === "Empresa" ? cl.nome || "" : "")}"></label></div>
+      <div class="r2"><label>E-mail<input type="email" name="email" required maxlength="254" value="${esc(cl.email || "")}"></label>
+        <label>Telefone<input type="tel" name="telefone" required maxlength="30" value="${esc(cl.telefone || "")}"></label></div>
+      <label>Morada<input type="text" name="morada" required maxlength="200" value="${esc(cl.morada || "")}"></label>
+      <div class="r2"><label>Cidade<input type="text" name="cidade" required maxlength="80" value="Luanda"></label>
+        <label>País (código)<input type="text" name="pais" required maxlength="2" value="AO" style="text-transform:uppercase"></label></div>
+      <label class="consent" style="display:flex;gap:10px;align-items:flex-start;background:var(--warn-50);padding:12px;border-radius:10px">
+        <input type="checkbox" name="confirmo" required style="width:18px;height:18px;margin-top:2px">
+        <span><strong>Compra real:</strong> o registo é cobrado no saldo da conta 20i e <strong>não pode ser anulado</strong>. Confirmei o domínio, o período e os dados do titular. Os domínios .ao não são registados pela 20i.</span></label>
+      <p class="adm-msg err" data-erro></p><div class="adm-modal-acc"><button class="btn btn-outline btn-sm" type="button" data-fechar>Cancelar</button><button class="btn btn-primary btn-sm" type="submit">Registar domínio na 20i</button></div></form>`,
+    async (f) => {
+      if (!f.confirmo.checked) throw new Error("Marque a confirmação de que é uma compra real.");
+      const b = $("button[type=submit]", f); b.disabled = true; b.textContent = "A verificar e a registar na 20i…";
+      try {
+        const r = await chamar("vintei.dominio", { id, dominio: f.dominio.value, anos: Number(f.anos.value), confirmo: true,
+          contacto: { nome: f.nome.value, organizacao: f.organizacao.value, email: f.email.value, telefone: f.telefone.value, morada: f.morada.value, cidade: f.cidade.value, pais: f.pais.value } });
+        const reg = (r.venda.vinteiDominios || []).find((x) => x.dominio === f.dominio.value.trim().toLowerCase());
+        aviso(`Domínio ${reg ? reg.dominio : ""} registado na 20i.`); vVendas();
+      } catch (e) { b.disabled = false; b.textContent = "Registar domínio na 20i"; throw e; }
     });
   };
 

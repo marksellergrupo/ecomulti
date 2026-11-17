@@ -21,11 +21,19 @@ export function iniciar20iFalsa(porta = 8789, chave = "chave-teste-20i") {
       if (String(corpo.domain_name).includes("recusado")) return responder(400, { error: { message: "Domain already hosted" } });
       return responder(200, { result: 987654 });
     }
+    if (req.method === "POST" && req.url === "/reseller/*/addDomain") {
+      const c = corpo?.contact || {};
+      if (!corpo?.name || !(corpo.years >= 1) || !c.name || !c.address || !c.city || !/^[A-Z]{2}$/.test(c.cc || "") || !/^\+\d{1,3}\.\d{6,}$/.test(c.telephone || "") || !/@/.test(c.email || ""))
+        return responder(400, { error: { message: "Invalid domain registration data" } });
+      if (String(corpo.name).includes("semsaldo")) return responder(400, { error: { message: "Insufficient account balance" } });
+      return responder(200, { result: { [corpo.name]: true } });
+    }
 
     const m = req.url.match(/^\/domain-search\/([^/?]+)$/);
     if (req.method === "GET" && m) {
       const dom = decodeURIComponent(m[1]).toLowerCase();
       if (dom.includes("falha")) return responder(500, { error: { message: "Internal error" } });
+      if (dom.endsWith(".ao")) return responder(200, [{ header: { names: [dom] } }]);   // a 20i não vende .ao
       const nome = dom.split(".")[0];
       return responder(200, [                                // formato real confirmado com a conta ECOMULTI
         { header: { names: [dom] } },

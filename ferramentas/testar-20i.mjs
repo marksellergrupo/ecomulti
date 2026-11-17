@@ -120,9 +120,9 @@ else {
       try { await assert.rejects(pedir20i("/reseller"), (e) => e.estado === 403); }
       finally { process.env.VINTEI_PROXY_CHAVE = segredo; }
     });
-    await teste("proxy PHP: endereços fora da lista são recusados (registar domínio, apagar, listar pacotes)", async () => {
+    await teste("proxy PHP: endereços fora da lista são recusados (apagar pacotes, outros métodos)", async () => {
       const antes = pedidos20i.length;
-      await assert.rejects(pedir20i("/reseller/*/addDomain", { metodo: "POST", corpo: { x: 1 } }), (e) => e.estado === 404);
+      await assert.rejects(pedir20i("/reseller/*/addDomain", { metodo: "GET" }), (e) => e.estado === 404);
       await assert.rejects(pedir20i("/reseller/*/deleteWeb", { metodo: "POST", corpo: { "delete-id": ["1"] } }), (e) => e.estado === 404);
       await assert.rejects(pedir20i("/package"), (e) => e.estado === 404);
       await assert.rejects(pedir20i("/reseller/*/packageTypes", { metodo: "POST", corpo: {} }), (e) => e.estado === 404);
@@ -196,6 +196,75 @@ else {
       const antes = pedidos20i.length;
       assert.equal((await chamarAdmin("vintei.activar", { id: v.id, tipo: "111", dominio: "não é domínio" }, token)).estado, 400);
       assert.equal((await chamarAdmin("vintei.activar", { id: v.id, tipo: "1; DROP", dominio: "ok.ao" }, token)).estado, 400);
+      assert.equal(pedidos20i.length, antes);
+    });
+
+    /* ---- registo de domínios (compra real na 20i) ---- */
+    const CONTACTO = { nome: "Ana Teste", organizacao: "Padaria Teste, Lda", email: "ana@padaria.ao", telefone: "923 000 001", morada: "Rua Direita 10", cidade: "Luanda", pais: "AO" };
+    const vendaDominio = async (desc = "Registo de domínio — padariateste.com") => (await chamarAdmin("vendas.guardar", { estado: "pago", pagoEm: "2026-11-10",
+      cliente: { nome: "Ana Teste", email: "ana@padaria.ao", telefone: "923000001" }, itens: [{ descricao: desc, valor: 32000 }] }, token)).corpo.venda;
+    const registar = (id, dados) => chamarAdmin("vintei.dominio", { id, dominio: "padariateste.com", anos: 1, confirmo: true, contacto: CONTACTO, ...dados }, token);
+
+    await teste("domínio: venda paga → confirma disponibilidade e regista com os dados do titular", async () => {
+      const v = await vendaDominio();
+      const r = await registar(v.id, { anos: 2 });
+      assert.equal(r.estado, 200, JSON.stringify(r.corpo));
+      const reg = r.corpo.venda.vinteiDominios.find((x) => x.dominio === "padariateste.com");
+      assert.ok(reg.registoId); assert.equal(reg.anos, 2); assert.equal(reg.por, "ecomulti.ao@gmail.com");
+      const ped = pedidos20i.filter((p) => p.url.startsWith("/domain-search/padariateste.com") || p.url === "/reseller/*/addDomain").slice(-2);
+      assert.equal(ped[0].url, "/domain-search/padariateste.com", "verificou a disponibilidade antes");
+      assert.equal(ped[1].url, "/reseller/*/addDomain");
+      assert.deepEqual(ped[1].corpo, { name: "padariateste.com", years: 2, contact: { name: "Ana Teste", organisation: "Padaria Teste, Lda", address: "Rua Direita 10",
+        city: "Luanda", sp: "Luanda", pc: "0000", cc: "AO", telephone: "+244.923000001", email: "ana@padaria.ao" } });
+      // segunda vez → recusado sem chamar a 20i
+      const antes = pedidos20i.length;
+      assert.equal((await registar(v.id, { anos: 2 })).estado, 409); assert.equal(pedidos20i.length, antes);
+      // editar a venda não apaga o registo
+      const ed = await chamarAdmin("vendas.guardar", { id: v.id, estado: "pago", cliente: { nome: "Ana Teste", email: "ana@padaria.ao" }, itens: [{ descricao: "Registo de domínio — padariateste.com", valor: 32000 }] }, token);
+      assert.ok(ed.corpo.venda.vinteiDominios?.[0]?.registoId);
+    });
+
+    await teste("domínio: a subscrição do domínio passa a renovar na data do registo + anos", async () => {
+      const subs = (await chamarAdmin("subs.listar", {}, token)).corpo.subscricoes.filter((s) => s.dominio === "padariateste.com");
+      assert.ok(subs.length >= 1);
+      const hoje = new Date().toISOString().slice(0, 10), daqui2 = new Date(); daqui2.setUTCFullYear(daqui2.getUTCFullYear() + 2);
+      assert.equal(subs[0].inicio, hoje); assert.equal(subs[0].renovacao, daqui2.toISOString().slice(0, 10));
+    });
+
+    await teste("domínio: ocupado, .ao ou não vendido pela 20i → recusado, nada comprado", async () => {
+      const v = await vendaDominio();
+      const conta = () => pedidos20i.filter((p) => p.url === "/reseller/*/addDomain").length, antes = conta();
+      const ocupado = await registar(v.id, { dominio: "ocupado.com" });
+      assert.equal(ocupado.estado, 409); assert.match(ocupado.corpo.erro, /já está registado/);
+      const ao = await registar(v.id, { dominio: "padariateste.ao" });
+      assert.equal(ao.estado, 400); assert.match(ao.corpo.erro, /\.ao/);
+      assert.equal(conta(), antes, "nenhum pedido de compra chegou à 20i");
+    });
+
+    await teste("domínio: venda em aberto, sem confirmação ou dados do titular em falta → recusado antes da 20i", async () => {
+      const aberta = (await chamarAdmin("vendas.guardar", { estado: "em_aberto", cliente: { nome: "X Teste" }, itens: [{ descricao: "Domínio", valor: 1 }] }, token)).corpo.venda;
+      const v = await vendaDominio(), antes = pedidos20i.length;
+      assert.equal((await registar(aberta.id, {})).estado, 400);
+      assert.equal((await registar(v.id, { confirmo: false })).estado, 400);
+      assert.equal((await registar(v.id, { contacto: { ...CONTACTO, email: "" } })).estado, 400);
+      assert.equal((await registar(v.id, { contacto: { ...CONTACTO, telefone: "123" } })).estado, 400);
+      assert.equal((await registar(v.id, { anos: 0 })).estado, 400);
+      assert.equal(pedidos20i.length, antes);
+    });
+
+    await teste("domínio: 20i recusa (ex.: sem saldo) → erro claro, fica registado e pode tentar de novo", async () => {
+      const v = await vendaDominio("Registo de domínio — semsaldo.com");
+      const r = await registar(v.id, { dominio: "semsaldo.com" });
+      assert.equal(r.estado, 502); assert.match(r.corpo.erro, /Insufficient account balance/);
+      const lista = (await chamarAdmin("vendas.listar", {}, token)).corpo.vendas;
+      assert.match(lista.find((x) => x.id === v.id).vinteiDominios[0].erro, /Insufficient/);
+      assert.equal((await registar(v.id, { dominio: "outro-nome.com" })).estado, 200);
+    });
+
+    await teste("proxy: registar domínio passa; transferir domínios e mexer em DNS continuam bloqueados", async () => {
+      const antes = pedidos20i.length;
+      await assert.rejects(pedir20i("/reseller/*/transferDomain", { metodo: "POST", corpo: {} }), (e) => e.estado === 404);
+      await assert.rejects(pedir20i("/domain/123/dns", { metodo: "POST", corpo: {} }), (e) => e.estado === 404);
       assert.equal(pedidos20i.length, antes);
     });
   } finally { proc.kill(); rmSync(dir, { recursive: true, force: true }); }

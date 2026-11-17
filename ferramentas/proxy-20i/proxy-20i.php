@@ -62,12 +62,13 @@ if ($caminho === '/ip') {
 }
 
 /* Lista de endereços autorizados (método + expressão). Tudo o resto é recusado:
-   apagar pacotes ou registar domínios NÃO passa por aqui. */
+   apagar pacotes, transferir domínios ou mexer em DNS NÃO passa por aqui. */
 const PERMITIDOS = [
     ['GET',  '#^/reseller$#'],
     ['GET',  '#^/domain-search/[a-z0-9.-]{1,253}$#i'],
     ['GET',  '#^/reseller/\*/packageTypes$#'],   // tipos de pacote (para o painel escolher)
     ['POST', '#^/reseller/\*/addWeb$#'],         // criar alojamento ("Activar na 20i" no painel)
+    ['POST', '#^/reseller/\*/addDomain$#'],      // registar domínio ("Registar domínio" no painel; compra real)
 ];
 $autorizado = false;
 foreach (PERMITIDOS as [$m, $padrao]) {

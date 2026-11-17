@@ -56,6 +56,38 @@ export async function criarHospedagem({ tipo, dominio }) {
   return { pacoteId: String(id) };
 }
 
+/* Telefone no formato dos registos de domínios (EPP): +244.923000000 */
+const IND_1 = ["1", "7"];
+const IND_2 = "20 27 30 31 32 33 34 36 39 40 41 43 44 45 46 47 48 49 51 52 53 54 55 56 57 58 60 61 62 63 64 65 66 81 82 84 86 90 91 92 93 94 95 98".split(" ");
+export function telefoneEPP(tel, indicativo = "244") {
+  const bruto = String(tel || "").trim();
+  if (/^\+\d{1,3}\.\d{4,}$/.test(bruto)) return bruto;      // já vem no formato +NNN.NNNNNN
+  let d = bruto.replace(/[^\d+]/g, "");
+  if (d.startsWith("+")) d = d.slice(1);
+  else if (d.startsWith("00")) d = d.slice(2);
+  else if (d.length <= 9) d = indicativo + d;               // número angolano sem indicativo
+  const ind = d.startsWith(indicativo) ? indicativo
+    : IND_1.includes(d[0]) ? d[0] : IND_2.includes(d.slice(0, 2)) ? d.slice(0, 2) : d.slice(0, 3);
+  return `+${ind}.${d.slice(ind.length)}`;
+}
+
+/* Regista um domínio na 20i (COMPRA REAL, cobrada no saldo da conta de revenda e irreversível).
+   contacto: { nome, organizacao, email, telefone, morada, cidade, provincia, codigoPostal, pais } */
+export async function registarDominio({ dominio, anos, contacto }) {
+  const c = contacto || {};
+  const corpo = {
+    name: dominio, years: anos,
+    contact: {
+      name: c.nome, organisation: c.organizacao || "", address: c.morada, city: c.cidade, sp: c.provincia || c.cidade,
+      pc: c.codigoPostal || "0000", cc: (c.pais || "AO").toUpperCase(), telephone: telefoneEPP(c.telefone), email: c.email
+    }
+  };
+  const r = await pedir20i("/reseller/*/addDomain", { metodo: "POST", corpo, timeout: 60000 });
+  const id = r && typeof r === "object" ? (r.result ?? r.id ?? r.domain_id) : r;
+  if (id == null || id === false || (typeof id === "object" && !Object.keys(id).length)) throw new Error("20i: resposta sem confirmação do registo (" + JSON.stringify(r).slice(0, 200) + ")");
+  return { registoId: typeof id === "object" ? JSON.stringify(id).slice(0, 80) : String(id) };
+}
+
 /* Disponibilidade de um domínio pela pesquisa da 20i.
    Devolve "free", "taken" ou null (resposta sem informação sobre esse domínio). */
 export async function disponibilidade20i(dominio) {

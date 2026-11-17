@@ -5,9 +5,9 @@
 import { listarTudo, obterItem, gravarItem, apagarItem } from "../../agente/armazem.mjs";
 import { json, cabecalhosCors, ipDe, novoNumero, hash } from "../../agente/util-http.mjs";
 import { utilizador, verificarLogin, emitirToken, validarToken, alterarSenha, bloqueado, registarFalha, limparFalhas } from "../../agente/admin-auth.mjs";
-import { vinteiConfigurado, tiposPacote, criarHospedagem } from "../../agente/vintei.mjs";
+import { vinteiConfigurado, tiposPacote, criarHospedagem, registarDominio, disponibilidade20i } from "../../agente/vintei.mjs";
 import { dominioValido } from "../../agente/catalogo.mjs";
-import { criarDaVenda, listarTodas, guardar as guardarSubscricao } from "../../agente/subscricoes.mjs";
+import { criarDaVenda, listarTodas, guardar as guardarSubscricao, dominioRegistado } from "../../agente/subscricoes.mjs";
 
 
 const VENDAS = "admin-vendas", CLIENTES = "admin-clientes", IGNORADOS = "admin-ignorados", LEADS = "newsletter-subs";
@@ -50,7 +50,8 @@ function limparVenda(d, antigo) {
     id, data, cliente, clienteId: antigo?.clienteId || "", itens, total, metodo: METODOS.includes(metodo) ? metodo : metodo || "",
     estado, pagoEm, canal: txt(d.canal, 30) || antigo?.canal || "manual", notas: txt(d.notas, 600),
     criadoEm: antigo?.criadoEm || agora(), actualizado: agora(),
-    ...(antigo?.vintei ? { vintei: antigo.vintei } : {})   // a activação na 20i nunca se perde ao editar
+    ...(antigo?.vintei ? { vintei: antigo.vintei } : {}),   // a activação na 20i nunca se perde ao editar
+    ...(antigo?.vinteiDominios ? { vinteiDominios: antigo.vinteiDominios } : {})   // nem os domínios registados
   };
 }
 
@@ -192,6 +193,58 @@ const ACCOES = {
     }
     v.actualizado = agora();
     await gravarItem(VENDAS, v.id, v);
+    return { ok: true, venda: v };
+  },
+
+  /* ---- 20i: registar um domínio de uma venda paga (COMPRA REAL, irreversível) ---- */
+  async "vintei.dominio"(d, sessao) {
+    if (!vinteiConfigurado()) throw erro("A ligação à 20i não está configurada no servidor (variáveis VINTEI_URL e VINTEI_PROXY_CHAVE da aplicação Node no cPanel).", 503);
+    if (!idSeguro(d.id)) throw erro("Pedido inválido.");
+    const dominio = txt(d.dominio, 253).toLowerCase().replace(/^https?:\/\//, "").replace(/^www\./, "").replace(/\/.*$/, "");
+    if (!dominioValido(dominio)) throw erro("Indique um domínio válido (ex.: empresa.com).");
+    if (/\.ao$/.test(dominio)) throw erro("Os domínios .ao não são registados pela 20i: o registo é feito à parte, como até agora.");
+    const anos = Math.round(Number(d.anos));
+    if (!(anos >= 1 && anos <= 10)) throw erro("Escolha entre 1 e 10 anos.");
+    if (d.confirmo !== true) throw erro("Confirme que sabe que o registo é uma compra real na 20i.");
+    const c = d.contacto || {};
+    const contacto = {
+      nome: txt(c.nome, 120), organizacao: txt(c.organizacao, 120), email: txt(c.email, 254).toLowerCase(), telefone: txt(c.telefone, 30),
+      morada: txt(c.morada, 200), cidade: txt(c.cidade, 80), provincia: txt(c.provincia, 80), codigoPostal: txt(c.codigoPostal, 20), pais: txt(c.pais || "AO", 2).toUpperCase()
+    };
+    if (contacto.nome.length < 2) throw erro("Indique o nome do titular do domínio.");
+    if (!EMAIL.test(contacto.email)) throw erro("Indique um e-mail válido do titular (recebe os avisos do registo).");
+    if (digitos(contacto.telefone).length < 9) throw erro("Indique o telefone do titular.");
+    if (contacto.morada.length < 3 || contacto.cidade.length < 2) throw erro("Indique a morada e a cidade do titular.");
+    if (!/^[A-Z]{2}$/.test(contacto.pais)) throw erro("País inválido (código de 2 letras, ex.: AO).");
+
+    const v = await obterItem(VENDAS, d.id);
+    if (!v) throw erro("Venda não encontrada.", 404);
+    if (v.estado !== "pago") throw erro("Só vendas pagas podem registar domínios na 20i.");
+    const registos = Array.isArray(v.vinteiDominios) ? v.vinteiDominios : [];
+    if (registos.some((r) => r.dominio === dominio && r.registoId)) throw erro(`O domínio ${dominio} já foi registado nesta venda.`, 409);
+    const emCurso = registos.find((r) => r.dominio === dominio && r.aRegistar);
+    if (emCurso && Date.now() - Date.parse(emCurso.aRegistar) < 180000) throw erro("O registo deste domínio já está em curso. Aguarde um momento.", 409);
+
+    // confirma na 20i, imediatamente antes de comprar, que o domínio está livre
+    let disp;
+    try { disp = await disponibilidade20i(dominio); } catch (e) { throw erro("Não foi possível confirmar a disponibilidade na 20i: " + e.message, 502); }
+    if (disp === "taken") throw erro(`O domínio ${dominio} já está registado. Nada foi comprado.`, 409);
+    if (disp !== "free") throw erro(`A 20i não confirma que ${dominio} pode ser registado (extensão não disponível na 20i?). Nada foi comprado.`, 409);
+
+    const outros = registos.filter((r) => r.dominio !== dominio);
+    v.vinteiDominios = [...outros, { dominio, anos, aRegistar: agora() }];          // trava contra duplo clique
+    await gravarItem(VENDAS, v.id, v);
+    try {
+      const { registoId } = await registarDominio({ dominio, anos, contacto });
+      v.vinteiDominios = [...outros, { dominio, anos, registoId, titular: contacto.nome, em: agora(), por: sessao?.email || "" }];
+    } catch (e) {
+      v.vinteiDominios = [...outros, { dominio, anos, erro: txt(e.message, 300), em: agora() }];
+      await gravarItem(VENDAS, v.id, v);
+      throw erro("A 20i não registou o domínio: " + e.message, 502);
+    }
+    v.actualizado = agora();
+    await gravarItem(VENDAS, v.id, v);
+    await dominioRegistado(v, dominio, anos).catch((e) => console.error("[subscricoes]", e.message));
     return { ok: true, venda: v };
   },
 

@@ -87,6 +87,18 @@ export async function listarDoCliente(email) {
     .sort((a, b) => (a.renovacao || "9999").localeCompare(b.renovacao || "9999"));
 }
 
+/* domínio registado na 20i → a subscrição desse domínio passa a renovar na data do registo + anos */
+export async function dominioRegistado(venda, dominio, anos, em = new Date().toISOString()) {
+  await criarDaVenda(venda);
+  const subs = (await listarTudo(SUBS)).filter((s) => s.vendaId === venda.id && s.dominio === dominio && /dom\S{0,2}nio|domain/i.test(s.servico));
+  for (const s of subs) {
+    if (s.editada) continue;
+    Object.assign(s, { tipo: "recorrente", inicio: em.slice(0, 10), renovacao: somarAnos(em, anos), actualizado: new Date().toISOString() });
+    await gravarItem(SUBS, s.id, s);
+  }
+  return subs.length;
+}
+
 /* painel admin: corrigir uma subscrição */
 const DATA_RE = /^\d{4}-\d{2}-\d{2}$/;
 export async function guardar(d) {
