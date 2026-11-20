@@ -865,3 +865,49 @@ footer nav a:hover, .footer-contact a:hover { color: #fff; }
   .cli-badge { grid-column: 2; justify-self: start; }
   .panel.cli-caixa { padding: 22px 18px; }
 }
+
+/* =====================================================================
+   PÁGINA DE VENDA (loja.html): carrossel de serviços + planos por serviço
+   ===================================================================== */
+.loja-topo { background: var(--grad-dark); color: #d7def5; padding: 40px 0 56px; overflow: hidden; }
+.loja-h1 { color: #fff; text-align: center; font-size: clamp(1.6rem, 2.4vw + 0.8rem, 2.4rem); margin-bottom: 26px; }
+.loja-topo .text-grad { background: linear-gradient(90deg, #8fb0ff, #5fc9d8); -webkit-background-clip: text; background-clip: text; }
+.loja-carrossel { position: relative; padding: 0 30px; outline: none; }
+.loja-carrossel:focus-visible .loja-janela { box-shadow: 0 0 0 3px var(--aqua); }
+.loja-janela { overflow: hidden; border-radius: var(--radius-lg); background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.12); }
+.loja-trilho { display: flex; transition: transform 0.55s var(--ease); }
+.loja-slide { flex: 0 0 100%; display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 32px; align-items: center; padding: 36px 48px; }
+.loja-slide-texto .eyebrow { color: var(--aqua); }
+.loja-slide-texto h2 { color: #fff; font-size: clamp(2rem, 3.4vw + 0.6rem, 3.4rem); margin-bottom: 14px; }
+.loja-slide-texto p { color: #c3cdeb; font-size: 1.05rem; max-width: 460px; }
+.loja-desde { margin: 22px 0 26px; font-size: 0.95rem !important; }
+.loja-desde strong { display: block; color: #fff; font-size: clamp(1.7rem, 2vw + 0.8rem, 2.4rem); letter-spacing: -0.02em; line-height: 1.15; }
+.loja-comprar { min-width: 200px; justify-content: center; font-size: 1.05rem; }
+.loja-slide-img { justify-self: center; width: 100%; max-width: 330px; }
+.loja-slide-img img { width: 100%; height: auto; border-radius: 18px; box-shadow: 0 24px 50px rgba(0, 0, 0, 0.35); }
+.loja-seta { position: absolute; top: 50%; transform: translateY(-50%); z-index: 2; width: 56px; height: 56px; border-radius: 50%; border: 0; background: #fff; color: var(--navy-900); display: grid; place-items: center; cursor: pointer; box-shadow: var(--shadow-lg); transition: transform 0.2s var(--ease), background 0.2s; }
+.loja-seta:hover { background: var(--blue-50); transform: translateY(-50%) scale(1.06); }
+.loja-seta:focus-visible { outline: 3px solid var(--aqua); outline-offset: 2px; }
+.loja-seta .icon { width: 22px; height: 22px; }
+.loja-seta.ant { left: 0; }
+.loja-seta.prox { right: 0; }
+.loja-pontos { display: flex; justify-content: center; gap: 10px; margin-top: 18px; }
+.loja-pontos button { width: 10px; height: 10px; padding: 0; border-radius: 999px; border: 0; background: rgba(255, 255, 255, 0.35); cursor: pointer; transition: width 0.3s var(--ease), background 0.3s; }
+.loja-pontos button[aria-selected="true"] { width: 30px; background: var(--aqua); }
+.loja-planos { padding-top: 72px; }
+.loja-planos .price .loja-antes { display: block; font-size: 0.85rem; color: var(--muted); font-weight: 600; }
+.loja-entrar .plan { animation: lojaEntrar 0.45s var(--ease) both; }
+.loja-entrar .plan:nth-child(2) { animation-delay: 0.06s; }
+.loja-entrar .plan:nth-child(3) { animation-delay: 0.12s; }
+@keyframes lojaEntrar { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+@media (max-width: 860px) {
+  .loja-carrossel { padding: 0; }
+  .loja-slide { grid-template-columns: 1fr; gap: 20px; padding: 26px 22px 30px; text-align: center; }
+  .loja-slide-img { order: -1; max-width: 230px; }
+  .loja-slide-texto p { margin-left: auto; margin-right: auto; }
+  .loja-desde { margin: 14px 0 18px; }
+  .loja-seta { top: 150px; width: 44px; height: 44px; }
+  .loja-seta.ant { left: 8px; }
+  .loja-seta.prox { right: 8px; }
+}
+@media (prefers-reduced-motion: reduce) { .loja-trilho { transition: none; } .loja-entrar .plan { animation: none; } }

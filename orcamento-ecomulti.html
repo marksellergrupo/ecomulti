@@ -150,16 +150,16 @@
             <div class="panel" id="p4" hidden>
               <div class="success-box">
                 <span class="ico"><svg class="icon"><use href="#i-tick"/></svg></span>
-                <h2>Pedido preparado!</h2>
-                <p class="sub" style="margin-bottom:12px">Confirme o envio na aplicação que abriu. Guarde a referência do seu pedido:</p>
+                <h2 id="p4Titulo">Pedido preparado!</h2>
+                <p class="sub" id="p4Sub" style="margin-bottom:12px">Confirme o envio na aplicação que abriu. Guarde a referência do seu pedido:</p>
                 <span class="order-no" id="numPedido"></span>
               </div>
               <ol class="next-steps">
-                <li><span><strong>Recebemos o seu pedido</strong><br><span style="color:var(--muted)">Assim que carregar em Enviar no WhatsApp ou no e-mail.</span></span></li>
+                <li><span><strong>Recebemos o seu pedido</strong><br><span style="color:var(--muted)" id="p4Passo1">Assim que carregar em Enviar no WhatsApp ou no e-mail.</span></span></li>
                 <li><span><strong>Confirmamos e enviamos a factura proforma</strong><br><span style="color:var(--muted)">Verificamos a disponibilidade (ex.: domínios) e enviamos os dados de pagamento.</span></span></li>
                 <li><span><strong>Activamos os serviços</strong><br><span style="color:var(--muted)">Após a confirmação do pagamento, tratamos de tudo e avisamos quando estiver pronto.</span></span></li>
               </ol>
-              <div class="notice"><svg class="icon"><use href="#i-help"/></svg><span>A aplicação não abriu? <a href="#" id="reenviarWa" style="color:var(--blue);font-weight:700">Enviar por WhatsApp</a> ou <a href="#" id="reenviarMail" style="color:var(--blue);font-weight:700">por e-mail</a>.</span></div>
+              <div class="notice" id="p4Aviso"><svg class="icon"><use href="#i-help"/></svg><span>A aplicação não abriu? <a href="#" id="reenviarWa" style="color:var(--blue);font-weight:700">Enviar por WhatsApp</a> ou <a href="#" id="reenviarMail" style="color:var(--blue);font-weight:700">por e-mail</a>.</span></div>
               <div class="panel-actions no-print">
                 <button class="btn btn-outline" type="button" onclick="window.print()"><svg class="icon"><use href="#i-file"/></svg> Imprimir / guardar PDF</button>
                 <button class="btn btn-primary" type="button" id="novo">Novo orçamento</button>
@@ -314,7 +314,7 @@
         `Pagamento preferido: ${metodo}` + (cliente.obs ? `\n\nObservações: ${cliente.obs}` : "") +
         `\n\nPor favor, enviem a factura proforma. Obrigado!`;
     }
-    $$("[data-enviar]").forEach((b) => b.addEventListener("click", () => {
+    $$("[data-enviar]").forEach((b) => b.addEventListener("click", async () => {
       if (!$("#consent").checked) { $("#eConsent").textContent = "Confirme que aceita a política de privacidade."; return; }
       $("#eConsent").textContent = "";
       if (!pedido) {
@@ -323,7 +323,20 @@
       }
       const texto = montarTexto();
       registarNoPainel(pedido, metodoEscolhido());
-      enviar(b.dataset.enviar, texto, `Pedido de orçamento ${pedido} - ${cliente.nome}`);
+      // e-mail: vai directo para a caixa da ECOMULTI (servidor); WhatsApp: abre a aplicação
+      const botoes = $$("[data-enviar]"), porEmail = b.dataset.enviar === "email", rotulo = b.innerHTML;
+      if (porEmail) { botoes.forEach((x) => (x.disabled = true)); b.textContent = "A enviar…"; }
+      const r = await enviar(b.dataset.enviar, texto, `Pedido de orçamento ${pedido} - ${cliente.nome}`, { nome: cliente.nome, contacto: cliente.email || cliente.tel });
+      if (porEmail) { b.innerHTML = rotulo; botoes.forEach((x) => (x.disabled = false)); }
+      const enviado = r === "enviado";
+      $("#p4Titulo").textContent = enviado ? "Pedido enviado!" : "Pedido preparado!";
+      $("#p4Sub").textContent = enviado
+        ? "O seu pedido já chegou à nossa caixa de e-mail. Guarde a referência do seu pedido:"
+        : "Confirme o envio na aplicação que abriu. Guarde a referência do seu pedido:";
+      $("#p4Passo1").textContent = enviado
+        ? "Respondemos para o seu e-mail ou telefone."
+        : "Assim que carregar em Enviar no WhatsApp ou no e-mail.";
+      $("#p4Aviso").hidden = enviado;
       $("#numPedido").textContent = pedido;
       $("#reenviarWa").href = linkWhatsApp(texto); $("#reenviarWa").target = "_blank";
       $("#reenviarMail").href = linkEmail(`Pedido de orçamento ${pedido} - ${cliente.nome}`, texto);

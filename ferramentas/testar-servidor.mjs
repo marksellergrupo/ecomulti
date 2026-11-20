@@ -84,6 +84,37 @@ try {
     assert.equal(lista.vendas.find((x) => x.id === n)?.estado, "em_aberto");
   });
 
+  await teste("formulários: POST /api/contacto → e-mail na caixa da ECOMULTI, com Reply-To do cliente", async () => {
+    const email = await import("../agente/email.mjs");
+    const enviados = [];
+    email.usarTransporteDeTeste((m) => { enviados.push(m); return { ok: true }; });
+    try {
+      const r = await post("/api/contacto", { assunto: "Hospedagem web - Business", texto: "Olá! Quero <b>saber</b> mais.", nome: "Ana Teste", contacto: "ana@teste.ao", pagina: "hospedagem-ecomulti.html" });
+      assert.equal(r.status, 200);
+      assert.equal(enviados.length, 1);
+      assert.equal(enviados[0].to, process.env.CONTACTO_EMAIL || "suporte@ecomulti.ao");
+      assert.equal(enviados[0].subject, "[Site] Hospedagem web - Business");
+      assert.match(enviados[0].replyTo, /<ana@teste\.ao>$/);
+      assert.match(enviados[0].html, /&lt;b&gt;saber/, "HTML do cliente escapado");
+      assert.match(enviados[0].text, /Contacto: ana@teste\.ao/);
+      // só telefone: envia, sem Reply-To
+      assert.equal((await post("/api/contacto", { texto: "Liguem-me", nome: "Rui", contacto: "923 000 111" })).status, 200);
+      assert.equal(enviados[1].replyTo, undefined);
+      // inválidos
+      assert.equal((await post("/api/contacto", { texto: "x", nome: "A", contacto: "ana@teste.ao" })).status, 400);
+      assert.equal((await post("/api/contacto", { texto: "x", nome: "Ana", contacto: "123" })).status, 400);
+      // campo-armadilha: responde ok mas não envia
+      assert.equal((await post("/api/contacto", { texto: "spam", nome: "Robo", contacto: "r@r.ao", site: "http://spam" })).status, 200);
+      assert.equal(enviados.length, 2);
+      // limite por IP
+      let ultimo;
+      for (let i = 0; i < 12; i++) ultimo = await post("/api/contacto", { texto: "repetido", nome: "Ana", contacto: "ana@teste.ao" });
+      assert.equal(ultimo.status, 429);
+    } finally { email.usarTransporteDeTeste(null); }
+    // sem SMTP configurado → 503 (o site abre o programa de e-mail como alternativa)
+    if (!email.envioDisponivel()) assert.equal((await post("/api/contacto", { texto: "x", nome: "Ana", contacto: "ana@teste.ao" }, { "x-forwarded-for": "1.2.3.4" })).status, 503);
+  });
+
   await teste("o cliente não consegue falsificar o IP (cabeçalho x-ip-cliente é substituído)", async () => {
     // 6 tentativas falhadas com IPs "falsos" diferentes contam para o mesmo IP real → bloqueio
     let ultimo;

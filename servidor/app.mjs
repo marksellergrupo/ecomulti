@@ -18,6 +18,7 @@ const ROTAS = {
   "/api/admin": () => import("./rotas/admin.mjs"),
   "/api/cliente": () => import("./rotas/cliente.mjs"),
   "/api/pedido": () => import("./rotas/pedido.mjs"),
+  "/api/contacto": () => import("./rotas/contacto.mjs"),
   "/api/agente": () => import("./rotas/agente.mjs"),
   "/api/blog": () => import("./rotas/blog.mjs"),
   "/api/newsletter": () => import("./rotas/newsletter.mjs"),

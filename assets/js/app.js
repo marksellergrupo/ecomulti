@@ -22,7 +22,6 @@
         const remoto = Number(window.precoDe(chave));
         const ehPct = chave.startsWith("regra.") && chave !== "regra.pagina_extra";
         if (Number.isFinite(remoto) && (ehPct || remoto >= 100)) return remoto;
-        console.warn("[ECOMULTI] Preço suspeito na API para", chave, "=", remoto, "→ a usar", local);
       } catch (e) { /* chave não existe na API */ }
     }
     return local;
@@ -83,12 +82,30 @@
   function linkEmail(assunto, texto) {
     return "mailto:" + EMP.email + "?subject=" + encodeURIComponent(assunto || "Pedido pelo site") + "&body=" + encodeURIComponent(texto || "");
   }
-  function enviar(canal, texto, assunto) {
+  /* Envia a mensagem directamente para a caixa da ECOMULTI (servidor → SMTP).
+     Devolve true se foi enviada; false se o servidor não a pôde enviar. */
+  async function enviarPorEmail({ assunto, texto, nome, contacto }) {
+    const url = (CFG.contacto || {}).endpoint;
+    if (!url) return false;
+    try {
+      const r = await fetch(url, {
+        method: "POST", headers: { "content-type": "application/json" },
+        body: JSON.stringify({ assunto, texto, nome, contacto, pagina: location.pathname.split("/").pop() || "index.html" })
+      });
+      return r.ok;
+    } catch { return false; }
+  }
+  /* canal "email": envia pelo servidor; só se falhar abre o programa de e-mail (mailto) como alternativa.
+     Devolve uma promessa: "enviado" | "aberto" (WhatsApp ou programa de e-mail aberto). */
+  async function enviar(canal, texto, assunto, remetente = {}) {
     if (canal === "email" || !EMP.whatsapp) {
+      if (await enviarPorEmail({ assunto, texto, ...remetente })) return "enviado";
       window.location.href = linkEmail(assunto, texto);
+      return "aberto";
     } else {
       const w = window.open(linkWhatsApp(texto), "_blank", "noopener");
       if (!w) window.location.href = linkWhatsApp(texto);
+      return "aberto";
     }
   }
 
@@ -246,12 +263,29 @@
           `Contacto: ${contacto}\n` +
           (f.get("mensagem") ? `\n${f.get("mensagem")}` : "") +
           `\n\n(Enviado a partir de ${location.pathname.split("/").pop() || "index.html"})`;
-        enviar(canal, texto, `${form.dataset.contact || "Pedido de contacto"}${servico ? " - " + servico : ""}`);
-        msg.className = "form-msg ok";
-        msg.textContent = canal === "email"
-          ? "A abrir o seu programa de e-mail com a mensagem preenchida. Só falta carregar em Enviar."
-          : "A abrir o WhatsApp com a mensagem preenchida. Só falta carregar em Enviar.";
+        const assunto = `${form.dataset.contact || "Pedido de contacto"}${servico ? " - " + servico : ""}`;
+        const usado = canal;
         canal = "whatsapp";
+        if (usado !== "email" && EMP.whatsapp) {
+          enviar(usado, texto, assunto);
+          msg.className = "form-msg ok";
+          msg.textContent = "A abrir o WhatsApp com a mensagem preenchida. Só falta carregar em Enviar.";
+          return;
+        }
+        const botoes = $$("button", form);
+        botoes.forEach((b) => (b.disabled = true));
+        msg.className = "form-msg";
+        msg.textContent = "A enviar a sua mensagem…";
+        enviar("email", texto, assunto, { nome, contacto }).then((r) => {
+          botoes.forEach((b) => (b.disabled = false));
+          msg.className = "form-msg ok";
+          if (r === "enviado") {
+            msg.textContent = "Mensagem enviada! Recebemos o seu pedido e respondemos em breve.";
+            form.reset();
+          } else {
+            msg.textContent = "Não conseguimos enviar directamente. Abrimos o seu programa de e-mail com a mensagem preenchida; só falta carregar em Enviar.";
+          }
+        });
       });
     });
 

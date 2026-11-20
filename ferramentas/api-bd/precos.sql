@@ -1,4 +1,4 @@
--- GERADO por ferramentas/precos-para-sql.mjs a partir de assets/js/config.js (2026-11-17).
+-- GERADO por ferramentas/precos-para-sql.mjs a partir de assets/js/config.js (2026-11-19).
 -- Importe no phpMyAdmin, na base ecomulti_ecomulti. Pode ser importado várias vezes.
 SET NAMES utf8mb4;
 START TRANSACTION;

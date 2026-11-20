@@ -8,7 +8,8 @@ export default async function limpar() {
   const r = {
     conversas: await limparAntigos("agente-conversas", 7 * dia, "actualizado"),
     vistos: await limparAntigos("agente-wa-vistos", 2 * dia, "t"),
-    trincos: await limparAntigos("agente-trincos", dia, "t")
+    trincos: await limparAntigos("agente-trincos", dia, "t"),
+    contactos: await limparAntigos("contacto-limite", dia, "t")
   };
   console.log("[limpar]", r);
   return r;

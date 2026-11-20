@@ -47,6 +47,10 @@ window.ECOMULTI = {
   pedidos: {
     endpoint: "/api/pedido"
   },
+  /* "Enviar por e-mail" nos formulários e no orçamento: o servidor envia a mensagem para a caixa da ECOMULTI */
+  contacto: {
+    endpoint: "/api/contacto"
+  },
   /* Área do cliente (cliente.html): conta, confirmação do e-mail e subscrições */
   cliente: {
     endpoint: "/api/cliente"

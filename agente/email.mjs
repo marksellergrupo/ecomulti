@@ -25,8 +25,8 @@ async function obterTransporte() {
   return transporte;
 }
 
-export async function enviarEmail({ para, assunto, texto, html }) {
-  const msg = { from: process.env.SMTP_REMETENTE || `ECOMULTI <${process.env.SMTP_UTILIZADOR}>`, to: para, subject: assunto, text: texto, html };
+export async function enviarEmail({ para, assunto, texto, html, responderPara }) {
+  const msg = { from: process.env.SMTP_REMETENTE || `ECOMULTI <${process.env.SMTP_UTILIZADOR}>`, to: para, subject: assunto, text: texto, html, ...(responderPara ? { replyTo: responderPara } : {}) };
   if (substituto) return substituto(msg);
   if (consola()) { console.log(`\n[e-mail para ${para}] ${assunto}\n${texto}\n`); return { consola: true }; }
   if (!emailConfigurado()) throw new Error("envio de e-mail não configurado (SMTP_HOST, SMTP_UTILIZADOR, SMTP_SENHA)");
